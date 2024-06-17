@@ -3,24 +3,13 @@
   justify-content: space-between;
   align-items: center;
   padding: 20px;
-  transition: background-color 0.5s, color 0.5s, box-shadow 0.5s, border-radius 0.5s, width 0.5s, z-index 0.5s, margin-top 0.5s;
-  position: fixed;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  z-index: 1;
-  max-width: 100%;
-  background-color: rgba(255, 255, 255, 1);
+  transition: background-color 0.3s, color 0.3s;
+  height: 8vh;
 }
 
-.navbar.scrolled {
-  border-radius: 15px; 
-  width: 95%;
-  z-index: 500;
-  margin-top: 10px;
-  background-color: rgba(255, 255, 255, 0.8);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+.navbar.light {
+  background-color: #fff;
+  color: #333;
 }
 
 .navbar__logo a {
@@ -97,7 +86,7 @@
     top: 5px;
     right: 5px;
     width: 250px;
-    height: 300%;
+    height: 30%;
     background-color: inherit;
     box-shadow: rgb(53, 136, 209) 2px 2px 4px 0px inset, rgba(231, 70, 70, 0.5) -2px -2px 4px 1px inset;
     padding: 20px;

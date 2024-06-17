@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Navbar.css";
 import logo from "./assets/logo.png";
@@ -6,7 +6,6 @@ import profileImage from "./assets/profile.png"; // Replace with the actual path
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(true); // Default to true for demonstration
   const username = "username"; // Replace with the actual username
 
@@ -14,23 +13,8 @@ const Navbar = () => {
     setMenuOpen(!menuOpen);
   };
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
   return (
-    <nav className={`navbar ${isScrolled ? "scrolled" : ""}`}>
+    <nav className="navbar light">
       <div className="navbar__logo">
         <Link to="/">
           <img src={logo} alt="StayHeaven Logo" />

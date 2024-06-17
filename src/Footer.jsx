@@ -73,7 +73,8 @@ export default Footer;
 const FooterContainer = styled.footer`
   background: #f8f9fa; /* Light grey background */
   color: #333;
-  padding: 40px 20px;
+  padding: 25px 20px;
+  height : 35vh;
   text-align: center;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1); /* Add box shadow */
   border-top: 1px solid #e0e0e0; /* Add top border for inner differentiation */
