@@ -139,7 +139,7 @@ const Landing = () => {
                   <img
                     src={city.image}
                     alt={city.name}
-                    className="landing__city-image"
+                    className="landing__city-image m-auto"
                   />
                   <p className="landing__city-name">{city.name}</p>
                 </div>
