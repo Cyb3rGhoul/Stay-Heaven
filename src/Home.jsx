@@ -168,7 +168,7 @@ const Landing = () => {
                   <button
                     className="landing__grid-item-button"
                     // onClick={() => navigate(`/property/${property.id}`)}
-                    onClick={() => navigate("/single")}
+                    onClick={() => navigate("/hotel")}
                   >
                     View Details
                   </button>

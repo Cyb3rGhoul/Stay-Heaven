@@ -189,7 +189,6 @@ const HotelDetails = () => {
 export default HotelDetails;
 
 const Wrapper = styled.div`
-  margin-top: 85px;
   background-color: #f4f4f9;
   color: #333;
   min-height: 100vh;
