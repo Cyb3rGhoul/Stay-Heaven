@@ -156,22 +156,15 @@ const Landing = () => {
         <div className="landing__grid-container">
           <div className="landing__grid">
             {properties.map((property) => (
-              <div key={property.id} className="landing__grid-item">
+              <div key={property.id} className="landing__grid-item" onClick={() => navigate("/hotel")}>
                 <img
                   src={property.image}
                   alt={property.title}
                   className="landing__grid-item-image"
                 />
-                <div className="landing__grid-item-content">
-                  <h3>{property.title}</h3>
-                  <p>{property.price}</p>
-                  <button
-                    className="landing__grid-item-button"
-                    // onClick={() => navigate(`/property/${property.id}`)}
-                    onClick={() => navigate("/hotel")}
-                  >
-                    View Details
-                  </button>
+                <div className="landing__grid-item-content flex flex-col gap-1">
+                  <div className="text-lg font-bold">{property.title}</div>
+                  <div >{property.price}</div>
                 </div>
               </div>
             ))}

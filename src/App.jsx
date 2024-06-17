@@ -12,14 +12,14 @@ const App = () => {
   const navigationType = useNavigationType();
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 2000);
+    const timer = setTimeout(() => setLoading(false), 700);
     return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
     if (navigationType !== "POP") {
       setLoading(true);
-      const timer = setTimeout(() => setLoading(false), 2000);
+      const timer = setTimeout(() => setLoading(false), 700);
       return () => clearTimeout(timer);
     }
   }, [location, navigationType]);

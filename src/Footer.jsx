@@ -36,7 +36,7 @@ const Footer = () => (
         </div>
       </div>
       
-        <div className="flex flex-row mt-10 lg:mt-0 lg:flex-col items-center justify-between  text-2xl h-full">
+        <div className="flex gap-0 lg:gap-6 flex-row mt-10 lg:mt-0 lg:flex-col items-center justify-between  text-2xl h-full">
           <a
           className="hover:text-[#04af70]"
             href="https://instagram.com/stayheaven"
