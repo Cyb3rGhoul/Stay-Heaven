@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import googlebutt from "./assets/googlesignup.png";
+import Navbar from "./Navbar";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -19,7 +20,9 @@ const Login = () => {
   };
 
   return (
-    <Wrapper>
+    <>
+    <Navbar />
+      <Wrapper>
       <Card>
         <Form onSubmit={handleLogin}>
           <Input
@@ -42,6 +45,7 @@ const Login = () => {
         </Form>
       </Card>
     </Wrapper>
+    </>
   );
 };
 
@@ -51,7 +55,7 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 85vh;
+  height: 92vh;
   background-color: #1a1a1a;
 `;
 

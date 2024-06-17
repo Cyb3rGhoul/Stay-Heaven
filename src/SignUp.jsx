@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import styled from "styled-components";
+import Navbar from "./Navbar";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -19,7 +20,9 @@ const SignUp = () => {
   };
 
   return (
-    <Wrapper>
+    <>
+    <Navbar />
+      <Wrapper>
       <Card>
         <Avatar />
         <Form onSubmit={handleSignUp}>
@@ -46,6 +49,7 @@ const SignUp = () => {
         </Form>
       </Card>
     </Wrapper>
+    </>
   );
 };
 
@@ -55,7 +59,7 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 85vh;
+  height: 92vh;
   background-color: #1a1a1a;
 `;
 
