@@ -1,0 +1,132 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  transition: background-color 0.5s, color 0.5s, box-shadow 0.5s, border-radius 0.5s, width 0.5s, z-index 0.5s, margin-top 0.5s;
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  z-index: 1;
+  max-width: 100%;
+  background-color: rgba(255, 255, 255, 1);
+}
+
+.navbar.scrolled {
+  border-radius: 15px; 
+  width: 95%;
+  z-index: 500;
+  margin-top: 10px;
+  background-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.navbar__logo a {
+  text-decoration: none;
+  color: inherit;
+  font-size: 24px;
+}
+
+.navbar__logo img {
+  max-width: 200px;
+  height: auto;
+  transition: max-width 0.3s ease;
+}
+
+.navbar__toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: inherit;
+}
+
+.navbar__links {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+.navbar__links li a {
+  text-decoration: none;
+  color: inherit;
+  font-size: 18px;
+}
+
+.navbar__close {
+  display: none;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: inherit;
+}
+
+.navbar__username {
+  display: flex;
+  align-items: center;
+}
+
+.navbar__profile-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #2a9d8f;
+  cursor: pointer;
+  transition: border 0.3s;
+}
+
+.navbar__profile-image:hover {
+  border: 2px solid #04af70;
+}
+
+@media (max-width: 768px) {
+  .navbar__links {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    display: none;
+    position: fixed;
+    top: 5px;
+    right: 5px;
+    width: 250px;
+    height: 300%;
+    background-color: inherit;
+    box-shadow: rgb(53, 136, 209) 2px 2px 4px 0px inset, rgba(231, 70, 70, 0.5) -2px -2px 4px 1px inset;
+    padding: 20px;
+    transform: translateX(100%);
+    opacity: 0;
+    overflow-y: auto;
+    z-index: 1000;
+  }
+
+  .navbar__toggle {
+    display: block;
+  }
+
+  .navbar__links.active {
+    display: flex;
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  .navbar__close {
+    display: block;
+  }
+
+  .navbar__logo img {
+    max-width: 140px; 
+  }
+}
+
+body.light-theme {
+  background-color: #f0f0f0;
+  color: #333;
+}
