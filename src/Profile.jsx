@@ -118,7 +118,6 @@ export default Profile;
 
 
 const Container = styled.div`
-  margin-top: 85px;
   padding: 20px;
   background-color: #f0f0f0;
   color: #333;
