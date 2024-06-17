@@ -15,10 +15,10 @@ StayHeaven is a destination, hotel, and house booking website that aims to provi
 
 To run StayHeaven locally on your machine, follow these steps:
 
-1. Clone the repository: `git clone https://github.com/your-username/StayHeaven.git`
-2. Navigate to the project directory: `cd StayHeaven`
+1. Clone the repository: `git clone https://github.com/your-username/Stay-Heaven.git`
+2. Navigate to the project directory: `cd Stay-Heaven`
 3. Install dependencies: `npm install`
-4. Start the development server: `npm start`
+4. Start the development server: `npm run dev`
 
 ## Contributors
 
