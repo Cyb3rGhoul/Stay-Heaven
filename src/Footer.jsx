@@ -14,7 +14,7 @@ const Footer = () => (
     <div className="flex p-10 px-10 min-[1500px]:px-40 min-[1500px]:pr-60  flex-col lg:flex-row  justify-between h-full">
 
       <div className=" lg:w-[28%] w-full flex flex-col gap-4 text-justify">
-        <img src={logo} alt="StayHeaven Logo"  className="h-16 w-80 m-auto lg:m-0"/>
+        <img src={logo} alt="StayHeaven Logo"  className="h-10 w-60 m-auto lg:m-0"/>
         <div className="">
           StayHeaven is an Indian marketplace that connects people looking to book and create hotels. It has revolutionized the travel industry by enabling hosts to offer unique, often cost-effective lodging options to guests in country.
         </div>
