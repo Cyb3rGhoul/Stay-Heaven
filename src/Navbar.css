@@ -24,6 +24,12 @@
   transition: max-width 0.3s ease;
 }
 
+@media (max-width: 500px) {
+  .navbar__logo img {
+    max-width: 150px;
+  }
+}
+
 .navbar__toggle {
   display: none;
   background: none;
