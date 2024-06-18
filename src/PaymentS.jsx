@@ -1,5 +1,6 @@
 import React from 'react'
 import './payment.css'
+import { Link } from 'react-router-dom'
 
 const PaymentS = () => {
   return (
@@ -9,11 +10,12 @@ const PaymentS = () => {
                 <div class="message-box _success">
                      <i class="fa fa-check-circle" aria-hidden="true"></i>
                     <h2> Your payment was successful </h2>
-                   <p> Thank you for your payment</p>      
+                   <p> Thank you for your payment</p>
+                   <Link to="/">
                    <button className='button1'>
   <span className="button_top"> Home
   </span>
-</button>
+</button></Link>   
             </div> 
             
         </div> 
