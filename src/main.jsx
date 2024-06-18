@@ -9,6 +9,9 @@ import Login from './Login.jsx'
 import Search from './Search.jsx'
 import HotelDetails from './HotelDetails.jsx'
 import Profile from './Profile.jsx'
+import PaymentS from './PaymentS.jsx';
+import PaymentF from './PaymentF.jsx';
+import Notfound from './Notfound.jsx';
 
 const router = createBrowserRouter([
   {
@@ -30,6 +33,17 @@ const router = createBrowserRouter([
       {
         path: '/profile',
         element: <Profile />,
+      },
+      {
+        path: '/success',
+        element: <PaymentS />,
+      },
+      {
+        path: '/fail',
+        element: <PaymentF />,
+      },{
+        path: '*',
+        element: <Notfound />,
       }
     ],
   },
