@@ -6,11 +6,16 @@ import profileImage from "./assets/profile.png"; // Replace with the actual path
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(true); // Default to true for demonstration
-  const username = "username"; // Replace with the actual username
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const username = "username";
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
+  };
+
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
   };
 
   return (
@@ -20,33 +25,42 @@ const Navbar = () => {
           <img src={logo} alt="StayHeaven Logo" />
         </Link>
       </div>
-      <button className="navbar__toggle" onClick={toggleMenu}>
-        ☰
-      </button>
       <ul className={`navbar__links ${menuOpen ? "active" : ""}`}>
-        <button className="navbar__close" onClick={toggleMenu}>
+        
+        {isLoggedIn ? (
+          <li className="navbar__username" onClick={toggleDropdown}>
+            <div className="flex gap-4">
+              <img
+                src={profileImage}
+                alt="Profile"
+                className="navbar__profile-image"
+              />
+            </div>
+            {dropdownOpen && (
+              <div className="navbar__dropdown">
+              <button className="navbar__close" onClick={toggleMenu}>
           ✖
         </button>
-        {isLoggedIn ? (
-          <>
-            <li className="navbar__username">
-              <Link to="/profile" onClick={toggleMenu}>
-                <img
-                  src={profileImage}
-                  alt="Profile"
-                  className="navbar__profile-image"
-                />
-              </Link>
-            </li>
-          </>
+                <div className="mt-6">Profile</div>
+                <div>Previous Bookings</div>
+                <div>Dashboard</div>
+                <div>Logout</div>
+              </div>
+            )}
+          </li>
         ) : (
-          <>
+          <div className="flex gap-4">
             <li>
               <Link to="/signup" onClick={toggleMenu}>
                 Sign Up
               </Link>
             </li>
-          </>
+            <li>
+              <Link to="/login" onClick={toggleMenu}>
+                Login
+              </Link>
+            </li>
+          </div>
         )}
       </ul>
     </nav>

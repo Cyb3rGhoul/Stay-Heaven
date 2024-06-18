@@ -47,13 +47,13 @@
 }
 
 .navbar__close {
-  display: none;
+  display: block;
   position: absolute;
-  top: 20px;
-  right: 20px;
+  top: -10px;
+  right: 0px;
   background: none;
   border: none;
-  font-size: 24px;
+  font-size: 20px;
   cursor: pointer;
   color: inherit;
 }
@@ -61,12 +61,14 @@
 .navbar__username {
   display: flex;
   align-items: center;
+  position: relative;
 }
 
 .navbar__profile-image {
   width: 40px;
   height: 40px;
   border-radius: 50%;
+  /* margin-right: 50px; */
   border: 2px solid #2a9d8f;
   cursor: pointer;
   transition: border 0.3s;
@@ -76,46 +78,46 @@
   border: 2px solid #04af70;
 }
 
-@media (max-width: 768px) {
-  .navbar__links {
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    display: none;
-    position: fixed;
-    top: 5px;
-    right: 5px;
-    width: 250px;
-    height: 30%;
-    background-color: inherit;
-    box-shadow: rgb(53, 136, 209) 2px 2px 4px 0px inset, rgba(231, 70, 70, 0.5) -2px -2px 4px 1px inset;
-    padding: 20px;
-    transform: translateX(100%);
-    opacity: 0;
-    overflow-y: auto;
-    z-index: 1000;
-  }
+.navbar__dropdown {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: center;
+  top: 50px; 
+  right: 0;
+  width: 160px;
+  background: #fff;
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  z-index: 1000;
+}
 
-  .navbar__toggle {
-    display: block;
-  }
+.navbar__dropdown a,
+.navbar__dropdown button {
+  padding: 10px;
+  color: #333;
+  text-decoration: none;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+}
 
-  .navbar__links.active {
-    display: flex;
-    transform: translateX(0);
-    opacity: 1;
-  }
-
-  .navbar__close {
-    display: block;
-  }
-
-  .navbar__logo img {
-    max-width: 140px; 
-  }
+.navbar__dropdown a:hover,
+.navbar__dropdown button:hover {
+  background: #f0f0f0;
 }
 
 body.light-theme {
   background-color: #f0f0f0;
   color: #333;
 }
+
+/* Media Queries for responsive design */
+/* Adjustments for mobile screen */
+
