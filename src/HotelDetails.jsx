@@ -2,11 +2,14 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import {
-  FaHeart,
   FaShareAlt,
   FaWifi,
   FaSnowflake,
-  FaCoffee
+  FaCoffee,
+  FaParking,
+  FaTv,
+  FaUtensils,
+  FaTshirt,
 } from "react-icons/fa";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -16,9 +19,13 @@ import MaxGuests from "./MaxGuest";
 const HotelDetails = () => {
   const [maxGuests, setMaxGuests] = useState(1);
   const [features, setFeatures] = useState({
-    wifi: false,
-    ac: false,
+    wifi: true,
+    ac: true,
     breakfast: false,
+    parking: true,
+    tv: false,
+    kitchen: true,
+    laundry: true,
   });
   const [checkInDate, setCheckInDate] = useState(null);
   const [checkOutDate, setCheckOutDate] = useState(null);
@@ -38,6 +45,32 @@ const HotelDetails = () => {
       console.error("Error sharing:", error);
     }
   };
+
+const reviews = [
+  { user: "User 1", comment: "Great place to stay!", date: "2023-06-01" },
+  {
+    user: "User 2",
+    comment: "Loved the location and amenities.",
+    date: "2023-06-10",
+  },
+  {
+    user: "User 3",
+    comment: "Very comfortable and clean.",
+    date: "2023-06-15",
+  },
+  {
+    user: "User 4",
+    comment: "Excellent service and location.",
+    date: "2023-06-20",
+  },
+];
+
+const generateRandomStars = () => {
+  const stars = Math.floor(Math.random() * 5) + 1;
+  return "★".repeat(stars) + "☆".repeat(5 - stars);
+};
+
+
 
   return (
     <>
@@ -101,6 +134,42 @@ const HotelDetails = () => {
                   <FaCoffee size={24} />
                   Breakfast
                 </CheckboxLabel>
+                <CheckboxLabel checked={features.parking}>
+                  <HiddenCheckbox
+                    name="parking"
+                    checked={features.parking}
+                    onChange={handleFeatureChange}
+                  />
+                  <FaParking size={24} />
+                  Parking
+                </CheckboxLabel>
+                <CheckboxLabel checked={features.tv}>
+                  <HiddenCheckbox
+                    name="tv"
+                    checked={features.tv}
+                    onChange={handleFeatureChange}
+                  />
+                  <FaTv size={24} />
+                  TV
+                </CheckboxLabel>
+                <CheckboxLabel checked={features.kitchen}>
+                  <HiddenCheckbox
+                    name="kitchen"
+                    checked={features.kitchen}
+                    onChange={handleFeatureChange}
+                  />
+                  <FaUtensils size={24} />
+                  Kitchen
+                </CheckboxLabel>
+                <CheckboxLabel checked={features.laundry}>
+                  <HiddenCheckbox
+                    name="laundry"
+                    checked={features.laundry}
+                    onChange={handleFeatureChange}
+                  />
+                  <FaTshirt size={24} />
+                  Laundry
+                </CheckboxLabel>
               </CheckboxContainer>
             </Features>
 
@@ -143,43 +212,20 @@ const HotelDetails = () => {
         </Details>
         <ReviewsContainer>
           <Reviews>
-            <Review>
-              <Avatar src="https://via.placeholder.com/50" alt="User 1" />
-              <Comment>
-                <p>
-                  <strong>User 1</strong>
-                </p>
-                <p>Great place to stay!</p>
-              </Comment>
-            </Review>
-            <Review>
-              <Avatar src="https://via.placeholder.com/50" alt="User 2" />
-              <Comment>
-                <p>
-                  <strong>User 2</strong>
-                </p>
-                <p>Loved the location and amenities.</p>
-              </Comment>
-            </Review>
-            <Review>
-              <Avatar src="https://via.placeholder.com/50" alt="User 3" />
-              <Comment>
-                <p>
-                  <strong>User 3</strong>
-                </p>
-                <p>Very comfortable and clean.</p>
-              </Comment>
-            </Review>
-            <Review>
-              <Avatar src="https://via.placeholder.com/50" alt="User 4" />
-              <Comment>
-                <p>
-                  <strong>User 4</strong>
-                </p>
-                <p>Excellent service and location.</p>
-              </Comment>
-            </Review>
-          </Reviews>
+    {reviews.map((review, index) => (
+      <Review key={index}>
+        <Avatar src={`https://via.placeholder.com/50?text=User${index + 1}`} alt={`User ${index + 1}`} />
+        <Comment>
+          <ReviewHeader>
+            <strong>{review.user}</strong>
+            <ReviewDate>{review.date}</ReviewDate>
+          </ReviewHeader>
+          <p>{generateRandomStars()}</p>
+          <p>{review.comment}</p>
+        </Comment>
+      </Review>
+    ))}
+  </Reviews>
         </ReviewsContainer>
       </Wrapper>
     </>
@@ -488,6 +534,7 @@ const Review = styled.div`
   border: 1px solid #ddd;
   transition: background-color 0.3s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative; // Add this line
 
   &:hover {
     background-color: #f1f1f1;
@@ -498,8 +545,10 @@ const Review = styled.div`
   }
 `;
 
+
 const Avatar = styled.img`
   border-radius: 50%;
+  height: 80px;
   margin-right: 10px;
 `;
 
@@ -508,4 +557,18 @@ const Comment = styled.div`
     margin: 0;
     color: #333;
   }
+`;
+
+const ReviewHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const ReviewDate = styled.span`
+  font-size: 12px;
+  color: #999;
+  position: absolute;
+  top: 10px;
+  right: 10px;
 `;

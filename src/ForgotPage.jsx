@@ -35,8 +35,8 @@ const ForgotPassword = () => {
         <Card>
           <Form onSubmit={handleEmailPhoneSubmit}>
             <Input
-              type="email"
-              placeholder="Email"
+              type="name"
+              placeholder="username"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -48,23 +48,6 @@ const ForgotPassword = () => {
             />
             <SubmitButton type="submit">Submit</SubmitButton>
           </Form>
-          <OtpForm onSubmit={handleOtpSubmit}>
-            <div>
-              {otp.map((data, index) => {
-                return (
-                  <OtpInput
-                    type="text"
-                    maxLength="1"
-                    key={index}
-                    value={data}
-                    onChange={(e) => handleOtpChange(e.target, index)}
-                    onFocus={(e) => e.target.select()}
-                  />
-                );
-              })}
-            </div>
-            <SubmitButton type="submit">Verify OTP</SubmitButton>
-          </OtpForm>
         </Card>
       </Wrapper>
     </>

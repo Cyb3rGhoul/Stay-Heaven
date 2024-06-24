@@ -2,7 +2,14 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { FaWifi, FaSnowflake, FaCoffee } from "react-icons/fa";
+import {
+  FaWifi,
+  FaSnowflake,
+  FaParking,
+  FaTv,
+  FaUtensils,
+  FaTshirt,
+} from "react-icons/fa";
 import randomImage from "./assets/random.jpg";
 
 const bookings = [
@@ -230,7 +237,7 @@ const CreateBooking = () => {
                     checked={selectedBooking.parking}
                     onChange={handleDetailChange}
                   />
-                  <FaCoffee size={24} />
+                  <FaParking size={24} />
                   Parking
                 </CheckboxLabel>
                 <CheckboxLabel checked={selectedBooking.tv}>
@@ -239,7 +246,7 @@ const CreateBooking = () => {
                     checked={selectedBooking.tv}
                     onChange={handleDetailChange}
                   />
-                  <FaCoffee size={24} />
+                  <FaTv size={24} />
                   TV
                 </CheckboxLabel>
                 <CheckboxLabel checked={selectedBooking.kitchen}>
@@ -248,7 +255,7 @@ const CreateBooking = () => {
                     checked={selectedBooking.kitchen}
                     onChange={handleDetailChange}
                   />
-                  <FaCoffee size={24} />
+                  <FaUtensils size={24} />
                   Kitchen
                 </CheckboxLabel>
                 <CheckboxLabel checked={selectedBooking.laundry}>
@@ -257,7 +264,7 @@ const CreateBooking = () => {
                     checked={selectedBooking.laundry}
                     onChange={handleDetailChange}
                   />
-                  <FaCoffee size={24} />
+                  <FaTshirt size={24} />
                   Laundry
                 </CheckboxLabel>
               </CheckboxContainer>
