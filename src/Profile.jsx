@@ -1,23 +1,34 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import profileImage from "./assets/profile.png"; // Replace with actual profile image if available
-import randomImage from "./assets/random.jpg"; // Ensure you have a random image in this path
+import profileImage from "./assets/profile.png";
 
 const Profile = () => {
-  const [isCreatePlaceOpen, setIsCreatePlaceOpen] = useState(false);
-
-  const toggleCreatePlace = () => {
-    setIsCreatePlaceOpen(!isCreatePlaceOpen);
-  };
+  const [selectedImage, setSelectedImage] = useState(profileImage);
 
   const handleUpdateProfile = () => {
     alert("Profile updated");
   };
 
+  const handleImageChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setSelectedImage(URL.createObjectURL(e.target.files[0]));
+    }
+  };
+
   return (
     <>
-      <Container isCreatePlaceOpen={isCreatePlaceOpen}>
+      <Container>
         <StyledProfileSection>
+          <AvatarContainer>
+            <Avatar src={selectedImage} alt="Profile Avatar" />
+            <ImageUpload
+              id="imageUpload"
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+            />
+            <UploadLabel htmlFor="imageUpload">Change Image</UploadLabel>
+          </AvatarContainer>
           <ProfileForm>
             <Title>Profile Section</Title>
             <Label>Name</Label>
@@ -30,85 +41,7 @@ const Profile = () => {
               Update Profile
             </UpdateButton>
           </ProfileForm>
-          <Avatar src={profileImage} alt="Profile Avatar" />
         </StyledProfileSection>
-        <Section>
-          <SectionHeader>
-            <Title>Previous Booking</Title>
-          </SectionHeader>
-          <ScrollableContainer>
-            <BookingCard>
-              <Image src={randomImage} alt="Booking" />
-              <Description>
-                <p>Description</p>
-                <p>Guest</p>
-                <p>Address</p>
-                <p>Amount</p>
-              </Description>
-            </BookingCard>
-            <BookingCard>
-              <Image src={randomImage} alt="Booking" />
-              <Description>
-                <p>Description</p>
-                <p>Guest</p>
-                <p>Address</p>
-                <p>Amount</p>
-              </Description>
-            </BookingCard>
-            {/* Add more BookingCards as needed */}
-          </ScrollableContainer>
-        </Section>
-        <Section>
-          <SectionHeader>
-            <Title>My Created Places</Title>
-            <CreatePlaceButton onClick={toggleCreatePlace}>
-              Create Place
-            </CreatePlaceButton>
-          </SectionHeader>
-          <ScrollableContainer>
-            <BookingCard>
-              <Image src={randomImage} alt="Created Place" />
-              <Description>
-                <p>Description</p>
-                <p>Guest</p>
-                <p>Address</p>
-                <p>Amount</p>
-              </Description>
-            </BookingCard>
-            <BookingCard>
-              <Image src={randomImage} alt="Created Place" />
-              <Description>
-                <p>Description</p>
-                <p>Guest</p>
-                <p>Address</p>
-                <p>Amount</p>
-              </Description>
-            </BookingCard>
-            {/* Add more BookingCards as needed */}
-          </ScrollableContainer>
-          {isCreatePlaceOpen && (
-            <CreatePlaceFormOverlay>
-              <CreatePlaceForm>
-                <CloseButton onClick={toggleCreatePlace}>✖</CloseButton>
-                <Label>Image</Label>
-                <Input type="file" />
-                <Label>Title</Label>
-                <Input type="text" />
-                <Label>Address</Label>
-                <Input type="text" />
-                <Label>Contact Number</Label>
-                <Input type="tel" />
-                <Label>Facilities Available</Label>
-                <Input type="text" />
-                <Label>Amount</Label>
-                <Input type="number" />
-                <Label>Other Details</Label>
-                <Input type="text" />
-                <SubmitButton>Submit</SubmitButton>
-              </CreatePlaceForm>
-            </CreatePlaceFormOverlay>
-          )}
-        </Section>
       </Container>
     </>
   );
@@ -116,11 +49,13 @@ const Profile = () => {
 
 export default Profile;
 
-
 const Container = styled.div`
-  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90%;
   background-color: #f0f0f0;
-  color: #333;
+  padding: 20px;
 `;
 
 const StyledProfileSection = styled.div`
@@ -131,10 +66,10 @@ const StyledProfileSection = styled.div`
   background-color: #d4f3c2;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 500px;
   @media (min-width: 768px) {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
   }
 `;
 
@@ -157,17 +92,14 @@ const Label = styled.label`
 
 const Input = styled.input`
   width: 100%;
-  max-width: 300px;
   padding: 6px;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 14px;
 `;
 
-
 const UpdateButton = styled.button`
   width: 100%;
-  max-width: 300px;
   padding: 10px;
   background-color: #2a9d8f;
   color: #fff;
@@ -175,107 +107,34 @@ const UpdateButton = styled.button`
   border-radius: 4px;
   cursor: pointer;
   margin-top: 10px;
+`;
+
+const AvatarContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const UploadLabel = styled.label`
+  background-color: #2a9d8f;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+`;
+
+const ImageUpload = styled.input`
+  display: none;
 `;
 
 const Avatar = styled.img`
-  width: 150px; /* Increased width for larger profile image */
-  height: 150px; /* Increased height for larger profile image */
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   border: 2px solid #2a9d8f;
   @media (min-width: 768px) {
-    width: 200px; /* Further increase width for larger screens */
-    height: 200px; /* Further increase height for larger screens */
+    width: 200px;
+    height: 200px;
   }
-`;
-
-const Section = styled.div`
-  margin-top: 40px;
-`;
-
-const SectionHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const ScrollableContainer = styled.div`
-  display: flex;
-  overflow-x: auto;
-  gap: 20px;
-  padding: 10px;
-`;
-
-const BookingCard = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 200px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 10px;
-  background-color: #fff;
-`;
-
-const Image = styled.img`
-  width: 100%;
-  border-radius: 8px;
-`;
-
-const Description = styled.div`
-  margin-top: 10px;
-  font-size: 14px;
-  color: #333;
-`;
-
-const CreatePlaceButton = styled.button`
-  padding: 10px;
-  background-color: #2a9d8f;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-`;
-
-const CreatePlaceFormOverlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-`;
-
-const CreatePlaceForm = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  width: 300px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  position: relative;
-`;
-
-const CloseButton = styled.button`
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-`;
-
-const SubmitButton = styled.button`
-  padding: 10px;
-  background-color: #2a9d8f;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 10px;
 `;
