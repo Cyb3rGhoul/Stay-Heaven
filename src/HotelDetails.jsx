@@ -29,6 +29,9 @@ const HotelDetails = () => {
   });
   const [checkInDate, setCheckInDate] = useState(null);
   const [checkOutDate, setCheckOutDate] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
+  const [guestNames, setGuestNames] = useState([""]);
+  const [mobileNumber, setMobileNumber] = useState("");
 
   const handleFeatureChange = (e) => {
     setFeatures({ ...features, [e.target.name]: e.target.checked });
@@ -68,6 +71,36 @@ const reviews = [
 const generateRandomStars = () => {
   const stars = Math.floor(Math.random() * 5) + 1;
   return "★".repeat(stars) + "☆".repeat(5 - stars);
+};
+
+const handleAddGuest = () => {
+  setGuestNames([...guestNames, ""]);
+};
+
+const handleRemoveGuest = (index) => {
+  const updatedGuestNames = [...guestNames];
+  updatedGuestNames.splice(index, 1);
+  setGuestNames(updatedGuestNames);
+};
+
+const handleGuestNameChange = (index, value) => {
+  const newGuestNames = [...guestNames];
+  newGuestNames[index] = value;
+  setGuestNames(newGuestNames);
+};
+
+const handlePopupClose = () => {
+  setShowPopup(false);
+};
+
+const handleBookClick = () => {
+  setShowPopup(true);
+};
+
+const handlePay = () => {
+  // Handle payment logic here
+  console.log("Payment processed");
+  setShowPopup(false);
 };
 
 
@@ -194,38 +227,127 @@ const generateRandomStars = () => {
                 <DiscountedPrice>₹19,293</DiscountedPrice> per night
               </p>
               <MaxGuests maxGuests={maxGuests} setMaxGuests={setMaxGuests} />
-              <DatePickers>
-                <DatePicker
-                  selected={checkInDate}
-                  onChange={(date) => setCheckInDate(date)}
-                  placeholderText="Check-In"
-                />
-                <DatePicker
-                  selected={checkOutDate}
-                  onChange={(date) => setCheckOutDate(date)}
-                  placeholderText="Check-Out"
-                />
-              </DatePickers>
-              <button>Reserve</button>
+              <button onClick={handleBookClick}>Reserve</button>
+              {showPopup && (
+                <PopupOverlay onClick={handlePopupClose}>
+                  <PopupContent onClick={(e) => e.stopPropagation()}>
+                    <PopupHeader>
+                      <h2>Booking Details</h2>
+                      <CloseButton onClick={handlePopupClose}>×</CloseButton>
+                    </PopupHeader>
+                    <Form>
+                      {guestNames.map((guest, index) => (
+                        <GuestDetails key={index}>
+                          <FormItem>
+                            <label>Guest {index + 1} First Name:</label>
+                            <input
+                              type="text"
+                              value={guest.firstName}
+                              onChange={(e) =>
+                                handleGuestNameChange(
+                                  index,
+                                  "firstName",
+                                  e.target.value
+                                )
+                              }
+                            />
+                          </FormItem>
+                          <FormItem>
+                            <label>Guest {index + 1} Last Name:</label>
+                            <input
+                              type="text"
+                              value={guest.lastName}
+                              onChange={(e) =>
+                                handleGuestNameChange(
+                                  index,
+                                  "lastName",
+                                  e.target.value
+                                )
+                              }
+                            />
+                          </FormItem>
+                          <FormItem>
+                            <label>Guest {index + 1} Phone Number:</label>
+                            <input
+                              type="text"
+                              value={guest.phoneNumber}
+                              onChange={(e) =>
+                                handleGuestNameChange(
+                                  index,
+                                  "phoneNumber",
+                                  e.target.value
+                                )
+                              }
+                            />
+                          </FormItem>
+                          <RemoveGuestButton
+                            type="button"
+                            onClick={() => handleRemoveGuest(index)}
+                          >
+                            Remove Guest
+                          </RemoveGuestButton>
+                        </GuestDetails>
+                      ))}
+                      <AddGuestButton type="button" onClick={handleAddGuest}>
+                        Add Guest
+                      </AddGuestButton>
+                      <FormItem>
+                        <label>Check-In Date:</label>
+                        <DatePicker
+                          selected={checkInDate}
+                          onChange={(date) => setCheckInDate(date)}
+                          placeholderText="Check-In"
+                        />
+                      </FormItem>
+                      <FormItem>
+                        <label>Check-Out Date:</label>
+                        <DatePicker
+                          selected={checkOutDate}
+                          onChange={(date) => setCheckOutDate(date)}
+                          placeholderText="Check-Out"
+                        />
+                      </FormItem>
+                      <FormItem>
+                        <label>Mobile Number:</label>
+                        <input
+                          type="text"
+                          value={mobileNumber}
+                          onChange={(e) => setMobileNumber(e.target.value)}
+                        />
+                      </FormItem>
+                      <FormItem>
+                        <label>Final Price:</label>
+                        <p>₹19999</p>
+                      </FormItem>
+                      <PayButton type="button" onClick={handlePay}>
+                        Pay
+                      </PayButton>
+                    </Form>
+                  </PopupContent>
+                </PopupOverlay>
+              )}
             </PriceSection>
           </Right>
         </Details>
         <ReviewsContainer>
           <Reviews>
-    {reviews.map((review, index) => (
-      <Review key={index}>
-        <Avatar src={`https://via.placeholder.com/50?text=User${index + 1}`} alt={`User ${index + 1}`} />
-        <Comment>
-          <ReviewHeader>
-            <strong>{review.user}</strong>
-            <ReviewDate>{review.date}</ReviewDate>
-          </ReviewHeader>
-          <p>{generateRandomStars()}</p>
-          <p>{review.comment}</p>
-        </Comment>
-      </Review>
-    ))}
-  </Reviews>
+            {reviews.map((review, index) => (
+              <Review key={index}>
+                <Avatar
+                  src={`https://via.placeholder.com/50?text=User${index + 1}`}
+                  alt={`User ${index + 1}`}
+                />
+                <Comment>
+                  <ReviewHeader>
+                    <strong>{review.user}</strong>
+                    <ReviewDate>{review.date}</ReviewDate>
+                  </ReviewHeader>
+                  <p>{generateRandomStars()}</p>
+                  <p>{review.comment}</p>
+                </Comment>
+              </Review>
+            ))}
+          </Reviews>
         </ReviewsContainer>
       </Wrapper>
     </>
@@ -534,7 +656,6 @@ const Review = styled.div`
   border: 1px solid #ddd;
   transition: background-color 0.3s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  position: relative; // Add this line
 
   &:hover {
     background-color: #f1f1f1;
@@ -571,4 +692,124 @@ const ReviewDate = styled.span`
   position: absolute;
   top: 10px;
   right: 10px;
+`;
+
+const PopupOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const PopupContent = styled.div`
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 70vw;
+  max-height: 70vh;
+  overflow-y: auto;
+  width: 100%;
+`;
+const PopupHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const CloseButton = styled.button`
+  background: #ff6347;
+  border: none;
+  color: white;
+  font-size: 1.5em;
+  cursor: pointer;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    background: #e5533d;
+  }
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  text-align: left;
+`;
+
+const GuestDetails = styled.div`
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+`;
+
+const FormItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  label {
+    font-weight: bold;
+  }
+  input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+`;
+
+const AddGuestButton = styled.button`
+  margin-top: 10px;
+  padding: 10px 20px;
+  font-size: 1em;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+`;
+
+const PayButton = styled.button`
+  padding: 10px 20px;
+  font-size: 1em;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  align-self: center;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+`;
+
+const RemoveGuestButton = styled.button`
+  margin-top: 20px;
+  padding: 5px 10px;
+  font-size: 0.9em;
+  background-color: #ff6347;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  align-self: center;
+
+  &:hover {
+    background-color: #e5533d;
+  }
 `;
