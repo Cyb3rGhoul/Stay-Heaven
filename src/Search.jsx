@@ -6,21 +6,36 @@ import ReactSlider from "react-slider";
 import "react-datepicker/dist/react-datepicker.css"; 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faUserFriends,
-  faWifi,
-  faUtensils,
-} from "@fortawesome/free-solid-svg-icons";
+  FaWifi,
+  FaSnowflake,
+  FaCoffee,
+  FaParking,
+  FaTv,
+  FaUtensils,
+  FaTshirt,
+} from "react-icons/fa";
 
 const Search = () => {
   const navigate = useNavigate();
   const [filterOpen, setFilterOpen] = useState(false);
   const [priceRange, setPriceRange] = useState([500, 4000]);
-  const [isCoupleFriendly, setIsCoupleFriendly] = useState(false);
-  const [wifiAvailable, setWifiAvailable] = useState(false);
-  const [breakfastIncluded, setBreakfastIncluded] = useState(false);
 
   const toggleFilter = () => {
     setFilterOpen(!filterOpen);
+  };
+
+  const [features, setFeatures] = useState({
+    wifi: true,
+    ac: true,
+    breakfast: false,
+    parking: true,
+    tv: false,
+    kitchen: true,
+    laundry: true,
+  });
+
+  const handleFeatureChange = (e) => {
+    setFeatures({ ...features, [e.target.name]: e.target.checked });
   };
 
   const properties = [
@@ -124,31 +139,95 @@ const Search = () => {
             </FilterSection>
             <FilterSection>
               <CheckboxContainer>
-                <CheckboxLabel checked={isCoupleFriendly}>
+                <CheckboxLabel checked={features.wifi}>
                   <HiddenCheckbox
-                    checked={isCoupleFriendly}
-                    onChange={() => setIsCoupleFriendly(!isCoupleFriendly)}
+                    name="wifi"
+                    checked={features.wifi}
+                    onChange={handleFeatureChange}
                   />
-                  <FontAwesomeIcon icon={faUserFriends} size="2x" />
-                  Couple Friendly
+                  <FaWifi size={24} />
+                  WiFi
                 </CheckboxLabel>
-                <CheckboxLabel checked={wifiAvailable}>
+                <CheckboxLabel checked={features.ac}>
                   <HiddenCheckbox
-                    checked={wifiAvailable}
-                    onChange={() => setWifiAvailable(!wifiAvailable)}
+                    name="ac"
+                    checked={features.ac}
+                    onChange={handleFeatureChange}
                   />
-                  <FontAwesomeIcon icon={faWifi} size="2x" />
-                  WiFi Available
+                  <FaSnowflake size={24} />
+                  AC
                 </CheckboxLabel>
-                <CheckboxLabel checked={breakfastIncluded}>
+                <CheckboxLabel checked={features.breakfast}>
                   <HiddenCheckbox
-                    checked={breakfastIncluded}
-                    onChange={() => setBreakfastIncluded(!breakfastIncluded)}
+                    name="breakfast"
+                    checked={features.breakfast}
+                    onChange={handleFeatureChange}
                   />
-                  <FontAwesomeIcon icon={faUtensils} size="2x" />
-                  Breakfast Included
+                  <FaCoffee size={24} />
+                  Breakfast
+                </CheckboxLabel>
+                <CheckboxLabel checked={features.parking}>
+                  <HiddenCheckbox
+                    name="parking"
+                    checked={features.parking}
+                    onChange={handleFeatureChange}
+                  />
+                  <FaParking size={24} />
+                  Parking
+                </CheckboxLabel>
+                <CheckboxLabel checked={features.tv}>
+                  <HiddenCheckbox
+                    name="tv"
+                    checked={features.tv}
+                    onChange={handleFeatureChange}
+                  />
+                  <FaTv size={24} />
+                  TV
+                </CheckboxLabel>
+                <CheckboxLabel checked={features.kitchen}>
+                  <HiddenCheckbox
+                    name="kitchen"
+                    checked={features.kitchen}
+                    onChange={handleFeatureChange}
+                  />
+                  <FaUtensils size={24} />
+                  Kitchen
+                </CheckboxLabel>
+                <CheckboxLabel checked={features.laundry}>
+                  <HiddenCheckbox
+                    name="laundry"
+                    checked={features.laundry}
+                    onChange={handleFeatureChange}
+                  />
+                  <FaTshirt size={24} />
+                  Laundry
                 </CheckboxLabel>
               </CheckboxContainer>
+            </FilterSection>
+            <FilterSection>
+              <label>Sort By:</label>
+              <select
+                onChange={(e) => setSortOption(e.target.value)}
+                style={{
+                  padding: "10px",
+                  fontSize: "16px",
+                  borderRadius: "5px",
+                  border: "1px solid #ccc",
+                  width: "100%",
+                  boxSizing: "border-box",
+                  "@media (max-width: 768px)": {
+                    fontSize: "14px",
+                    padding: "8px",
+                  },
+                }}
+              >
+                <option value="latest">Latest</option>
+                <option value="oldest">Oldest</option>
+                <option value="priceLowToHigh">Price: Low to High</option>
+                <option value="priceHighToLow">Price: High to Low</option>
+                <option value="ratingHighToLow">Rating: High to Low</option>
+                <option value="ratingLowToHigh">Rating: Low to High</option>
+              </select>
             </FilterSection>
           </FilterBox>
         )}
@@ -304,7 +383,7 @@ const FilterBox = styled.div`
 
 const CloseButton = styled.button`
   position: absolute;
-  top: 10px;
+  top: 1px;
   right: 10px;
   background: none;
   border: none;
@@ -322,7 +401,7 @@ const FilterSection = styled.div`
 
 const CheckboxContainer = styled.div`
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   gap: 10px;
   justify-content: center;
 `;
