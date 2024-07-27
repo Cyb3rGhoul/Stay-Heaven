@@ -15,6 +15,9 @@ import Notfound from "./Notfound.jsx";
 import ForgotPassword from "./ForgotPage.jsx";
 import PreviousBookings from "./PreviousBookings.jsx";
 import CreatePlace from "./CreatePlace.jsx";
+import Admin from "./Admin.jsx";
+import AdminDashboard from "./AdminDashboard.jsx";
+import AdminRequests from "./AdminRequests.jsx";
 
 const router = createBrowserRouter([
   {
@@ -70,6 +73,20 @@ const router = createBrowserRouter([
   {
     path: "/forgotPassword",
     element: <ForgotPassword />,
+  },
+  {
+    path: "/admin",
+    element: <Admin />,
+    children: [
+      {
+        path: "dashboard",
+        element: <AdminDashboard />,
+      },
+      {
+        path: "requests",
+        element: <AdminRequests />,
+      },
+    ],
   },
 ]);
 

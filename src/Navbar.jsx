@@ -26,7 +26,6 @@ const Navbar = () => {
         </Link>
       </div>
       <ul className={`navbar__links ${menuOpen ? "active" : ""}`}>
-        
         {isLoggedIn ? (
           <li className="navbar__username" onClick={toggleDropdown}>
             <div className="flex gap-4">
@@ -38,9 +37,9 @@ const Navbar = () => {
             </div>
             {dropdownOpen && (
               <div className="navbar__dropdown">
-              <button className="navbar__close" onClick={toggleMenu}>
-          ✖
-        </button>
+                <button className="navbar__close" onClick={toggleMenu}>
+                  ✖
+                </button>
                 <div className="mt-6">Profile</div>
                 <div>Previous Bookings</div>
                 <div>Dashboard</div>
@@ -52,21 +51,20 @@ const Navbar = () => {
           <div className="flex gap-1">
             <li className="">
               <Link to="/signup" onClick={toggleMenu}>
-              <button class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-teal-300 to-lime-300 group-hover:from-teal-300 group-hover:to-lime-300 dark:text-white dark:hover:text-gray-900 focus:ring-4 max-[500px]:mt-2 focus:outline-none focus:ring-lime-200 dark:focus:ring-lime-800">
-<span class="relative px-5 py-2.5 max-[500px]:px-2 max-[500px]:py-1.5  transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
-Sign Up
-</span>
-</button>
-                
+                <button class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-teal-300 to-lime-300 group-hover:from-teal-300 group-hover:to-lime-300 dark:text-white dark:hover:text-gray-900 focus:ring-4 max-[500px]:mt-2 focus:outline-none focus:ring-lime-200 dark:focus:ring-lime-800">
+                  <span class="relative px-5 py-2.5 max-[500px]:px-2 max-[500px]:py-1.5  transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+                    Sign Up
+                  </span>
+                </button>
               </Link>
             </li>
             <li>
               <Link to="/login" onClick={toggleMenu}>
-              <button class="relative inline-flex max-[500px]:mt-2 items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-teal-300 to-lime-300 group-hover:from-teal-300 group-hover:to-lime-300 dark:text-white dark:hover:text-gray-900 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-lime-800">
-<span class="relative px-5 py-2.5 max-[500px]:px-2 max-[500px]:py-1.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
-Login
-</span>
-</button>
+                <button class="relative inline-flex max-[500px]:mt-2 items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-teal-300 to-lime-300 group-hover:from-teal-300 group-hover:to-lime-300 dark:text-white dark:hover:text-gray-900 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-lime-800">
+                  <span class="relative px-5 py-2.5 max-[500px]:px-2 max-[500px]:py-1.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+                    Login
+                  </span>
+                </button>
               </Link>
             </li>
           </div>
