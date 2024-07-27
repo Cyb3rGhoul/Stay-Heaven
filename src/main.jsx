@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import "./index.css";
-import { Router, RouterProvider, createBrowserRouter } from "react-router-dom";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Home from "./Home.jsx";
 import SignUp from "./SignUp.jsx";
 import Login from "./Login.jsx";
@@ -19,6 +19,7 @@ import Admin from "./Admin.jsx";
 import AdminDashboard from "./AdminDashboard.jsx";
 import AdminRequests from "./AdminRequests.jsx";
 import AdminHotels from './AdminHotels';
+import SellerFormPage from "./SellerAuth.jsx";
 
 const router = createBrowserRouter([
   {
@@ -60,6 +61,10 @@ const router = createBrowserRouter([
       {
         path: "*",
         element: <Notfound />,
+      },
+      {
+        path: "/seller",
+        element: <SellerFormPage />,
       },
     ],
   },
