@@ -2,6 +2,10 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import logo from "./assets/logo.png";
 import Navbar from "./Navbar";
+import dashboard from "./assets/adminnav/dashboard.png";
+import requests from "./assets/adminnav/requests.png";
+import hotels from "./assets/adminnav/hotel.png";
+import users from "./assets/adminnav/users.png";
 
 const AdminNavbar = () => {
   return (
@@ -20,33 +24,45 @@ const AdminNavbar = () => {
             {
               path: "/admin/dashboard",
               label: "Dashboard",
+              icon: dashboard,
             },
             {
               path: "/admin/requests",
               label: "Requests",
+              icon: requests,
             },
             {
               path: "/admin/hotels",
               label: "Hotels",
+              icon: hotels,
             },
             {
               path: "/admin/users",
               label: "Users",
+              icon:  users,
+            },
+            {
+              path: "/admin/prev-bookings",
+              label: "Previous Bookings",
+              icon:  users,
             },
           ].map((item, index) => (
             <NavLink
+              key={item.label}
               to={item.path}
               className={({ isActive }) =>
-                `flex items-center gap-4 bg-blue-400/25 hover:bg-blue-700/60 transition-all duration-500 px-4 py-2 rounded-lg ${
-                  isActive ? "bg-blue-700/60" : ""
+                `flex items-center gap-4 bg-[#9ce49e] hover:bg-[#508D4E] hover:text-white transition-all duration-500 px-4 py-2 rounded-lg ${
+                  isActive ? "bg-[#78d075] text-white" : ""
                 }`
               }
             >
+              <div className="p-2 bg-green-700/20 rounded-lg backdrop-blur-sm size-12">
               <img
-                className="size-16 rounded-full"
-                src="https://minimal-kit-react.vercel.app/assets/images/avatars/avatar_25.jpg"
+                className=""
+                src={item.icon}
                 alt=""
               />
+              </div>
               <h2 className="text-xl">{item.label}</h2>
             </NavLink>
           ))}

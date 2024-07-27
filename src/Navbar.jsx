@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import "./Navbar.css";
 import logo from "./assets/logo.png";
 import profileImage from "./assets/profile.png"; // Replace with the actual path to the profile image
@@ -8,8 +8,16 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [fixed, setfixed] = useState(false)
   const username = "username";
-
+  const location = useLocation();
+  const currentPath = location.pathname.split("/")[1];
+  useEffect(() => {
+    if(currentPath === "admin") {
+      setfixed(true)
+    }
+  })
+  
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
@@ -19,7 +27,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="navbar light">
+    <nav className={`navbar light ${fixed ? "fixed top-0 left-0 w-full z-10": "" }`}>
       <div className="navbar__logo">
         <Link to="/">
           <img src={logo} alt="StayHeaven Logo" />

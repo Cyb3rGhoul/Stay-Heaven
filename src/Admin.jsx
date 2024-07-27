@@ -5,9 +5,9 @@ import { Outlet } from "react-router-dom";
 
 const Admin = () => {
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full bg-white">
       <AdminNavbar />
-      <main className="bg-red-00 w-4/5 absolute left-[20%] mt-6 ">
+      <main className="w-4/5 absolute left-[20%] top-[8vh] ">
         <Outlet />
       </main>
     </div>
