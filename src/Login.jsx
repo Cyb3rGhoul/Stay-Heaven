@@ -36,7 +36,22 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <LoginButton type="submit">Login</LoginButton>
+            <LoginButton type="submit">
+              <span className="span-mother">
+                <span>L</span>
+                <span>o</span>
+                <span>g</span>
+                <span>i</span>
+                <span>n</span>
+              </span>
+              <span className="span-mother2">
+                <span>L</span>
+                <span>o</span>
+                <span>g</span>
+                <span>i</span>
+                <span>n</span>
+              </span>
+            </LoginButton>
             <ForgotPasswordButton onClick={() => navigate("/forgotPassword")}>
               Forgot Password?
             </ForgotPasswordButton>
@@ -102,6 +117,7 @@ const Input = styled.input`
   }
 `;
 
+
 const LoginButton = styled.button`
   padding: 10px;
   background-color: #90ee90;
@@ -111,6 +127,13 @@ const LoginButton = styled.button`
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 42.66px;
 
   &:hover {
     background-color: #057807;
@@ -120,6 +143,83 @@ const LoginButton = styled.button`
   @media (max-width: 768px) {
     padding: 8px;
     font-size: 14px;
+  }
+
+  .span-mother, .span-mother2 {
+    display: flex;
+    position: absolute;
+  }
+
+  .span-mother {
+    overflow: hidden;
+  }
+
+  &:hover .span-mother {
+    position: absolute;
+  }
+
+  &:hover .span-mother span {
+    transform: translateY(1.2em);
+  }
+
+  .span-mother span:nth-child(1) {
+    transition: 0.2s;
+  }
+
+  .span-mother span:nth-child(2) {
+    transition: 0.3s;
+  }
+
+  .span-mother span:nth-child(3) {
+    transition: 0.4s;
+  }
+
+  .span-mother span:nth-child(4) {
+    transition: 0.5s;
+  }
+
+  .span-mother span:nth-child(5) {
+    transition: 0.6s;
+  }
+
+  .span-mother span:nth-child(6) {
+    transition: 0.7s;
+  }
+
+  .span-mother2 {
+    overflow: hidden;
+  }
+
+  .span-mother2 span {
+    transform: translateY(-2em); /* Increased value */
+  }
+
+  &:hover .span-mother2 span {
+    transform: translateY(0);
+  }
+
+  .span-mother2 span {
+    transition: 0.2s;
+  }
+
+  .span-mother2 span:nth-child(2) {
+    transition: 0.3s;
+  }
+
+  .span-mother2 span:nth-child(3) {
+    transition: 0.4s;
+  }
+
+  .span-mother2 span:nth-child(4) {
+    transition: 0.5s;
+  }
+
+  .span-mother2 span:nth-child(5) {
+    transition: 0.6s;
+  }
+
+  .span-mother2 span:nth-child(6) {
+    transition: 0.7s;
   }
 `;
 

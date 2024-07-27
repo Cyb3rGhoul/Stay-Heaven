@@ -14,37 +14,37 @@ const Landing = () => {
     {
       id: 1,
       title: "Cozy Apartment",
-      price: "$120/night",
+      price: "₹120/night",
       image: "https://via.placeholder.com/300",
     },
     {
       id: 2,
       title: "Luxury Villa",
-      price: "$350/night",
+      price: "₹350/night",
       image: "https://via.placeholder.com/300",
     },
     {
       id: 3,
       title: "Modern House",
-      price: "$200/night",
+      price: "₹200/night",
       image: "https://via.placeholder.com/300",
     },
     {
       id: 4,
       title: "Beachfront Condo",
-      price: "$220/night",
+      price: "₹220/night",
       image: "https://via.placeholder.com/300",
     },
     {
       id: 5,
       title: "Mountain Cabin",
-      price: "$180/night",
+      price: "₹180/night",
       image: "https://via.placeholder.com/300",
     },
     {
       id: 6,
       title: "Urban Loft",
-      price: "$150/night",
+      price: "₹150/night",
       image: "https://via.placeholder.com/300",
     },
   ];

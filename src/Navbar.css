@@ -124,6 +124,194 @@ body.light-theme {
   color: #333;
 }
 
+@keyframes bg-spin {
+  to {
+    --border-angle: 1turn;
+  }
+}
+
+@property --border-angle {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: 0turn;
+}
+
+.button-animation {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  width: 90px;
+  height: 42.66px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  background: #90ee90;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  text-align: center;
+}
+
+.button-animation:hover {
+  background-color: #057807;
+  color: #fff;
+}
+
+.button-animation .span-mother,
+.button-animation .span-mother2 {
+  position: absolute;
+  display: flex;
+}
+
+.button-animation .span-mother {
+  overflow: hidden;
+}
+
+.button-animation:hover .span-mother {
+  position: absolute;
+}
+
+.button-animation:hover .span-mother span {
+  transform: translateY(3rem);
+}
+
+.button-animation .span-mother span:nth-child(1) {
+  transition: 0.2s;
+}
+
+.button-animation .span-mother span:nth-child(2) {
+  transition: 0.3s;
+}
+
+.button-animation .span-mother span:nth-child(3) {
+  transition: 0.4s;
+}
+
+.button-animation .span-mother span:nth-child(4) {
+  transition: 0.5s;
+}
+
+.button-animation .span-mother span:nth-child(5) {
+  transition: 0.6s;
+}
+
+.button-animation .span-mother span:nth-child(6) {
+  transition: 0.7s;
+}
+.button-animation .span-mother span:nth-child(7) {
+  transition: 0.8s;
+}
+
+.button-animation .span-mother2 {
+  overflow: hidden;
+}
+
+.button-animation .span-mother2 span {
+  transform: translateY(-6rem);
+}
+
+.button-animation:hover .span-mother2 span {
+  transform: translateY(0);
+}
+
+.button-animation .span-mother2 span:nth-child(1) {
+  transition: 0.2s;
+}
+
+.button-animation .span-mother2 span:nth-child(2) {
+  transition: 0.3s;
+}
+
+.button-animation .span-mother2 span:nth-child(3) {
+  transition: 0.4s;
+}
+
+.button-animation .span-mother2 span:nth-child(4) {
+  transition: 0.5s;
+}
+
+.button-animation .span-mother2 span:nth-child(5) {
+  transition: 0.6s;
+}
+
+.button-animation .span-mother2 span:nth-child(6) {
+  transition: 0.7s;
+}
+.button-animation .span-mother2 span:nth-child(7) {
+  transition: 0.8s;
+}
+
 /* Media Queries for responsive design */
 /* Adjustments for mobile screen */
 
+#theme-toggle-button {
+  font-size: 8px;
+  position: absolute;
+  top: 2px;
+  right: 5px;
+  display: inline-block;
+  width: 7em;
+  cursor: pointer;
+}
+
+#toggle {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+#container,
+#patches,
+#stars,
+#button,
+#sun,
+#moon,
+#cloud {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 0.25s;
+}
+
+#toggle:checked + svg #container {
+  fill: #2b4360;
+}
+
+#toggle:checked + svg #button {
+  transform: translate(28px, 2.333px);
+}
+
+#sun {
+  opacity: 1;
+}
+
+#toggle:checked + svg #sun {
+  opacity: 0;
+}
+
+#moon {
+  opacity: 0;
+}
+
+#toggle:checked + svg #moon {
+  opacity: 1;
+}
+
+#cloud {
+  opacity: 1;
+}
+
+#toggle:checked + svg #cloud {
+  opacity: 0;
+}
+
+#stars {
+  opacity: 0;
+}
+
+#toggle:checked + svg #stars {
+  opacity: 1;
+}
