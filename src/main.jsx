@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import "./index.css";
-import { Router, RouterProvider, createBrowserRouter } from "react-router-dom";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Home from "./Home.jsx";
 import SignUp from "./SignUp.jsx";
 import Login from "./Login.jsx";
@@ -15,6 +15,7 @@ import Notfound from "./Notfound.jsx";
 import ForgotPassword from "./ForgotPage.jsx";
 import PreviousBookings from "./PreviousBookings.jsx";
 import CreatePlace from "./CreatePlace.jsx";
+import SellerFormPage from "./SellerAuth.jsx"; // Import the new page
 
 const router = createBrowserRouter([
   {
@@ -56,6 +57,10 @@ const router = createBrowserRouter([
       {
         path: "*",
         element: <Notfound />,
+      },
+      {
+        path: "/seller",
+        element: <SellerFormPage />, // Add the new page here
       },
     ],
   },
