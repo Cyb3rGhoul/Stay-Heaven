@@ -49,59 +49,59 @@ const HotelDetails = () => {
     }
   };
 
-const reviews = [
-  { user: "User 1", comment: "Great place to stay!", date: "2023-06-01" },
-  {
-    user: "User 2",
-    comment: "Loved the location and amenities.",
-    date: "2023-06-10",
-  },
-  {
-    user: "User 3",
-    comment: "Very comfortable and clean.",
-    date: "2023-06-15",
-  },
-  {
-    user: "User 4",
-    comment: "Excellent service and location.",
-    date: "2023-06-20",
-  },
-];
+  const reviews = [
+    { user: "User 1", comment: "Great place to stay!", date: "2023-06-01" },
+    {
+      user: "User 2",
+      comment: "Loved the location and amenities.",
+      date: "2023-06-10",
+    },
+    {
+      user: "User 3",
+      comment: "Very comfortable and clean.",
+      date: "2023-06-15",
+    },
+    {
+      user: "User 4",
+      comment: "Excellent service and location.",
+      date: "2023-06-20",
+    },
+  ];
 
-const generateRandomStars = () => {
-  const stars = Math.floor(Math.random() * 5) + 1;
-  return "★".repeat(stars) + "☆".repeat(5 - stars);
-};
+  const generateRandomStars = () => {
+    const stars = Math.floor(Math.random() * 5) + 1;
+    return "★".repeat(stars) + "☆".repeat(5 - stars);
+  };
 
-const handleAddGuest = () => {
-  setGuestNames([...guestNames, ""]);
-};
+  const handleAddGuest = () => {
+    setGuestNames([...guestNames, ""]);
+  };
 
-const handleRemoveGuest = (index) => {
-  const updatedGuestNames = [...guestNames];
-  updatedGuestNames.splice(index, 1);
-  setGuestNames(updatedGuestNames);
-};
+  const handleRemoveGuest = (index) => {
+    const updatedGuestNames = [...guestNames];
+    updatedGuestNames.splice(index, 1);
+    setGuestNames(updatedGuestNames);
+  };
 
-const handleGuestNameChange = (index, value) => {
-  const newGuestNames = [...guestNames];
-  newGuestNames[index] = value;
-  setGuestNames(newGuestNames);
-};
+  const handleGuestNameChange = (index, value) => {
+    const newGuestNames = [...guestNames];
+    newGuestNames[index] = value;
+    setGuestNames(newGuestNames);
+  };
 
-const handlePopupClose = () => {
-  setShowPopup(false);
-};
+  const handlePopupClose = () => {
+    setShowPopup(false);
+  };
 
-const handleBookClick = () => {
-  setShowPopup(true);
-};
+  const handleBookClick = () => {
+    setShowPopup(true);
+  };
 
-const handlePay = () => {
-  // Handle payment logic here
-  console.log("Payment processed");
-  setShowPopup(false);
-};
+  const handlePay = () => {
+    // Handle payment logic here
+    console.log("Payment processed");
+    setShowPopup(false);
+  };
 
 
 
@@ -291,31 +291,35 @@ const handlePay = () => {
                       <AddGuestButton type="button" onClick={handleAddGuest}>
                         Add Guest
                       </AddGuestButton>
-                      <FormItem>
-                        <label>Check-In Date:</label>
-                        <DatePicker
-                          selected={checkInDate}
-                          onChange={(date) => setCheckInDate(date)}
-                          placeholderText="Check-In"
-                        />
-                      </FormItem>
-                      <FormItem>
-                        <label>Check-Out Date:</label>
-                        <DatePicker
-                          selected={checkOutDate}
-                          onChange={(date) => setCheckOutDate(date)}
-                          placeholderText="Check-Out"
-                        />
-                      </FormItem>
+                      <div className="flex flex-row">
+                        <FormItem>
+                          <label>Check-In Date:</label>
+                          <DatePicker
+                            selected={checkInDate}
+                            onChange={(date) => setCheckInDate(date)}
+                            placeholderText="Check-In"
+                          />
+                        </FormItem>
+                        <div className="w-5"></div>
+                        <FormItem>
+                          <label>Check-Out Date:</label>
+                          <DatePicker
+                            selected={checkOutDate}
+                            onChange={(date) => setCheckOutDate(date)}
+                            placeholderText="Check-Out"
+                          />
+                        </FormItem>
+                      </div>
                       <FormItem>
                         <label>Mobile Number:</label>
                         <input
                           type="text"
                           value={mobileNumber}
                           onChange={(e) => setMobileNumber(e.target.value)}
+                          className="w-1/2"
                         />
                       </FormItem>
-                      <FormItem>
+                      <FormItem className="self-center">
                         <label>Final Price:</label>
                         <p>₹19999</p>
                       </FormItem>
@@ -710,7 +714,7 @@ const PopupContent = styled.div`
   background: white;
   padding: 20px;
   border-radius: 10px;
-  max-width: 70vw;
+  max-width: 60vw;
   max-height: 70vh;
   overflow-y: auto;
   width: 100%;
@@ -722,10 +726,10 @@ const PopupHeader = styled.div`
 `;
 
 const CloseButton = styled.button`
-  background: #ff6347;
-  border: none;
-  color: white;
-  font-size: 1.5em;
+  background: #fff !important;
+  border: none !important;
+  color: black !important;
+  font-size: 2.5em !important;
   cursor: pointer;
   border-radius: 50%;
   width: 40px;
@@ -771,6 +775,7 @@ const FormItem = styled.div`
 `;
 
 const AddGuestButton = styled.button`
+  width: 21%;
   margin-top: 10px;
   padding: 10px 20px;
   font-size: 1em;
@@ -783,6 +788,7 @@ const AddGuestButton = styled.button`
 
 const PayButton = styled.button`
   padding: 10px 20px;
+  width: 30%;
   font-size: 1em;
   background-color: #007bff;
   color: white;
@@ -791,7 +797,6 @@ const PayButton = styled.button`
   cursor: pointer;
   transition: background-color 0.3s;
   align-self: center;
-
   &:hover {
     background-color: #0056b3;
   }
