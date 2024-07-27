@@ -18,6 +18,7 @@ import CreatePlace from "./CreatePlace.jsx";
 import Admin from "./Admin.jsx";
 import AdminDashboard from "./AdminDashboard.jsx";
 import AdminRequests from "./AdminRequests.jsx";
+import AdminHotels from './AdminHotels';
 
 const router = createBrowserRouter([
   {
@@ -85,6 +86,10 @@ const router = createBrowserRouter([
       {
         path: "requests",
         element: <AdminRequests />,
+      },
+      {
+        path: "hotels",
+        element: <AdminHotels />,
       },
     ],
   },
