@@ -163,6 +163,7 @@ const CreateBooking = () => {
                 <ImageInput
                   id="imageUploadInput"
                   type="file"
+                  accept="image/*"
                   onChange={handleImageChange}
                   style={{ display: "none" }}
                 />
