@@ -15,7 +15,10 @@ import Notfound from "./Notfound.jsx";
 import ForgotPassword from "./ForgotPage.jsx";
 import PreviousBookings from "./PreviousBookings.jsx";
 import CreatePlace from "./CreatePlace.jsx";
-import SellerFormPage from "./SellerAuth.jsx"; // Import the new page
+import Admin from "./Admin.jsx";
+import AdminDashboard from "./AdminDashboard.jsx";
+import AdminRequests from "./AdminRequests.jsx";
+import SellerFormPage from "./SellerAuth.jsx";
 
 const router = createBrowserRouter([
   {
@@ -60,7 +63,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/seller",
-        element: <SellerFormPage />, // Add the new page here
+        element: <SellerFormPage />,
       },
     ],
   },
@@ -75,6 +78,20 @@ const router = createBrowserRouter([
   {
     path: "/forgotPassword",
     element: <ForgotPassword />,
+  },
+  {
+    path: "/admin",
+    element: <Admin />,
+    children: [
+      {
+        path: "dashboard",
+        element: <AdminDashboard />,
+      },
+      {
+        path: "requests",
+        element: <AdminRequests />,
+      },
+    ],
   },
 ]);
 

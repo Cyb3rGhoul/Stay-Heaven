@@ -26,7 +26,6 @@ const Navbar = () => {
         </Link>
       </div>
       <ul className={`navbar__links ${menuOpen ? "active" : ""}`}>
-
         {isLoggedIn ? (
           <li className="navbar__username" onClick={toggleDropdown}>
             <div className="flex gap-4">
