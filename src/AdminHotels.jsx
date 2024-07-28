@@ -26,13 +26,13 @@ const AdminHotels = () => {
               <td className='text-center'>New York</td>
               <td className='text-center'>NY</td>
               <td className='text-center'>
-                <select className='select select-ghost select-sm'>
+                <select className='select bg-zinc-200 select-ghost select-sm'>
                   <option>Accepted</option>
                   <option>Rejected</option>
                 </select>
               </td>
               <td className='text-center flex justify-center '>
-                <button className="btn" onClick={()=>document.getElementById('my_modal_3').showModal()}>More</button>
+                <button className="btn bg-zinc-200" onClick={()=>document.getElementById('my_modal_3').showModal()}>More</button>
                 <dialog id="my_modal_3" className="modal">
                   <div className="modal-box">
                     <form method="dialog">

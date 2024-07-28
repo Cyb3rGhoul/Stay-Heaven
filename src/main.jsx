@@ -20,6 +20,8 @@ import AdminDashboard from "./AdminDashboard.jsx";
 import AdminRequests from "./AdminRequests.jsx";
 import AdminHotels from './AdminHotels';
 import SellerFormPage from "./SellerAuth.jsx";
+import AdminUser from "./AdminUser.jsx";
+import AdminBookings from "./AdminBookings.jsx";
 
 const router = createBrowserRouter([
   {
@@ -95,6 +97,14 @@ const router = createBrowserRouter([
       {
         path: "hotels",
         element: <AdminHotels />,
+      },
+      {
+        path: "users",
+        element: <AdminUser />,
+      },
+      {
+        path: "bookings",
+        element: <AdminBookings />,
       },
     ],
   },

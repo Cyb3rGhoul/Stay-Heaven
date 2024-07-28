@@ -42,8 +42,8 @@ const AdminNavbar = () => {
               icon:  users,
             },
             {
-              path: "/admin/prev-bookings",
-              label: "Previous Bookings",
+              path: "/admin/Bookings",
+              label: "Bookings",
               icon:  users,
             },
           ].map((item, index) => (
