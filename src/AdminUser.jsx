@@ -3,6 +3,22 @@ import React from 'react'
 const AdminUser = () => {
   return (
     <div>
+      <div className="ml-2 py-4">
+        <select
+          className="border-2 border-black rounded-md"
+          name="filter"
+          id="filter"
+        >
+          <option value="select">select</option>
+          <option value="username">username</option>
+          <option value="email">email</option>
+          <option value="previousBookings">previous bookings</option>
+          <option value="myCreatedPlaces">my created places</option>
+          <option value="admin">admin</option>
+          <option value="seller">seller</option>
+          <option value="receivedOrders">received orders</option>
+        </select>
+      </div>
         <div className="overflow-x-auto">
         <table className="table">
           <thead>
@@ -17,6 +33,7 @@ const AdminUser = () => {
               <th className='text-center'>Seller</th>
               <th className='text-center'>Created Hotels</th>
               <th className='text-center'>Orders</th>
+              <th className='text-center'>Ban User</th>
             </tr>
           </thead>
           <tbody>
@@ -32,8 +49,7 @@ const AdminUser = () => {
                     </div>
                     </div>
                     <div>
-                    <div className="font-bold">Hart Hagerty</div>
-                    <div className="text-sm opacity-50">United States</div>
+                    <div className="font-bold">HartHagerty</div>
                     </div>
                 </div>
               </td>
@@ -45,10 +61,10 @@ const AdminUser = () => {
                 value=""
                 >
                 <option value="" disabled selected>order id</option>
-                  <option>54654679856325654</option>
+                  <option >54654679856325654</option>
                 </select>
               </td>
-              <td className='text-center  mt-2 flex justify-center '>
+              <td className='text-center  mt-2  '>
                 <select className='select bg-zinc-200 select-ghost select-sm'
                 >
                   <option>Yes</option>
@@ -62,7 +78,7 @@ const AdminUser = () => {
                   <option>No</option>
                 </select>
               </td>
-              <td className='text-center  flex justify-center '>
+              <td className='text-center'>
               <select className='select bg-zinc-200 select-ghost select-sm'
                 value=""
                 >
@@ -77,6 +93,12 @@ const AdminUser = () => {
                 <option value="" disabled selected>Received Order id</option>
                   <option>54654679856325654</option>
                 </select>
+              </td>
+              <td>
+                <select className='select bg-zinc-200 select-ghost select-sm'>
+                    <option>No</option>
+                    <option>Yes</option>
+                  </select>
               </td>
             </tr>
           </tbody>

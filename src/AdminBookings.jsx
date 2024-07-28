@@ -3,6 +3,19 @@ import React from 'react'
 const AdminBookings = () => {
   return (
     <div>
+      <div className="ml-2 py-4">
+        <select
+          className="border-2 border-black rounded-md"
+          name="filter"
+          id="filter"
+        >
+          <option value="hotelid">hotel id</option>
+          <option value="checkin">checkin</option>
+          <option value="checkout">checkout</option>
+          <option value="userid ">userid</option>
+          <option value="approvalStatus">approval status</option>
+        </select>
+      </div>
       <div className="overflow-x-auto">
         <table className="table">
           <thead>

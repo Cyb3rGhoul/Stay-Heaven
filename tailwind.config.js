@@ -9,5 +9,10 @@ export default {
   },
   plugins: [
     require('daisyui'),
+    require('tailwind-scrollbar-daisyui'),
   ],
+  variants: {
+    // ...
+    scrollbar: ['rounded']
+}
 }

@@ -2,39 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Firefox (uncomment to work in Firefox, although other properties will not work!)  */
-/** {
+.scrollbar-thumb-rounded::-webkit-scrollbar-thumb {
+  border-radius: 12px;
+}
+
+.scrollbar-thumb-rounded {
   scrollbar-width: thin;
-  scrollbar-color: #B2572B #DFE9EB;
-}*/
-
-/* Chrome, Edge and Safari */
-*::-webkit-scrollbar {
-  height: 10px;
-  width: 10px;
-}
-*::-webkit-scrollbar-track {
   border-radius: 5px;
-  background-color: #DFE9EB;
+  scrollbar-color: #B2572B #edf2f7; /* thumb and track color */
 }
 
-*::-webkit-scrollbar-track:hover {
-  background-color: #B8C0C2;
-}
-
-*::-webkit-scrollbar-track:active {
-  background-color: #B8C0C2;
-}
-
-*::-webkit-scrollbar-thumb {
-  border-radius: 5px;
-  background-color: #B2572B;
-}
-
-*::-webkit-scrollbar-thumb:hover {
-  background-color: #C86A37;
-}
-
-*::-webkit-scrollbar-thumb:active {
-  background-color: #E26E37;
+.scrollbar-w {
+  scrollbar-width: thin;
+  border-radius: 10px;
+  scrollbar-color: #B2572B #edf2f7; /* thumb and track color */
 }

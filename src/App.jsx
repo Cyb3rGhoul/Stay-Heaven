@@ -25,7 +25,7 @@ const App = () => {
   }, [location, navigationType]);
 
   return (
-    <>
+    <div className="h-screen scrollbar scrollbar-thumb-rounded relative">
       <GlobalStyles />
       {loading && <Preloader />}
       {!loading && (
@@ -37,7 +37,7 @@ const App = () => {
           <Footer />
         </>
       )}
-    </>
+    </div>
   );
 };
 
