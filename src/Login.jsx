@@ -3,18 +3,29 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import googlebutt from "./assets/googlesignup.png";
 import Navbar from "./Navbar";
+import axios from "./utils/axios";
 
 const Login = () => {
   const navigate = useNavigate();
   const [emailOrUsername, setEmailOrUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (emailOrUsername && password) {
-      navigate("/");
-    } else {
+
+    if (!emailOrUsername || !password) {
       alert("All fields are required");
+      return;
+    } 
+
+    try {
+      const response = await axios.post("/user/login", {
+        identity: emailOrUsername,
+        password,
+      });
+      navigate("/");
+    } catch (error) {
+      console.error(error);
     }
   };
 

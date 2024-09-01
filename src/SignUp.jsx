@@ -2,30 +2,75 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import styled from "styled-components";
 import Navbar from "./Navbar";
+import axios from "./utils/axios";
 
 const SignUp = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [avatar, setAvatar] = useState(null);
+  const [avatar, setAvatar] = useState("");
+  const [avatarurl, setAvatarurl] = useState("");
+  const [fullname, setFullname] = useState("");
+  const [phone, setPhone] = useState("");
 
-  const handleSignUp = (e) => {
+  const handleSignUp = async (e) =>{
     e.preventDefault();
-    if (username && email && password) {
-      // Perform signup logic here (e.g., API call)
-      navigate("/");
-    } else {
-      alert("All fields are required");
-    }
-  };
 
-  const handleAvatarChange = (e) => {
+    if (!username || !email || !password || !avatar || !fullname || !phone){
+      alert("All fields are required");
+      return;
+    }
+
+    if(phone.length != 10){
+      alert("Invalid phone number");
+      return;
+    }
+
+    try {
+      const formdata = new FormData();
+      formdata.append("file", avatar);
+      formdata.append("upload_preset","stayheaven")
+      formdata.append("cloud_name", "djsdjtkyu");
+
+      const response = await axios.post(
+        `https://api.cloudinary.com/v1_1/djsdjtkyu/image/upload`,
+        formdata,
+      );
+
+      const url = response.data.secure_url;
+      setAvatarurl(url);
+
+    } catch (error) {
+      console.error("error while uploading the image");
+      return ;
+    }
+
+    try {
+      console.log(username,email,password,avatarurl,fullname,phone);
+      const response = await axios.post("/user/register", {
+        username,
+        email,
+        password,
+        avatar:avatarurl,
+        fullName:fullname,
+        phoneNumber:phone,
+      });
+      console.log(response);
+      navigate("/login");
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const [showAvatar, setShowAvatar] = useState(null);
+  const showAvatarhandler = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setAvatar(URL.createObjectURL(file));
+      setShowAvatar(URL.createObjectURL(file));
     }
   };
+
 
   return (
     <>
@@ -35,7 +80,7 @@ const SignUp = () => {
           <Avatar>
             {avatar ? (
               <img
-                src={avatar}
+                src={showAvatar}
                 alt="Avatar"
                 style={{ width: "100%", height: "100%", borderRadius: "50%" }}
               />
@@ -47,10 +92,19 @@ const SignUp = () => {
               id="avatarUpload"
               type="file"
               accept="image/*"
-              onChange={handleAvatarChange}
+              onChange={(e) => {
+                setAvatar(e.target.files[0])
+                showAvatarhandler(e);
+              }}
             />
           </Avatar>
           <Form onSubmit={handleSignUp}>
+          <Input
+              type="text"
+              placeholder="fullname"
+              value={fullname}
+              onChange={(e) => setFullname(e.target.value)}
+            />
             <Input
               type="text"
               placeholder="username"
@@ -62,6 +116,12 @@ const SignUp = () => {
               placeholder="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+            />
+            <Input
+              type="tel"
+              placeholder="phone number"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
             />
             <Input
               type="password"

@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Home.css";
+// import axios from "./utils/axios";
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -9,45 +10,21 @@ const Landing = () => {
   const toggleShowAllCities = () => {
     setShowAllCities(!showAllCities);
   };
+  const [hotels, setHotels] = useState([]);
+  // const gethotels = async ()=>{
+  //   try {
+  //     const response = await axios('/hotel/hotels');
+  //     const data = await response.json();
+  //     console.log(data);
+  //     setHotels(data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
 
-  const properties = [
-    {
-      id: 1,
-      title: "Cozy Apartment",
-      price: "₹120/night",
-      image: "https://via.placeholder.com/300",
-    },
-    {
-      id: 2,
-      title: "Luxury Villa",
-      price: "₹350/night",
-      image: "https://via.placeholder.com/300",
-    },
-    {
-      id: 3,
-      title: "Modern House",
-      price: "₹200/night",
-      image: "https://via.placeholder.com/300",
-    },
-    {
-      id: 4,
-      title: "Beachfront Condo",
-      price: "₹220/night",
-      image: "https://via.placeholder.com/300",
-    },
-    {
-      id: 5,
-      title: "Mountain Cabin",
-      price: "₹180/night",
-      image: "https://via.placeholder.com/300",
-    },
-    {
-      id: 6,
-      title: "Urban Loft",
-      price: "₹150/night",
-      image: "https://via.placeholder.com/300",
-    },
-  ];
+  // useEffect(()=>{
+  //   gethotels();
+  // },[])
 
   const cities = [
     {
@@ -155,7 +132,7 @@ const Landing = () => {
         </div>
         <div className="landing__grid-container">
           <div className="landing__grid">
-            {properties.map((property) => (
+            {hotels.map((property) => (
               <div key={property.id} className="landing__grid-item" onClick={() => navigate("/hotel")}>
                 <img
                   src={property.image}

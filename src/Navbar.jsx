@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import "./Navbar.css";
 import logo from "./assets/logo.png";
-import profileImage from "./assets/profile.png"; // Replace with the actual path to the profile image
+import profileImage from "./assets/profile.png"; 
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -16,7 +16,19 @@ const Navbar = () => {
     if(currentPath === "admin") {
       setfixed(true)
     }
-  })
+  },[])
+
+  useEffect(() => {
+    console.log(document.cookie);
+    const refreshToken = document.cookie
+      .split('; ')
+      .find(row => row.startsWith('refreshToken='));
+
+    if (refreshToken) {
+      setIsLoggedIn(true);
+    }
+  }, []);
+  
   
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
