@@ -71,9 +71,7 @@ const Login = () => {
               Forgot Password?
             </ForgotPasswordButton>
             <OrText>or</OrText>
-            <GoogleButton>
-              <GoogleImage src={googlebutt} alt="Signup with Google" />
-            </GoogleButton>
+            <button onClick={() => { navigate("/signup")}} className="text-black">New User ? Sign Up</button>
           </Form>
         </Card>
       </Wrapper>
@@ -254,32 +252,11 @@ const ForgotPasswordButton = styled.button`
 `;
 
 const OrText = styled.div`
-  margin: 20px 0;
+  margin: 10px 0;
   color: #333;
   font-size: 16px;
 
   @media (max-width: 768px) {
     font-size: 14px;
-  }
-`;
-
-const GoogleButton = styled.button`
-  padding: 0;
-  background: none;
-  border: none;
-  cursor: pointer;
-  margin-left: 30px;
-
-  &:focus {
-    outline: none;
-  }
-`;
-
-const GoogleImage = styled.img`
-  width: 250px;
-  height: auto;
-
-  @media (max-width: 768px) {
-    width: 200px;
   }
 `;

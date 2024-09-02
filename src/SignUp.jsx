@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import styled from "styled-components";
 import Navbar from "./Navbar";
@@ -13,6 +13,8 @@ const SignUp = () => {
   const [avatarurl, setAvatarurl] = useState("");
   const [fullname, setFullname] = useState("");
   const [phone, setPhone] = useState("");
+  const [isFileSelected, setIsFileSelected] = useState(false);
+  const avatarRef = useRef(null);
 
   const handleSignUp = async (e) =>{
     e.preventDefault();
@@ -30,11 +32,11 @@ const SignUp = () => {
     try {
       const formdata = new FormData();
       formdata.append("file", avatar);
-      formdata.append("upload_preset","stayheaven")
-      formdata.append("cloud_name", "djsdjtkyu");
+      formdata.append("upload_preset", import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET)
+      formdata.append("cloud_name", import.meta.env.VITE_CLOUDINARY_CLOUD_NAME);
 
       const response = await axios.post(
-        `https://api.cloudinary.com/v1_1/djsdjtkyu/image/upload`,
+        `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/image/upload`,
         formdata,
       );
 
@@ -68,6 +70,9 @@ const SignUp = () => {
     const file = e.target.files[0];
     if (file) {
       setShowAvatar(URL.createObjectURL(file));
+      setIsFileSelected(true);
+    } else {
+      setIsFileSelected(false);
     }
   };
 
@@ -77,7 +82,9 @@ const SignUp = () => {
       <Navbar />
       <Wrapper>
         <Card>
-          <Avatar>
+          <Avatar onClick={() => {
+            avatarRef.current.click();
+          }} >
             {avatar ? (
               <img
                 src={showAvatar}
@@ -85,10 +92,13 @@ const SignUp = () => {
                 style={{ width: "100%", height: "100%", borderRadius: "50%" }}
               />
             ) : (
-              <AvatarPlaceholder />
+              <AvatarPlaceholder  />
             )}
-            <UploadLabel htmlFor="avatarUpload">Upload</UploadLabel>
+            {!isFileSelected && ( 
+              <UploadLabel htmlFor="avatarUpload">Upload</UploadLabel>
+            )}
             <UploadInput
+              ref={avatarRef}
               id="avatarUpload"
               type="file"
               accept="image/*"
@@ -341,6 +351,7 @@ const Avatar = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 `;
 
 const AvatarPlaceholder = styled.div`
