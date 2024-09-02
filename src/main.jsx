@@ -22,6 +22,8 @@ import AdminHotels from './AdminHotels';
 import SellerFormPage from "./SellerAuth.jsx";
 import AdminUser from "./AdminUser.jsx";
 import AdminBookings from "./AdminBookings.jsx";
+import { store } from './app/store'
+import { Provider } from 'react-redux'
 
 const router = createBrowserRouter([
   {
@@ -111,7 +113,8 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  
+  <Provider store={store}>
     <RouterProvider router={router} />
+    </Provider>
   
 );

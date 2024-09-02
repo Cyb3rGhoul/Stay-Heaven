@@ -1,35 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 import logo from "./assets/logo.png";
-import profileImage from "./assets/profile.png"; 
+import profileImage from "./assets/profile.png";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "./utils/axios";
+import { toggleLogin } from "./app/reducers/userSlice";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [fixed, setfixed] = useState(false)
-  const username = "username";
+  const [isLoggedIn, setIsLoggedIn] = useState(useSelector((state) => state.isLoggedIn));
+  const [fixed, setfixed] = useState(false);
   const location = useLocation();
   const currentPath = location.pathname.split("/")[1];
-  useEffect(() => {
-    if(currentPath === "admin") {
-      setfixed(true)
-    }
-  },[])
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    console.log(document.cookie);
-    const refreshToken = document.cookie
-      .split('; ')
-      .find(row => row.startsWith('refreshToken='));
-
-    if (refreshToken) {
-      setIsLoggedIn(true);
-    }
-  }, []);
-  
-  
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
@@ -38,8 +25,16 @@ const Navbar = () => {
     setDropdownOpen(!dropdownOpen);
   };
 
+  const logouthandler = () => {
+    axios.post("/user/logout", {}, {
+      withCredentials: true, // Important: This sends cookies with the request
+    })
+    dispatch(toggleLogin(false))
+    navigate("/")
+  }
+
   return (
-    <nav className={`navbar light ${fixed ? "fixed top-0 left-0 w-full z-10": "" }`}>
+    <nav className={`navbar light ${fixed ? "fixed top-0 left-0 w-full z-10" : ""}`}>
       <div className="navbar__logo">
         <Link to="/">
           <img src={logo} alt="StayHeaven Logo" />
@@ -63,16 +58,16 @@ const Navbar = () => {
                 <div className="mt-6">Profile</div>
                 <div>Previous Bookings</div>
                 <div>Dashboard</div>
-                <div>Logout</div>
+                <div onClick={logouthandler}>Logout</div>
               </div>
             )}
           </li>
         ) : (
           <div className="flex gap-1">
-            <li className="">
+            <li>
               <Link to="/signup" onClick={toggleMenu}>
-                <button class="button-animation relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-teal-300 to-lime-300 group-hover:from-teal-300 group-hover:to-lime-300 dark:text-gray-900 dark:hover:text-white focus:ring-4 max-[500px]:mt-2 focus:outline-none focus:ring-lime-200 dark:focus:ring-lime-800">
-                  <span class="span-mother relative px-5 py-2.5 max-[500px]:px-2 max-[500px]:py-1.5 transition-all ease-in duration-75 bg-white rounded-md group-hover:bg-opacity-0">
+                <button className="button-animation relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-teal-300 to-lime-300 group-hover:from-teal-300 group-hover:to-lime-300 dark:text-gray-900 dark:hover:text-white focus:ring-4 max-[500px]:mt-2 focus:outline-none focus:ring-lime-200 dark:focus:ring-lime-800">
+                  <span className="span-mother relative px-5 py-2.5 max-[500px]:px-2 max-[500px]:py-1.5 transition-all ease-in duration-75 bg-white rounded-md group-hover:bg-opacity-0">
                     <span>S</span>
                     <span>i</span>
                     <span>g</span>
@@ -81,7 +76,7 @@ const Navbar = () => {
                     <span>U</span>
                     <span>p</span>
                   </span>
-                  <span class="span-mother2">
+                  <span className="span-mother2">
                     <span>S</span>
                     <span>i</span>
                     <span>g</span>
@@ -95,15 +90,15 @@ const Navbar = () => {
             </li>
             <li>
               <Link to="/login" onClick={toggleMenu}>
-                <button class="button-animation relative inline-flex max-[500px]:mt-2 items-center justify-center p-0.5 mr-12 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-teal-300 to-lime-300 group-hover:from-teal-300 group-hover:to-lime-300 dark:text-gray-900 dark:hover:text-white focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-lime-800">
-                  <span class="span-mother relative px-5 py-2.5 max-[500px]:px-2 max-[500px]:py-1.5 transition-all ease-in duration-75 bg-white rounded-md group-hover:bg-opacity-0">
+                <button className="button-animation relative inline-flex max-[500px]:mt-2 items-center justify-center p-0.5 mr-12 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-teal-300 to-lime-300 group-hover:from-teal-300 group-hover:to-lime-300 dark:text-gray-900 dark:hover:text-white focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-lime-800">
+                  <span className="span-mother relative px-5 py-2.5 max-[500px]:px-2 max-[500px]:py-1.5 transition-all ease-in duration-75 bg-white rounded-md group-hover:bg-opacity-0">
                     <span>L</span>
                     <span>o</span>
                     <span>g</span>
                     <span>i</span>
                     <span>n</span>
                   </span>
-                  <span class="span-mother2">
+                  <span className="span-mother2">
                     <span>L</span>
                     <span>o</span>
                     <span>g</span>
@@ -138,26 +133,11 @@ const Navbar = () => {
                         </g>
                         <g fill="#a6cad0" transform="translate(-24.415 -1.009)" id="patches">
                           <circle transform="translate(43.009 4.496)" r="2" cy="2" cx="2"></circle>
-                          <circle transform="translate(39.366 17.952)" r="2" cy="2" cx="2" data-name="patch"></circle>
-                          <circle transform="translate(33.016 8.044)" r="1" cy="1" cx="1" data-name="patch"></circle>
-                          <circle transform="translate(51.081 18.888)" r="1" cy="1" cx="1" data-name="patch"></circle>
-                          <circle transform="translate(33.016 22.503)" r="1" cy="1" cx="1" data-name="patch"></circle>
-                          <circle transform="translate(50.081 10.53)" r="1.5" cy="1.5" cx="1.5" data-name="patch"></circle>
+                          <circle transform="translate(39.366 17.952)" r="2" cy="2" cx="2" data-name="Ellipse 130"></circle>
+                          <circle transform="translate(54.667 20.602)" r="3.5" cy="3.5" cx="3.5" data-name="Ellipse 131"></circle>
+                          <circle transform="translate(50.232 32.099)" r="2.5" cy="2.5" cx="2.5" data-name="Ellipse 132"></circle>
                         </g>
                       </g>
-                    </g>
-                    <g filter="url(#cloud)" transform="matrix(1, 0, 0, 1, -3.5, -3.5)">
-                      <path fill="#fff" transform="translate(-3466.47 -160.94)" d="M3512.81,173.815a4.463,4.463,0,0,1,2.243.62.95.95,0,0,1,.72-1.281,4.852,4.852,0,0,1,2.623.519c.034.02-.5-1.968.281-2.716a2.117,2.117,0,0,1,2.829-.274,1.821,1.821,0,0,1,.854,1.858c.063.037,2.594-.049,3.285,1.273s-.865,2.544-.807,2.626a12.192,12.192,0,0,1,2.278.892c.553.448,1.106,1.992-1.62,2.927a7.742,7.742,0,0,1-3.762-.3c-1.28-.49-1.181-2.65-1.137-2.624s-1.417,2.2-2.623,2.2a4.172,4.172,0,0,1-2.394-1.206,3.825,3.825,0,0,1-2.771.774c-3.429-.46-2.333-3.267-2.2-3.55A3.721,3.721,0,0,1,3512.81,173.815Z" data-name="cloud" id="cloud"></path>
-                    </g>
-                    <g fill="#def8ff" transform="translate(3.585 1.325)" id="stars">
-                      <path transform="matrix(-1, 0.017, -0.017, -1, 24.231, 3.055)" d="M.774,0,.566.559,0,.539.458.933.25,1.492l.485-.361.458.394L1.024.953,1.509.592.943.572Z"></path>
-                      <path transform="matrix(-0.777, 0.629, -0.629, -0.777, 23.185, 12.358)" d="M1.341.529.836.472.736,0,.505.46,0,.4.4.729l-.231.46L.605.932l.4.326L.9.786Z" data-name="star"></path>
-                      <path transform="matrix(0.438, 0.899, -0.899, 0.438, 23.177, 29.735)" d="M.015,1.065.475.9l.285.365L.766.772l.46-.164L.745.494.751,0,.481.407,0,.293.285.658Z" data-name="star"></path>
-                      <path transform="translate(12.677 0.388) rotate(104)" d="M1.161,1.6,1.059,1,1.574.722.962.607.86,0,.613.572,0,.457.446.881.2,1.454l.516-.274Z" data-name="star"></path>
-                      <path transform="matrix(-0.07, 0.998, -0.998, -0.07, 11.066, 15.457)" d="M.873,1.648l.114-.62L1.579.945,1.03.62,1.144,0,.706.464.157.139.438.7,0,1.167l.592-.083Z" data-name="star"></path>
-                      <path transform="translate(8.326 28.061) rotate(11)" d="M.593,0,.638.724,0,.982l.7.211.045.724.36-.64.7.211L1.342.935,1.7.294,1.063.552Z" data-name="star"></path>
-                      <path transform="translate(5.012 5.962) rotate(172)" d="M.816,0,.5.455,0,.311.323.767l-.312.455.516-.215.323.456L.827.911,1.343.7.839.552Z" data-name="star"></path>
-                      <path transform="translate(2.218 14.616) rotate(169)" d="M1.261,0,.774.571.114.3.487.967,0,1.538.728,1.32l.372.662.047-.749.728-.218L1.215.749Z" data-name="star"></path>
                     </g>
                   </g>
                 </svg>
@@ -166,6 +146,9 @@ const Navbar = () => {
           </div>
         )}
       </ul>
+      <div className="navbar__toggle" onClick={toggleMenu}>
+        <div className={`hamburger ${menuOpen ? "open" : ""}`}></div>
+      </div>
     </nav>
   );
 };

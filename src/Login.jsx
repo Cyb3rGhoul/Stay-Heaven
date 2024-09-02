@@ -22,7 +22,11 @@ const Login = () => {
       const response = await axios.post("/user/login", {
         identity: emailOrUsername,
         password,
-      });
+      },
+      {
+        withCredentials: true, // Important: This sends cookies with the request
+      }
+    );
       navigate("/");
     } catch (error) {
       console.error(error);
