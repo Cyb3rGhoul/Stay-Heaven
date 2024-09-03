@@ -1,26 +1,41 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import Navbar from "./Navbar";
 import axios from "./utils/axios.jsx";
 
-const ForgotPassword = () => {
+const ResetPassword = () => {
   const navigate = useNavigate();
-  const [username, setUsername] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const { id, token } = useParams();
 
   const handleEmailPhoneSubmit = async (e) => {
     e.preventDefault();
-    if(!username) {
-      alert("Please enter username");
+    if(!newPassword || !confirmPassword || newPassword !== confirmPassword) {
+      alert("Please enter new password and confirm password");
       return;
     } 
-
-    const response = await axios.post("/user/forgot-password", {username}, {withCredentials: true});
-    if(response.data.status === 200) {
-      alert("Password reset link sent to your email");
-      navigate("/login");
+    let password = newPassword;
+    let response;
+    try {
+        response = await axios.post(`/user/reset-password/${id}/${token}`, {password}, {withCredentials: true});
+        if(response.data.statusCode === 200) {
+          alert("Password reset successfully");
+          navigate("/login");
+        }
+    } catch (error) {
+        if (error.response) {
+            if (error.response.status === 400 && error.response.data.statusCode === 404) {
+              alert("User not found");
+            }else if (error.response.status === 400 && error.response.data.statusCode === 401) {
+              alert("Link expired");
+              navigate("/login");
+            } else {
+              alert("An unexpected error occurred. Please try again later.");
+            }
+          } 
     }
-
   };
 
 
@@ -31,10 +46,16 @@ const ForgotPassword = () => {
         <Card>
           <Form onSubmit={handleEmailPhoneSubmit}>
             <Input
-              type="name"
-              placeholder="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              type="password"
+              placeholder="New Password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+            />
+            <Input
+              type="password"
+              placeholder="Confirm Password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
             />
             <SubmitButton type="submit">Submit</SubmitButton>
           </Form>
@@ -44,7 +65,7 @@ const ForgotPassword = () => {
   );
 };
 
-export default ForgotPassword;
+export default ResetPassword;
 
 const Wrapper = styled.div`
   background-color: #f0f0f0;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Home.css";
-// import axios from "./utils/axios";
+import axios from "./utils/axios";
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -11,20 +11,18 @@ const Landing = () => {
     setShowAllCities(!showAllCities);
   };
   const [hotels, setHotels] = useState([]);
-  // const gethotels = async ()=>{
-  //   try {
-  //     const response = await axios('/hotel/hotels');
-  //     const data = await response.json();
-  //     console.log(data);
-  //     setHotels(data);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
+  const gethotels = async ()=>{
+    try {
+      const response = await axios('/hotel/hotels');
+      setHotels(response.data.data.hotels);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
-  // useEffect(()=>{
-  //   gethotels();
-  // },[])
+  useEffect(()=>{
+    gethotels();
+  },[])
 
   const cities = [
     {
@@ -133,9 +131,9 @@ const Landing = () => {
         <div className="landing__grid-container">
           <div className="landing__grid">
             {hotels.map((property) => (
-              <div key={property.id} className="landing__grid-item" onClick={() => navigate("/hotel")}>
+              <div key={property._id} className="landing__grid-item" onClick={() => navigate(`/hotel/${property._id}`)}>
                 <img
-                  src={property.image}
+                  src={property.images[0]}
                   alt={property.title}
                   className="landing__grid-item-image"
                 />

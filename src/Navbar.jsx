@@ -4,7 +4,7 @@ import "./Navbar.css";
 import logo from "./assets/logo.png";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "./utils/axios";
-import { toggleLogin } from "./app/reducers/userSlice";
+import { setUser, toggleLogin } from "./app/reducers/userSlice";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -30,6 +30,7 @@ const Navbar = () => {
       withCredentials: true, // Important: This sends cookies with the request
     })
     dispatch(toggleLogin(false))
+    dispatch(setUser({}))
     navigate("/")
   }
 

@@ -22,6 +22,7 @@ import AdminHotels from './AdminHotels';
 import SellerFormPage from "./SellerAuth.jsx";
 import AdminUser from "./AdminUser.jsx";
 import AdminBookings from "./AdminBookings.jsx";
+import ResetPassword from "./ResetPassword.jsx";
 import { store } from './app/store'
 import { Provider } from 'react-redux'
 
@@ -39,7 +40,7 @@ const router = createBrowserRouter([
         element: <Search />,
       },
       {
-        path: "/hotel",
+        path: "/hotel/:id",
         element: <HotelDetails />,
       },
       {
@@ -83,6 +84,10 @@ const router = createBrowserRouter([
   {
     path: "/forgotPassword",
     element: <ForgotPassword />,
+  },
+  {
+    path: "/resetPassword/:id/:token",
+    element: <ResetPassword />,
   },
   {
     path: "/admin",
