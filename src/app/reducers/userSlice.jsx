@@ -1,7 +1,8 @@
 import {createSlice, nanoid } from '@reduxjs/toolkit';
 
 const initialState = {
-    isLoggedIn: false
+    isLoggedIn: false,
+    userData:{}
 }
 
 export const userSlice = createSlice({
@@ -10,10 +11,13 @@ export const userSlice = createSlice({
     reducers: {
         toggleLogin: (state, action) => {
             state.isLoggedIn = action.payload
+        },
+        setUser: (state, action) => {
+            state.userData = action.payload
         }
     }
 })
 
-export const { toggleLogin } = userSlice.actions
+export const { toggleLogin, setUser } = userSlice.actions
 
 export default userSlice.reducer

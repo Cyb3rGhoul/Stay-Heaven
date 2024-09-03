@@ -1,19 +1,77 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import profileImage from "./assets/profile.png";
+import { useDispatch, useSelector } from "react-redux";
+import axios from './utils/axios';
+import { useNavigate } from "react-router-dom";
+import { setUser } from "./app/reducers/userSlice";
 
 const Profile = () => {
-  const [selectedImage, setSelectedImage] = useState(profileImage);
+  const [userdetail, setUserdetail] = useState(useSelector((state) => state.userData));
+  const [selectedImage, setSelectedImage] = useState(userdetail.avatar);
+  const [name, setName] = useState(userdetail.fullName);
+  const [email, setEmail] = useState(userdetail.email);
+  const [phone, setPhone] = useState(userdetail.phoneNumber);
+  const [username, setUsername] = useState(userdetail.username);
+  const [file,setfile] = useState(null);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const handleUpdateProfile = () => {
-    alert("Profile updated");
+  const handleUpdateProfile = async () => {
+    if (!username || !email || !selectedImage || !name || !phone){
+      alert("All fields are required");
+      return;
+    }
+
+    if(phone.length != 10){
+      alert("Invalid phone number");
+      return;
+    }
+    let url;
+    if(file != null){
+      try {
+        const formdata = new FormData();
+        formdata.append("file", file);
+        formdata.append("upload_preset", import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET)
+        formdata.append("cloud_name", import.meta.env.VITE_CLOUDINARY_CLOUD_NAME);
+        const response = await axios.post(
+          `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/image/upload`,
+          formdata,
+        );
+
+        url = response.data.secure_url;
+
+      } catch (error) {
+        console.error("error while uploading the image");
+        return ;
+      }
+    }
+
+    try {
+      const response = await axios.post("/user/update-account-details", {
+        username,
+        email,
+        fullName:name,
+        phoneNumber:phone,
+        avatar: url ?  url : selectedImage,
+      },
+      {
+        withCredentials: true,
+      });
+      dispatch(setUser(response.data.data));
+      navigate("/profile");
+    } catch (error) {
+      console.error(error);
+    }
+
   };
 
   const handleImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       setSelectedImage(URL.createObjectURL(e.target.files[0]));
+      setfile(e.target.files[0]);
     }
   };
+
 
   return (
     <>
@@ -32,11 +90,13 @@ const Profile = () => {
           <ProfileForm>
             <Title>Profile Section</Title>
             <Label>Name</Label>
-            <Input type="text" defaultValue="Harry" />
+            <Input type="text" defaultValue={name} onChange={(e) => setName(e.target.value)} />
             <Label>Email Address</Label>
-            <Input type="email" defaultValue="Kuchbhi@gmail.com" />
+            <Input type="email" defaultValue={email} onChange={(e) => setEmail(e.target.value)} />
+            <Label>Username</Label>
+            <Input type="text" defaultValue={username} onChange={(e) => setUsername(e.target.value)} />
             <Label>Phone Number</Label>
-            <Input type="tel" defaultValue="9999999999" />
+            <Input type="tel" defaultValue={phone} onChange={(e) => setPhone(e.target.value)} />
             <UpdateButton onClick={handleUpdateProfile}>
               Update Profile
             </UpdateButton>

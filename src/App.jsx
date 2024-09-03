@@ -7,7 +7,7 @@ import Preloader from "./Preloader";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { useDispatch } from 'react-redux'
 import axios from './utils/axios.jsx'
-import { toggleLogin } from "./app/reducers/userSlice.jsx";
+import { setUser, toggleLogin } from "./app/reducers/userSlice.jsx";
 
 const App = () => {
   const [loading, setLoading] = useState(true);
@@ -17,13 +17,14 @@ const App = () => {
 
   const getUser = async () => {
     const user = await axios.get("/user/current-user",{
-      withCredentials: true, // Important: This sends cookies with the request
+      withCredentials: true, 
     })
-    console.log("user: ", user)
     if(user) {
       dispatch(toggleLogin(true))
+      dispatch(setUser(user.data.data));
     } else {
       dispatch(toggleLogin(false))
+      dispatch(setUser({}));
     }
   }
 

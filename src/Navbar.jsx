@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 import logo from "./assets/logo.png";
-import profileImage from "./assets/profile.png";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "./utils/axios";
 import { toggleLogin } from "./app/reducers/userSlice";
@@ -11,6 +10,7 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(useSelector((state) => state.isLoggedIn));
+  const [profileImage, setprofileImage] = useState(useSelector((state) => state.userData.avatar));
   const [fixed, setfixed] = useState(false);
   const location = useLocation();
   const currentPath = location.pathname.split("/")[1];
@@ -55,7 +55,7 @@ const Navbar = () => {
                 <button className="navbar__close" onClick={toggleMenu}>
                   ✖
                 </button>
-                <div className="mt-6">Profile</div>
+                <Link to="/profile"><div className="">Profile</div></Link>
                 <div>Previous Bookings</div>
                 <div>Dashboard</div>
                 <div onClick={logouthandler}>Logout</div>

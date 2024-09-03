@@ -10,7 +10,6 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [avatar, setAvatar] = useState("");
-  const [avatarurl, setAvatarurl] = useState("");
   const [fullname, setFullname] = useState("");
   const [phone, setPhone] = useState("");
   const [isFileSelected, setIsFileSelected] = useState(false);
@@ -28,20 +27,18 @@ const SignUp = () => {
       alert("Invalid phone number");
       return;
     }
-
+    let url;
     try {
       const formdata = new FormData();
       formdata.append("file", avatar);
       formdata.append("upload_preset", import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET)
       formdata.append("cloud_name", import.meta.env.VITE_CLOUDINARY_CLOUD_NAME);
-
       const response = await axios.post(
         `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/image/upload`,
         formdata,
       );
 
-      const url = response.data.secure_url;
-      setAvatarurl(url);
+      url = response.data.secure_url;
 
     } catch (error) {
       console.error("error while uploading the image");
@@ -49,16 +46,14 @@ const SignUp = () => {
     }
 
     try {
-      console.log(username,email,password,avatarurl,fullname,phone);
       const response = await axios.post("/user/register", {
         username,
         email,
         password,
-        avatar:avatarurl,
+        avatar:url,
         fullName:fullname,
         phoneNumber:phone,
       });
-      console.log(response);
       navigate("/login");
     } catch (error) {
       console.error(error);
