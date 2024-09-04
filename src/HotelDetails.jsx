@@ -17,14 +17,13 @@ import "react-datepicker/dist/react-datepicker.css";
 import MaxGuests from "./MaxGuest";
 import { useParams } from "react-router-dom";
 import axios from "./utils/axios";
-import Rating from '@mui/material/Rating';
+import Rating from "@mui/material/Rating";
 import { useDispatch, useSelector } from "react-redux";
 
 const HotelDetails = () => {
     const { id } = useParams();
-    const dispatch = useDispatch();
+    const hotelId = id;
     const [user, setUser] = useState(useSelector((state) => state.userData));
-    const [maxGuests, setMaxGuests] = useState(1);
     const [features, setFeatures] = useState({
         wifi: false,
         ac: false,
@@ -36,33 +35,79 @@ const HotelDetails = () => {
     const [checkInDate, setCheckInDate] = useState(null);
     const [checkOutDate, setCheckOutDate] = useState(null);
     const [showPopup, setShowPopup] = useState(false);
-    const [guestNames, setGuestNames] = useState([""]);
-    const [mobileNumber, setMobileNumber] = useState("");
-    const [reviews, setReviews] = useState([]); 
+    const [guestNames, setGuestNames] = useState([{}]);
+    const [reviews, setReviews] = useState([]);
     const [hotel, setHotel] = useState({});
     const [comment, setComment] = useState({
         message: "",
         rating: 0,
     });
+    const [hotelRating, setHotelRating] = useState(0);
+    const [rooms, setRooms] = useState(0);
+    const [amount, setAmount] = useState(0);
 
+    useEffect(() => {
+        setRooms(Math.ceil(guestNames.length / hotel.maxGuests));
+        let days = getDifferenceInDays(
+            new Date(checkInDate),
+            new Date(checkOutDate)
+        );
+        if (days == 0) days = 1;
+        setAmount(rooms * hotel.price * days);
+    }, [guestNames, checkInDate, checkOutDate]);
+
+    const getHotelRatings = () => {
+        let len = reviews.length;
+        let total = 0;
+        for (let i = 0; i < len; i++) {
+            total += reviews[i].rating;
+        }
+        setHotelRating(total / len);
+    };
+
+    function getDifferenceInDays(date1, date2) {
+        const dateObj1 = new Date(date1);
+        const dateObj2 = new Date(date2);
+
+        const diffInMs = Math.abs(dateObj2 - dateObj1);
+
+        const diffInDays = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
+
+        return diffInDays;
+    }
+
+    useEffect(() => {
+        getHotelRatings();
+    }, [reviews]);
     const handleDeleteReview = (id) => {
         return async () => {
             try {
-                const response = await axios.delete(`/comment/delete/${id}`, { withCredentials: true });
-                setReviews(reviews.filter(review => review.user._id !== id));
+                const response = await axios.post(
+                    `/comment/delete/${id}`,
+                    { hotelId },
+                    { withCredentials: true }
+                );
+                setReviews((reviews) =>
+                    reviews.filter((review) => review._id !== id)
+                );
             } catch (error) {
                 console.log(error);
             }
-        }
-    }
+        };
+    };
     const commentHandler = async () => {
         try {
-            const response = await axios.post(`/comment/create/${id}`, comment, { withCredentials: true });
-            setComment({message: "", rating: 0});
+            const response = await axios.post(
+                `/comment/create/${id}`,
+                comment,
+                { withCredentials: true }
+            );
+            setReviews((reviews) => [...reviews, response.data.data]);
+            setComment({ message: "", rating: 0 });
         } catch (error) {
             console.log(error);
         }
-    }
+    };
     const getHotelDetails = async () => {
         try {
             const response = await axios.get(`/hotel/${id}`);
@@ -83,13 +128,9 @@ const HotelDetails = () => {
         }
     };
 
-
     useEffect(() => {
         getHotelDetails();
     }, []);
-    const handleFeatureChange = (e) => {
-        setFeatures({ ...features, [e.target.name]: e.target.checked });
-    };
 
     const handleShare = async () => {
         try {
@@ -108,15 +149,20 @@ const HotelDetails = () => {
     };
 
     const handleRemoveGuest = (index) => {
-        const updatedGuestNames = [...guestNames];
-        updatedGuestNames.splice(index, 1);
-        setGuestNames(updatedGuestNames);
+        setGuestNames((guestNames) => guestNames.filter((_, i) => i !== index));
     };
 
-    const handleGuestNameChange = (index, value) => {
-        const newGuestNames = [...guestNames];
-        newGuestNames[index] = value;
-        setGuestNames(newGuestNames);
+    const handleGuestNameChange = (index, name, value) => {
+        setGuestNames((prevGuestNames) => {
+            const updatedGuestNames = [...prevGuestNames];
+
+            updatedGuestNames[index] = {
+                ...updatedGuestNames[index],
+                [name]: value,
+            };
+
+            return updatedGuestNames;
+        });
     };
 
     const handlePopupClose = () => {
@@ -128,6 +174,17 @@ const HotelDetails = () => {
     };
 
     const handlePay = () => {
+        if (checkInDate === null || checkOutDate === null) {
+            alert("Please fill all the required fields");
+            return;
+        }
+
+        for (let i = 0; i < guestNames.length; i++) {
+            if (Object.keys(guestNames[i]).length !== 3) {
+                alert("Please fill all the required fields");
+                return;
+            }
+        }
         console.log("Payment processed");
         setShowPopup(false);
     };
@@ -193,8 +250,16 @@ const HotelDetails = () => {
                     <Left>
                         <GuestReviews>
                             <GuestFavourite>Guest favourite</GuestFavourite>
-                            <Ratings>4.93 ★★★★☆</Ratings>
-                            <ReviewCount>29 Reviews</ReviewCount>
+                            <div>
+                                {hotelRating || 0}
+                                <Rating
+                                    name="half-rating"
+                                    precision={0.5}
+                                    value={hotelRating}
+                                    readOnly
+                                />
+                            </div>
+                            <ReviewCount>{reviews.length} Reviews</ReviewCount>
                         </GuestReviews>
                         <Features>
                             <CheckboxContainer>
@@ -324,22 +389,23 @@ const HotelDetails = () => {
                                                                 handleGuestNameChange(
                                                                     index,
                                                                     "phoneNumber",
-                                                                    e.target
-                                                                        .value
+                                                                    e.target.value
                                                                 )
                                                             }
                                                         />
                                                     </FormItem>
-                                                    <RemoveGuestButton
-                                                        type="button"
-                                                        onClick={() =>
-                                                            handleRemoveGuest(
-                                                                index
-                                                            )
-                                                        }
-                                                    >
-                                                        Remove Guest
-                                                    </RemoveGuestButton>
+                                                    {guestNames.length > 1 && (
+                                                        <RemoveGuestButton
+                                                            type="button"
+                                                            onClick={() =>
+                                                                handleRemoveGuest(
+                                                                    index
+                                                                )
+                                                            }
+                                                        >
+                                                            Remove Guest
+                                                        </RemoveGuestButton>
+                                                    )}
                                                 </GuestDetails>
                                             ))}
                                             <AddGuestButton
@@ -368,31 +434,22 @@ const HotelDetails = () => {
                                                     </label>
                                                     <DatePicker
                                                         selected={checkOutDate}
-                                                        onChange={(date) =>
+                                                        onChange={(date) => {
                                                             setCheckOutDate(
                                                                 date
-                                                            )
-                                                        }
+                                                            );
+                                                        }}
                                                         placeholderText="Check-Out"
                                                     />
                                                 </FormItem>
                                             </div>
-                                            <FormItem>
-                                                <label>Mobile Number:</label>
-                                                <input
-                                                    type="text"
-                                                    value={mobileNumber}
-                                                    onChange={(e) =>
-                                                        setMobileNumber(
-                                                            e.target.value
-                                                        )
-                                                    }
-                                                    className="w-1/2"
-                                                />
+                                            <FormItem className="self-center">
+                                                <label>Rooms:</label>
+                                                <p>{rooms || 0}</p>
                                             </FormItem>
                                             <FormItem className="self-center">
                                                 <label>Final Price:</label>
-                                                <p>₹19999</p>
+                                                <p>{amount || 0}</p>
                                             </FormItem>
                                             <PayButton
                                                 type="button"
@@ -408,27 +465,66 @@ const HotelDetails = () => {
                     </Right>
                 </Details>
                 <div className="comment-box flex gap-2 mx-auto">
-                    <div className="w-3/4 flex justify-between">    
-                    <input className="w-3/4 border-2 rounded-md p-2" type="text" onChange={(e) => setComment({...comment, message: e.target.value})} value={comment.message}/>
-                    <Rating name="half-rating" defaultValue={0} precision={0.5} onChange={(e) => setComment({...comment, rating: e.target.value})} value={comment.rating}/>
+                    <div className="w-3/4 flex justify-between">
+                        <input
+                            className="w-3/4 border-2 rounded-md p-2"
+                            type="text"
+                            onChange={(e) =>
+                                setComment({
+                                    ...comment,
+                                    message: e.target.value,
+                                })
+                            }
+                            value={comment.message}
+                        />
+                        <Rating
+                            name="half-rating"
+                            defaultValue={0}
+                            precision={0.5}
+                            onChange={(e) =>
+                                setComment({
+                                    ...comment,
+                                    rating: e.target.value,
+                                })
+                            }
+                            value={comment.rating}
+                        />
                     </div>
-                    <button onClick={commentHandler} className=" text-white bg-green-500 p-2 rounded-md">Add Comment</button>
+                    <button
+                        onClick={commentHandler}
+                        className=" text-white bg-green-500 p-2 rounded-md"
+                    >
+                        Add Comment
+                    </button>
                 </div>
                 <ReviewsContainer>
                     <Reviews>
                         {reviews?.map((review, index) => (
                             <Review key={index}>
-                                <Avatar
-                                    src={review.user.avatar}
-                                />
+                                <Avatar src={review.user.avatar} />
                                 <Comment>
                                     <ReviewHeader>
                                         <strong>{review.user.username}</strong>
                                         {/* <ReviewDate>{review.date}</ReviewDate> */}
                                     </ReviewHeader>
                                     <p>{review.message}</p>
-                                    <Rating name="half-rating" defaultValue={0} precision={0.5} value={review.rating} readOnly/>
-                                    {user? user._id === review.user._id ? <MdDelete onClick={handleDeleteReview(review._id)} size={24}/> : null : null}
+                                    <Rating
+                                        name="half-rating"
+                                        defaultValue={0}
+                                        precision={0.5}
+                                        value={review.rating}
+                                        readOnly
+                                    />
+                                    {user ? (
+                                        user._id === review.user._id ? (
+                                            <MdDelete
+                                                onClick={handleDeleteReview(
+                                                    review._id
+                                                )}
+                                                size={24}
+                                            />
+                                        ) : null
+                                    ) : null}
                                 </Comment>
                             </Review>
                         ))}
@@ -762,6 +858,7 @@ const ReviewDate = styled.span`
 
 const PopupOverlay = styled.div`
     position: fixed;
+    z-index: 10;
     top: 0;
     left: 0;
     right: 0;
