@@ -68,6 +68,45 @@ const Landing = () => {
     },
   ];
 
+  const properties = [
+    {
+      id: 1,
+      title: "Cozy Apartment",
+      price: "₹1200/night",
+      image: "https://via.placeholder.com/300",
+    },
+    {
+      id: 2,
+      title: "Luxury Villa",
+      price: "₹3500/night",
+      image: "https://via.placeholder.com/300",
+    },
+    {
+      id: 3,
+      title: "Modern House",
+      price: "₹2000/night",
+      image: "https://via.placeholder.com/300",
+    },
+    {
+      id: 4,
+      title: "Beachfront Condo",
+      price: "₹2200/night",
+      image: "https://via.placeholder.com/300",
+    },
+    {
+      id: 5,
+      title: "Mountain Cabin",
+      price: "₹1800/night",
+      image: "https://via.placeholder.com/300",
+    },
+    {
+      id: 6,
+      title: "Urban Loft",
+      price: "₹1500/night",
+      image: "https://via.placeholder.com/300",
+    },
+  ];
+
   const internationalCities = [
     { name: "Nagpur" },
     { name: "Bhopal" },
@@ -130,16 +169,16 @@ const Landing = () => {
         </div>
         <div className="landing__grid-container">
           <div className="landing__grid">
-            {hotels.map((property) => (
-              <div key={property._id} className="landing__grid-item" onClick={() => navigate(`/hotel/${property._id}`)}>
+            {properties.map((properties) => (
+              <div key={properties._id} className="landing__grid-item" onClick={() => navigate(`/hotel/${properties._id}`)}>
                 <img
-                  src={property.images[0]}
-                  alt={property.title}
+                  src={properties.image}
+                  alt={properties.title}
                   className="landing__grid-item-image"
                 />
                 <div className="landing__grid-item-content flex flex-col gap-1">
-                  <div className="text-lg font-bold">{property.title}</div>
-                  <div >{property.price}</div>
+                  <div className="text-lg font-bold">{properties.title}</div>
+                  <div >{properties.price}</div>
                 </div>
               </div>
             ))}

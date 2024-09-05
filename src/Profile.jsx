@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from './utils/axios';
 import { useNavigate } from "react-router-dom";
 import { setUser } from "./app/reducers/userSlice";
+import "./Profile.css";
 
 const Profile = () => {
   const [userdetail, setUserdetail] = useState(useSelector((state) => state.userData));
@@ -76,9 +77,9 @@ const Profile = () => {
   return (
     <>
       <Container>
-        <StyledProfileSection>
+        <StyledProfileSection className="container">
           <AvatarContainer>
-            <Avatar src={selectedImage} alt="Profile Avatar" />
+            <Avatar src={selectedImage} alt="" />
             <ImageUpload
               id="imageUpload"
               type="file"

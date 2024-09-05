@@ -5,6 +5,10 @@
   padding: 20px;
   transition: background-color 0.3s, color 0.3s;
   height: 8vh;
+  font-family: "Josefin Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
 }
 
 .navbar.light {
@@ -150,15 +154,13 @@ body.light-theme {
   font-size: 16px;
   font-weight: bold;
   color: #333;
-  background: #90ee90;
   cursor: pointer;
   transition: background-color 0.3s;
   text-align: center;
 }
 
 .button-animation:hover {
-  background-color: #057807;
-  color: #fff;
+  
 }
 
 .button-animation .span-mother,

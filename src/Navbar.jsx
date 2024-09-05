@@ -67,7 +67,7 @@ const Navbar = () => {
           <div className="flex gap-1">
             <li>
               <Link to="/signup" onClick={toggleMenu}>
-                <button className="button-animation relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-teal-300 to-lime-300 group-hover:from-teal-300 group-hover:to-lime-300 dark:text-gray-900 dark:hover:text-white focus:ring-4 max-[500px]:mt-2 focus:outline-none focus:ring-lime-200 dark:focus:ring-lime-800">
+                <button className="button-animation relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-l font-medium text-gray-900 rounded-lg group dark:text-gray-900">
                   <span className="span-mother relative px-5 py-2.5 max-[500px]:px-2 max-[500px]:py-1.5 transition-all ease-in duration-75 bg-white rounded-md group-hover:bg-opacity-0">
                     <span>S</span>
                     <span>i</span>
@@ -91,7 +91,7 @@ const Navbar = () => {
             </li>
             <li>
               <Link to="/login" onClick={toggleMenu}>
-                <button className="button-animation relative inline-flex max-[500px]:mt-2 items-center justify-center p-0.5 mr-12 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-teal-300 to-lime-300 group-hover:from-teal-300 group-hover:to-lime-300 dark:text-gray-900 dark:hover:text-white focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-lime-800">
+                <button className="button-animation relative inline-flex max-[500px]:mt-2 items-center justify-center mr-12 mb-2 me-2 overflow-hidden text-l font-medium text-gray-900 rounded-lg group dark:text-gray-900">
                   <span className="span-mother relative px-5 py-2.5 max-[500px]:px-2 max-[500px]:py-1.5 transition-all ease-in duration-75 bg-white rounded-md group-hover:bg-opacity-0">
                     <span>L</span>
                     <span>o</span>

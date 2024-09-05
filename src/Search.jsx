@@ -4,7 +4,6 @@ import GoogleMap from "./GoogleMap";
 import { useNavigate } from "react-router-dom";
 import ReactSlider from "react-slider";
 import "react-datepicker/dist/react-datepicker.css"; 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   FaWifi,
   FaSnowflake,
@@ -88,20 +87,20 @@ const Search = () => {
               <FilterButton onClick={toggleFilter}>Filter</FilterButton>
             </SearchBar>
             <ResultsGrid>
-              {properties.map((property) => (
-                <ResultCard key={property.id}>
+              {properties.map((properties) => (
+                <ResultCard key={properties.id}>
                   <img
-                    src={property.image}
-                    alt={property.title}
+                    src={properties.image}
+                    alt={properties.title}
                     className="result-card-image"
                   />
                   <div className="result-card-content">
-                    <h3>{property.title}</h3>
-                    <p>{property.price}</p>
+                    <h3>{properties.title}</h3>
+                    <p>{properties.price}</p>
                     <button
                       className="result-card-button"
                       // onClick={() =>
-                      //   alert(`Navigating to property ${property.id}`)
+                      //   alert(`Navigating to properties ${properties.id}`)
                       // }
                       onClick={() => navigate("/single")}
                     >
@@ -246,6 +245,10 @@ const Wrapper = styled.div`
   padding: 20px;
   position: relative;
   overflow: hidden;
+  font-family: "Josefin Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
 `;
 
 const Content = styled.div`
@@ -268,6 +271,7 @@ const SearchBar = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+
   input {
     padding: 10px;
     border: 1px solid #ccc;
@@ -275,7 +279,13 @@ const SearchBar = styled.div`
     flex: 1;
     background-color: #fff;
     color: #333;
+    outline: none;
+
+    &:focus {
+      outline: none;
+    }
   }
+
   button {
     padding: 10px;
     border: none;
@@ -283,8 +293,14 @@ const SearchBar = styled.div`
     background-color: #4caf50;
     color: #fff;
     cursor: pointer;
+    outline: none;
+
+    &:focus {
+      outline: none;
+    }
   }
 `;
+
 
 const FilterButton = styled.button`
   padding: 10px;

@@ -284,6 +284,10 @@ const Container = styled.div`
   padding: 20px;
   background-color: #f0f0f0;
   color: #333;
+  font-family: "Josefin Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
 `;
 
 const Title = styled.h2`

@@ -17,3 +17,10 @@
   border-radius: 10px;
   scrollbar-color: #B2572B #edf2f7; /* thumb and track color */
 }
+
+body{
+  font-family: "Josefin Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
