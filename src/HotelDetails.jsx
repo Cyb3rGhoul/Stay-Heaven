@@ -389,7 +389,8 @@ const HotelDetails = () => {
                                                                 handleGuestNameChange(
                                                                     index,
                                                                     "phoneNumber",
-                                                                    e.target.value
+                                                                    e.target
+                                                                        .value
                                                                 )
                                                             }
                                                         />

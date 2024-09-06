@@ -144,11 +144,13 @@ const ProfileForm = styled.div`
   flex-direction: column;
   gap: 10px;
   flex: 1;
+  width: 100%;  
 `;
 
 const Label = styled.label`
   font-size: 14px;
   color: #333;
+  width: 100%;
 `;
 
 const Input = styled.input`
