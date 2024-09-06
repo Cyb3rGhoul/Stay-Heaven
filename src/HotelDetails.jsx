@@ -20,6 +20,7 @@ import axios from "./utils/axios";
 import Rating from "@mui/material/Rating";
 import { useDispatch, useSelector } from "react-redux";
 
+
 const HotelDetails = () => {
     const { id } = useParams();
     const hotelId = id;
@@ -46,6 +47,7 @@ const HotelDetails = () => {
     const [rooms, setRooms] = useState(0);
     const [amount, setAmount] = useState(0);
 
+    const [totalDays, setTotalDays] = useState(0);
     useEffect(() => {
         setRooms(Math.ceil(guestNames.length / hotel.maxGuests));
         let days = getDifferenceInDays(
@@ -53,6 +55,7 @@ const HotelDetails = () => {
             new Date(checkOutDate)
         );
         if (days == 0) days = 1;
+        setTotalDays(days);
         setAmount(rooms * hotel.price * days);
     }, [guestNames, checkInDate, checkOutDate]);
 
@@ -173,7 +176,7 @@ const HotelDetails = () => {
         setShowPopup(true);
     };
 
-    const handlePay = () => {
+    const handlePay = async () => {
         if (checkInDate === null || checkOutDate === null) {
             alert("Please fill all the required fields");
             return;
@@ -185,8 +188,51 @@ const HotelDetails = () => {
                 return;
             }
         }
-        console.log("Payment processed");
         setShowPopup(false);
+
+        try{
+            const {data: {key}} = await axios.get(`/payment/getkey`,
+                { withCredentials: true });
+
+            const {data: {order}} = await axios.post(
+                `/payment/checkout`,
+                {
+                    rooms,
+                    days:totalDays,
+                    hotelId,
+                },
+                { withCredentials: true }
+            );
+
+            console.log(key, "key");
+            var options = {
+                key, 
+                amount: order.amount, 
+                currency: "INR",
+                name: "Stay Heaven",
+                description: "tutorial of razorpay", //what if we remove this
+                image: "https://images.unsplash.com/photo-1725046908999-195118679132?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", //come back to change
+                order_id: order.id,
+                callback_url: import.meta.env.BACKEND_URL + "/paymentverification",
+                prefill: {
+                    "name": "Gaurav Kumar", //comeback to change
+                    "email": "gaurav.kumar@example.com",
+                    "contact": "9000090000"
+                },
+                notes: {
+                    "address": "Razorpay Corporate Office" //comeback to change
+                },
+                theme: {
+                    "color": "#4CAF50"
+                }
+    
+            };
+            const rzp1 = new window.Razorpay(options);
+            rzp1.open();
+        }
+        catch (e) {
+            console.log(e);
+        }
     };
 
     return (
