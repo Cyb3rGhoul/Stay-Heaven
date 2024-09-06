@@ -191,10 +191,9 @@ const HotelDetails = () => {
         setShowPopup(false);
 
         try{
-            const {data: {key}} = await axios.get(`/payment/getkey`,
-                { withCredentials: true });
+            
 
-            const {data: {order}} = await axios.post(
+            const {data: {data: {order}}} = await axios.post(
                 `/payment/checkout`,
                 {
                     rooms,
@@ -203,25 +202,24 @@ const HotelDetails = () => {
                 },
                 { withCredentials: true }
             );
+            const {data: {data: {key}}} = await axios.post(`/payment/getkey`,{userId: user._id, guestNames,checkInDate,checkOutDate},
+                { withCredentials: true });
 
-            console.log(key, "key");
+            console.log(user);
             var options = {
                 key, 
                 amount: order.amount, 
                 currency: "INR",
                 name: "Stay Heaven",
-                description: "tutorial of razorpay", //what if we remove this
                 image: "https://images.unsplash.com/photo-1725046908999-195118679132?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", //come back to change
                 order_id: order.id,
-                callback_url: import.meta.env.BACKEND_URL + "/paymentverification",
+                callback_url: import.meta.env.VITE_BACKEND_URL+"/payment/paymentverification",
                 prefill: {
-                    "name": "Gaurav Kumar", //comeback to change
-                    "email": "gaurav.kumar@example.com",
-                    "contact": "9000090000"
+                    "name": user.fullName, 
+                    "email": user.email,
+                    "contact": user.phoneNumber
                 },
-                notes: {
-                    "address": "Razorpay Corporate Office" //comeback to change
-                },
+                
                 theme: {
                     "color": "#4CAF50"
                 }
