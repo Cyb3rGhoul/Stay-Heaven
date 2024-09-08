@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import randomImage from "./assets/random.jpg";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Rating from "@mui/material/Rating";
 
@@ -80,7 +80,7 @@ const PreviousBookings = () => {
                             <p>
                                 Guests:{" "}
                                 {selectedBooking.guests
-                                    .map((guest) => guest.firstName)
+                                    .map((guest) => guest.firstName + " " + guest.lastName)     
                                     .join(", ")}
                             </p>
                             <p>
@@ -88,13 +88,12 @@ const PreviousBookings = () => {
                                 Date: {getDate(selectedBooking.checkin)} to{" "}
                                 {getDate(selectedBooking.checkout)}{" "}
                             </p>
-                            <p>Price: ₹{selectedBooking.amount}</p>
-                            <Rating
-                                name="half-rating"
-                                precision={0.5}
-                                value={selectedBooking.rating}
-                                readOnly
-                            />
+                            <p>Total: ₹{selectedBooking.amount}</p>
+                            <Link to={`/hotel/${selectedBooking.hotel._id}`}>
+                                <button className="bg-green-500 text-white p-2 rounded-md">
+                                    More Details
+                                </button>
+                            </Link>
                         </PopupDescription>
                     </Popup>
                 </PopupOverlay>
@@ -157,7 +156,6 @@ const Description = styled.div`
     font-size: 14px;
     color: #333;
 `;
-
 
 const Star = styled.span`
     font-size: 20px;
