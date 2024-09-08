@@ -8,17 +8,15 @@ import {
     FaCoffee,
     FaParking,
     FaUtensils,
-    FaTshirt,
 } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { CgGym } from "react-icons/cg";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import MaxGuests from "./MaxGuest";
 import { useParams } from "react-router-dom";
 import axios from "./utils/axios";
 import Rating from "@mui/material/Rating";
-import { useDispatch, useSelector } from "react-redux";
+import {  useSelector } from "react-redux";
 
 
 const HotelDetails = () => {
@@ -211,7 +209,7 @@ const HotelDetails = () => {
                 amount: order.amount, 
                 currency: "INR",
                 name: "Stay Heaven",
-                image: "https://images.unsplash.com/photo-1725046908999-195118679132?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", //come back to change
+                image: "https://res.cloudinary.com/djsdjtkyu/image/upload/v1725702771/cuktnsvqx7fstqfsxb4p.png", 
                 order_id: order.id,
                 callback_url: import.meta.env.VITE_BACKEND_URL+"/payment/paymentverification",
                 prefill: {

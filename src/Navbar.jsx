@@ -57,7 +57,8 @@ const Navbar = () => {
                   ✖
                 </button>
                 <Link to="/profile"><div className="">Profile</div></Link>
-                <div>Previous Bookings</div>
+                <Link to="/previousBookings"><div className="">Previous Bookings</div></Link>
+                
                 <div>Dashboard</div>
                 <div onClick={logouthandler}>Logout</div>
               </div>
