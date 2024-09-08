@@ -203,7 +203,6 @@ const HotelDetails = () => {
             const {data: {data: {key}}} = await axios.post(`/payment/getkey`,{userId: user._id, guestNames,checkInDate,checkOutDate},
                 { withCredentials: true });
 
-            console.log(user);
             var options = {
                 key, 
                 amount: order.amount, 
