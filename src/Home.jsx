@@ -2,11 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Home.css";
 import axios from "./utils/axios";
+import { useDispatch } from 'react-redux';
+import { setSearch } from "./app/reducers/userSlice";
 
 const Landing = () => {
     const navigate = useNavigate();
     const [showAllCities, setShowAllCities] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
+    const dispatch = useDispatch();
 
     const toggleShowAllCities = () => {
         setShowAllCities(!showAllCities);
@@ -16,7 +19,6 @@ const Landing = () => {
         try {
             const response = await axios("/hotel/hotels");
             setHotels(response.data.data.hotels);
-            console.log(response.data.data.hotels);
         } catch (error) {
             console.log(error);
         }
@@ -32,7 +34,7 @@ const Landing = () => {
             image: "https://in.bmscdn.com/m6/images/common-modules/regions/mumbai.png",
         },
         {
-            name: "Delhi-NCR",
+            name: "Delhi",
             image: "https://in.bmscdn.com/m6/images/common-modules/regions/ncr.png",
         },
         {
@@ -99,8 +101,10 @@ const Landing = () => {
                         className="landing__search-input"
                         placeholder="Search Destination/Hotel"
                     />
-                    <Link to={`/search/?searchTerm=${searchTerm}`}>
-                        <button className="landing__search-button">
+                    <Link to={`/search`}>
+                        <button className="landing__search-button" onClick={()=>{
+                            dispatch(setSearch(searchTerm));
+                        }}>
                             Search
                         </button>
                     </Link>
@@ -109,7 +113,10 @@ const Landing = () => {
                     <div className="landing__city-container">
                         <div className="landing__city-grid">
                             {cities.map((city, index) => (
-                                <div key={index} className="landing__city-item">
+                                <div key={index} className="landing__city-item" onClick={()=>{
+                            dispatch(setSearch(city.name));
+                            navigate("/search");
+                        }}>
                                     <img
                                         src={city.image}
                                         alt={city.name}
@@ -164,7 +171,10 @@ const Landing = () => {
                         </span>
                         <div className="landing__modal-grid">
                             {allCities.map((city, index) => (
-                                <div key={index} className="landing__city-item">
+                                <div key={index} className="landing__city-item" onClick={()=>{
+                            dispatch(setSearch(city.name));
+                            navigate("/search");
+                        }}>
                                     <p className="landing__city-name">
                                         {city.name}
                                     </p>

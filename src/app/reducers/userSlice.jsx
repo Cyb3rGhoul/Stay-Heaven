@@ -2,7 +2,8 @@ import {createSlice, nanoid } from '@reduxjs/toolkit';
 
 const initialState = {
     isLoggedIn: false,
-    userData:{}
+    userData:{},
+    searchTerm: "",
 }
 
 export const userSlice = createSlice({
@@ -14,10 +15,13 @@ export const userSlice = createSlice({
         },
         setUser: (state, action) => {
             state.userData = action.payload
+        },
+        setSearch: (state, action) => {
+            state.searchTerm = action.payload
         }
     }
 })
 
-export const { toggleLogin, setUser } = userSlice.actions
+export const { toggleLogin, setUser, setSearch } = userSlice.actions
 
 export default userSlice.reducer

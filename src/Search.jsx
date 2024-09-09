@@ -13,92 +13,70 @@ import {
 } from "react-icons/fa";
 import { CgGym } from "react-icons/cg";
 import axios from "./utils/axios";
+import { useSelector } from "react-redux";
 
 const Search = () => {
     const navigate = useNavigate();
     const [filterOpen, setFilterOpen] = useState(false);
     const [priceRange, setPriceRange] = useState([1000, 50000]);
-    const [sortOption, setSortOption] = useState("latest");
+    const [sortOption, setSortOption] = useState(null);
+    const [search, setSearch] = useState(useSelector(state => state.searchTerm));
+    const [hotels, setHotels] = useState([]);
 
     const toggleFilter = () => {
         setFilterOpen(!filterOpen);
     };
 
     const [features, setFeatures] = useState({
-        wifi: true,
-        ac: true,
+        wifi: false,
+        ac: false,
         breakfast: false,
-        parking: true,
-        kitchen: true,
-        gym: true,
+        parking: false,
+        kitchen: false,
+        gym: false,
     });
 
     const handleFeatureChange = (e) => {
         setFeatures({ ...features, [e.target.name]: e.target.checked });
     };
 
-    const properties = [
-        {
-            id: 1,
-            title: "Cozy Apartment",
-            price: "₹1200/night",
-            image: "https://via.placeholder.com/300",
-        },
-        {
-            id: 2,
-            title: "Luxury Villa",
-            price: "₹3500/night",
-            image: "https://via.placeholder.com/300",
-        },
-        {
-            id: 3,
-            title: "Modern House",
-            price: "₹2000/night",
-            image: "https://via.placeholder.com/300",
-        },
-        {
-            id: 4,
-            title: "Beachfront Condo",
-            price: "₹2200/night",
-            image: "https://via.placeholder.com/300",
-        },
-        {
-            id: 5,
-            title: "Mountain Cabin",
-            price: "₹1800/night",
-            image: "https://via.placeholder.com/300",
-        },
-        {
-            id: 6,
-            title: "Urban Loft",
-            price: "₹1500/night",
-            image: "https://via.placeholder.com/300",
-        },
-    ];
+    
 
     const filterHandler = async () => {
+
         const queryParams = Object.keys(features)
             .filter((key) => features[key]) 
             .map((key) => `${encodeURIComponent(key)}=true`) 
             .join("&");
 
         
-        const searchTerm = ""; 
-        let searchParam = searchTerm
-            ? `&searchterm=${encodeURIComponent(searchTerm)}`
-            : "";
-        if(sortOption !== "latest"){
+        let searchParam = `&searchterm=${encodeURIComponent(search)}`
+        
+        if(sortOption !== null){
           const sort = sortOption[0] === "p" ? "sort=price" : "sort=rating";
           const order= sortOption[2] === "H" ? "order=desc" : "order=asc";
-          searchParam += `${sort}&${order}`;
+          searchParam += `&${sort}&${order}`;
         }
-        searchParam += `&min-price=${priceRange[0]}&max-price=${priceRange[1]}`;
-        console.log(searchParam);
+        searchParam += `&min_price=${priceRange[0]}&max_price=${priceRange[1]}`;
 
+        
         const response = await axios.post(
             `/hotel/search?${queryParams}${searchParam}`
         );
-        console.log(response.data);
+        setHotels(response.data.data.hotels);
+    };
+    const ResetHandler = () => {
+        setFeatures({
+            wifi: false,
+            ac: false,
+            breakfast: false,
+            parking: false,
+            kitchen: false,
+            gym: false,
+        });
+        setPriceRange([1000, 50000]);
+        setSortOption(null);
+        setSearch("");
     };
     useEffect(() => {
         filterHandler();
@@ -111,30 +89,32 @@ const Search = () => {
                         <SearchBar>
                             <input
                                 type="text"
-                                placeholder="Search Destination"
+                                placeholder="Search Destination/Hotel"
+                                value={search}
+                                onChange={(e)=>setSearch(e.target.value)}
                             />
-                            <button>Search</button>
+                            <button onClick={filterHandler}>Search</button>
                             <FilterButton onClick={toggleFilter}>
                                 Filter
                             </FilterButton>
                         </SearchBar>
                         <ResultsGrid>
-                            {properties.map((properties) => (
-                                <ResultCard key={properties.id}>
+                            {hotels.map((hotel) => (
+                                <ResultCard key={hotel._id}>
                                     <img
-                                        src={properties.image}
-                                        alt={properties.title}
+                                        src={hotel.images[0]}
+                                        alt={hotel.title}
                                         className="result-card-image"
                                     />
                                     <div className="result-card-content">
-                                        <h3>{properties.title}</h3>
-                                        <p>{properties.price}</p>
+                                        <h3>{hotel.title}</h3>
+                                        <p>₹ {hotel.price}</p>
                                         <button
                                             className="result-card-button"
                                             // onClick={() =>
                                             //   alert(`Navigating to properties ${properties.id}`)
                                             // }
-                                            onClick={() => navigate("/single")}
+                                            onClick={() => navigate(`/hotel/${hotel._id}`)}
                                         >
                                             View Details
                                         </button>
@@ -154,7 +134,7 @@ const Search = () => {
                                 className="horizontal-slider"
                                 thumbClassName="example-thumb"
                                 trackClassName="example-track"
-                                defaultValue={priceRange}
+                                value={priceRange}
                                 min={1000}
                                 max={50000}
                                 step={1000}
@@ -227,6 +207,7 @@ const Search = () => {
                             <label>Sort By:</label>
                             <select
                                 onChange={(e) => setSortOption(e.target.value)}
+                                value={sortOption || ""}
                                 style={{
                                     padding: "10px",
                                     fontSize: "16px",
@@ -240,7 +221,7 @@ const Search = () => {
                                     },
                                 }}
                             >
-                                <option value="latest">Latest</option>
+                                <option disabled value="">Select</option>
                                 <option value="p:LowToHigh">
                                     Price: Low to High
                                 </option>
@@ -254,12 +235,20 @@ const Search = () => {
                                     Rating: Low to High
                                 </option>
                             </select>
+                            <div className="flex gap-5 mt-4">
                             <button
                                 onClick={filterHandler}
                                 className="bg-green-500 text-white p-2 rounded-md mt-2 mx-auto"
                             >
                                 Apply Filter
                             </button>
+                            <button
+                                onClick={ResetHandler}
+                                className="bg-white text-green-500 border-green-500 border-2 p-2 rounded-md mt-2 mx-auto"
+                            >
+                                Reset Filter
+                            </button>
+                            </div>
                         </FilterSection>
                     </FilterBox>
                 )}
@@ -420,7 +409,7 @@ const FilterBox = styled.div`
     position: fixed;
     top: 50%;
     right: 0;
-    transform: translate(-50%, -50%);
+    transform: translate(-5%, -65%);
     background-color: #fff;
     padding: 30px;
     border-radius: 10px;
