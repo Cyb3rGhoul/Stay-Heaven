@@ -11,6 +11,9 @@ const Navbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(useSelector((state) => state.isLoggedIn));
   const [profileImage, setprofileImage] = useState(useSelector((state) => state.userData.avatar));
+  const [isAdmin, setIsAdmin] = useState(useSelector((state) => state.userData.isAdmin));
+  const [isCreator, setIsCreator] = useState(useSelector((state) => state.userData.isCreator));
+  const [isBan, setIsBan] = useState(useSelector((state) => state.userData.isban));
   const [fixed, setfixed] = useState(false);
   const location = useLocation();
   const currentPath = location.pathname.split("/")[1];
@@ -24,9 +27,29 @@ const Navbar = () => {
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
   };
+  const getLoginStatus = async () => {
+    const user = await axios.get("/user/current-user", {
+        withCredentials: true,
+    });
+    if(user) {
+      dispatch(toggleLogin(true))
+      dispatch(setUser(user.data.data));
+      setIsLoggedIn(true)
+      setprofileImage(user.data.data.avatar)
+      setIsAdmin(user.data.data.isAdmin)
+      setIsCreator(user.data.data.isCreator)
+      setIsBan(user.data.data.isban)
+    } else {
+      dispatch(toggleLogin(false))
+      dispatch(setUser({}));
+    }
+};
 
-  const logouthandler = () => {
-    axios.post("/user/logout", {}, {
+useEffect(() => {
+    getLoginStatus();
+}, []);
+  const logouthandler =async () => {
+    await axios.post("/user/logout", {}, {
       withCredentials: true, // Important: This sends cookies with the request
     })
     dispatch(toggleLogin(false))
@@ -58,8 +81,8 @@ const Navbar = () => {
                 </button>
                 <Link to="/profile"><div className="">Profile</div></Link>
                 <Link to="/previousBookings"><div className="">Previous Bookings</div></Link>
-                
-                <div>Dashboard</div>
+                {isAdmin && !isBan && <Link to="/admin/dashboard"><div className="">Admin Dashboard</div></Link>}
+                {!isBan && <div>Seller Dashboard</div>}
                 <div onClick={logouthandler}>Logout</div>
               </div>
             )}

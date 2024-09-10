@@ -12,13 +12,6 @@ const AdminNavbar = () => {
     <>
       <Navbar />
       <div className="h-[92vh] p-4 pt-0 fixed top-[8vh] left-0 w-1/5 flex flex-col">
-        {/* <Link to="/">
-          <img className='w-[80%] mx-auto' src={logo} alt="StayHeaven Logo" />
-        </Link> */}
-        {/* <div className='flex items-center gap-2'>
-         <img className='size-16 rounded-full' src="https://minimal-kit-react.vercel.app/assets/images/avatars/avatar_25.jpg" alt="" />
-         <h1>Jaydon</h1>
-        </div> */}
         <div className="flex flex-col justify-evenly h-3/5">
           {[
             {
