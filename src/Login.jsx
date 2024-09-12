@@ -18,6 +18,7 @@ const Login = () => {
       return;
     } 
 
+
     try {
       const response = await axios.post("/user/login", {
         identity: emailOrUsername,
@@ -28,6 +29,7 @@ const Login = () => {
       }
     );
       navigate("/");
+      window.location.reload();
     } catch (error) {
       console.error(error);
     }

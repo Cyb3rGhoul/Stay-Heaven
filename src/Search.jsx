@@ -20,7 +20,7 @@ const Search = () => {
     const [filterOpen, setFilterOpen] = useState(false);
     const [priceRange, setPriceRange] = useState([1000, 50000]);
     const [sortOption, setSortOption] = useState(null);
-    const [search, setSearch] = useState(useSelector(state => state.searchTerm));
+    const [search, setSearch] = useState(useSelector(state => state.user.searchTerm));
     const [hotels, setHotels] = useState([]);
 
     const toggleFilter = () => {

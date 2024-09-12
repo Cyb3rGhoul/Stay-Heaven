@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "./utils/axios";
+import { useNavigate } from "react-router-dom";
 
 const AdminUser = () => {
     const [users, setUsers] = useState([]);
+    const [order, setOrder] = useState(false);
+    const [createdhotel, setCreatedHotel] = useState(false);
+    const [pastbookings, setPastbookings] = useState(false);
+    const navigate = useNavigate();
 
     const makeAdmin = async (id) => {
         try {
@@ -133,11 +138,160 @@ const AdminUser = () => {
         }
     };
 
+    const getDate = (date) => {
+        const specificDate = new Date(date);
+
+        const day = String(specificDate.getDate()).padStart(2, "0"); // Ensures two digits
+        const month = String(specificDate.getMonth() + 1).padStart(2, "0"); // Months are zero-indexed
+        const year = specificDate.getFullYear();
+
+        const formattedDate = `${day}-${month}-${year}`;
+
+        return formattedDate; // Correctly returning formattedDate
+    };
     useEffect(() => {
         getUsers();
     }, []);
     return (
         <div>
+            {(order || createdhotel || pastbookings) && (
+                <div className="w-screen h-full bg-black/60 fixed top-0 left-0 z-10 flex items-center justify-center">
+                    {order && (
+                        <div className="w-[40vw] h-[80vh] flex flex-col items-center justify-center absolute bg-white rounded-md">
+                            <div
+                                className="absolute right-[1%] top-[1%] text-xl font-bold"
+                                onClick={() => setOrder(false)}
+                            >
+                                X
+                            </div>
+                            <img
+                                className="w-[90%] h-3/5 object-cover rounded-md"
+                                src={order.hotel.images[0]}
+                                alt="Booking"
+                            />
+                            <h1 className="font-semibold">Hotel Name: {order.hotel.title}</h1>
+                            <h1 className="font-semibold">
+                                Order id: {order._id}
+                            </h1>
+                            <p>Order Date: {getDate(order.createdAt)}</p>
+                            <p>Rooms: {order.rooms}</p>
+                            <p className=" text-black font-semibold">
+                                Guests:{" "}
+                                {order.guests
+                                    .map(
+                                        (guest) =>
+                                            guest.firstName +
+                                            " " +
+                                            guest.lastName
+                                    )
+                                    .join(", ")}
+                            </p>
+                            <div className="flex gap-2 font-semibold">
+                                <p>{getDate(order.checkin)}</p> to
+                                <p>{getDate(order.checkout)}</p>
+                                {console.log(order)}
+                            </div>
+                            <p>Payment Order Id: {order.paymentDetails.razorpay_payment_id}</p> 
+                            <p>Payment Id: {order.paymentDetails.razorpay_payment_id}</p>
+                            <button
+                                onClick={() =>
+                                    navigate(`/hotel/${pastbookings.hotel._id}`)
+                                }
+                                className="btn btn-primary bg-white border-green-500 text-green-500 hover:bg-green-500 hover:text-white hover:border-green-800"
+                            >
+                                Hotel Details
+                            </button>
+                        </div>
+                    )}
+                    {createdhotel && (
+                        <div className="w-[40vw] h-[80vh] gap-2 flex flex-col items-center justify-center  absolute bg-white rounded-md">
+                            <div
+                                className="absolute right-[1%] top-[1%] text-xl font-bold"
+                                onClick={() => setCreatedHotel(false)}
+                            >
+                                X
+                            </div>
+                            <img
+                                className="w-[90%] h-3/5 object-cover rounded-md"
+                                src={createdhotel.images[0]}
+                                alt="Booking"
+                            />
+                            <h1 className="text-center text-2xl font-bold text-green-500 ">
+                                {createdhotel.title}
+                            </h1>
+                            <p className="text-center text-black font-semibold">
+                                {createdhotel.description}
+                            </p>
+                            <p className="font-semibold">
+                                Hotel id: {createdhotel._id}
+                            </p>
+                            <p className="font-semibold">
+                                {" "}
+                                Date of Creation:{" "}
+                                {getDate(createdhotel.createdAt)}
+                            </p>
+                            <p className="font-semibold">Approval Status: {createdhotel.approvalStatus}</p>
+                            <button
+                                onClick={() =>
+                                    navigate(`/hotel/${createdhotel.hotel._id}`)
+                                }
+                                className="btn btn-primary bg-white border-green-500 text-green-500 hover:bg-green-500 hover:text-white hover:border-green-800"
+                            >
+                                More Details
+                            </button>
+                        </div>
+                    )}
+                    {pastbookings && (
+                        <div className="w-[40vw] h-[80vh] flex flex-col items-center justify-center absolute bg-white rounded-md">
+                            <div
+                                className="absolute right-[1%] top-[1%] text-xl font-bold"
+                                onClick={() => setPastbookings(false)}
+                            >
+                                X
+                            </div>
+                            <img
+                                className="w-[90%] h-3/5 object-cover rounded-md"
+                                src={pastbookings.hotel.images[0]}
+                                alt="Booking"
+                            />
+                            <h1 className="text-center text-2xl font-bold text-green-500 ">
+                                {pastbookings.hotel.title}
+                            </h1>
+                            <p className="text-center text-black font-semibold">
+                                {pastbookings.hotel.description}
+                            </p>
+                            <p className=" text-black font-semibold">
+                                Guests:{" "}
+                                {pastbookings.guests
+                                    .map(
+                                        (guest) =>
+                                            guest.firstName +
+                                            " " +
+                                            guest.lastName
+                                    )
+                                    .join(", ")}
+                            </p>
+                            <p>Approval Status: {pastbookings.approvalStatus}</p>
+                            <p>Order Date: {getDate(pastbookings.createdAt)}</p>
+                            <p>Rooms: {pastbookings.rooms}</p>
+                            <p>Razorpay Order Id: {pastbookings.paymentDetails.razorpay_payment_id}</p> 
+                            <p>Razorpay Payment Id: {pastbookings.paymentDetails.razorpay_payment_id}</p> 
+
+                            <div className="flex gap-2 font-semibold">
+                                <p>{getDate(pastbookings.checkin)}</p> to
+                                <p>{getDate(pastbookings.checkout)}</p>
+                            </div>
+                            <p className="font-semibold">
+                                Total: ₹{pastbookings.amount}
+                            </p>
+                            <p className="font-semibold">
+                                order id: {pastbookings._id}
+                            </p>
+                            
+                        </div>
+                    )}
+                </div>
+            )}
             <div className="ml-2 py-4">
                 <select
                     className="border-2 border-black rounded-md"
@@ -206,13 +360,34 @@ const AdminUser = () => {
                                         <select
                                             className="select bg-zinc-200 select-ghost select-sm"
                                             value=""
+                                            onChange={(e) => {
+                                                const selectedOrderId =
+                                                    e.target.value;
+                                                const selectedOrder =
+                                                    user.previousBookings.find(
+                                                        (order) =>
+                                                            order._id ===
+                                                            selectedOrderId
+                                                    );
+                                                if (selectedOrder) {
+                                                    console.log(selectedOrder);
+                                                    setPastbookings(
+                                                        selectedOrder
+                                                    );
+                                                }
+                                            }}
                                         >
                                             <option value="" disabled selected>
                                                 order id
                                             </option>
                                             {user.previousBookings.map(
                                                 (order) => (
-                                                    <option>{order}</option>
+                                                    <option
+                                                        key={order._id}
+                                                        value={order._id}
+                                                    >
+                                                        {order._id}
+                                                    </option>
                                                 )
                                             )}
                                         </select>
@@ -256,13 +431,31 @@ const AdminUser = () => {
                                             disabled={!user.isCreator}
                                             className="select bg-zinc-200 select-ghost select-sm"
                                             value=""
+                                            onChange={(e) => {
+                                                const hoteltitle =
+                                                    e.target.value;
+                                                const selectedHotel =
+                                                    user.myCreatedPlaces.find(
+                                                        (hotel) =>
+                                                            hotel.title ===
+                                                            hoteltitle
+                                                    );
+                                                if (selectedHotel) {
+                                                    console.log(selectedHotel);
+                                                    setCreatedHotel(
+                                                        selectedHotel
+                                                    );
+                                                }
+                                            }}
                                         >
                                             <option value="" disabled selected>
-                                                Hotel id
+                                                Hotels
                                             </option>
                                             {user.myCreatedPlaces.map(
                                                 (hotel) => (
-                                                    <option>{hotel}</option>
+                                                    <option>
+                                                        {hotel.title}
+                                                    </option>
                                                 )
                                             )}
                                         </select>
@@ -272,13 +465,34 @@ const AdminUser = () => {
                                             disabled={!user.isCreator}
                                             className="select bg-zinc-200 select-ghost select-sm"
                                             value=""
+                                            onChange={(e) => {
+                                                const receivedbooking =
+                                                    e.target.value;
+                                                const selectedbooking =
+                                                    user.receivedOrders.find(
+                                                        (order) =>
+                                                            order._id ===
+                                                            receivedbooking
+                                                    );
+                                                if (selectedbooking) {
+                                                    console.log(
+                                                        selectedbooking
+                                                    );
+                                                    setOrder(selectedbooking);
+                                                }
+                                            }}
                                         >
                                             <option value="" disabled selected>
                                                 Received Order id
                                             </option>
                                             {user.receivedOrders.map(
                                                 (order) => (
-                                                    <option>{order}</option>
+                                                    <option
+                                                        key={order._id}
+                                                        value={order._id}
+                                                    >
+                                                        {order._id}
+                                                    </option>
                                                 )
                                             )}
                                         </select>
@@ -286,9 +500,7 @@ const AdminUser = () => {
                                     <td className="">
                                         <select
                                             className="select bg-zinc-200 select-ghost select-sm"
-                                            value={
-                                                user.isban ? "yes" : "no"
-                                            }
+                                            value={user.isban ? "yes" : "no"}
                                             onChange={(e) => {
                                                 if (e.target.value === "yes") {
                                                     makeBan(user._id);

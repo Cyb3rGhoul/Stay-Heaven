@@ -9,7 +9,7 @@ const PreviousBookings = () => {
     const [selectedBooking, setSelectedBooking] = useState(null);
     const navigate = useNavigate();
     const [previousBookings, setpreviousBookings] = useState(
-        useSelector((state) => state.userData.previousBookings)
+        useSelector((state) => state.user.userData.previousBookings)
     );
     console.log(previousBookings);
     const handleCardClick = (booking) => {

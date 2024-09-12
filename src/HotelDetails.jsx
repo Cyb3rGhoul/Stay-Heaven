@@ -22,7 +22,7 @@ import {  useSelector } from "react-redux";
 const HotelDetails = () => {
     const { id } = useParams();
     const hotelId = id;
-    const [user, setUser] = useState(useSelector((state) => state.userData));
+    const [user, setUser] = useState(useSelector((state) => state.user.userData));
     const [features, setFeatures] = useState({
         wifi: false,
         ac: false,

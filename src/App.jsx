@@ -13,24 +13,7 @@ const App = () => {
   const [loading, setLoading] = useState(true);
   const location = useLocation();
   const navigationType = useNavigationType();
-  const dispatch = useDispatch();
-
-  const getUser = async () => {
-    const user = await axios.get("/user/current-user",{
-      withCredentials: true, 
-    })
-    if(user) {
-      dispatch(toggleLogin(true))
-      dispatch(setUser(user.data.data));
-    } else {
-      dispatch(toggleLogin(false))
-      dispatch(setUser({}));
-    }
-  }
-
-  useEffect(() => {
-    getUser()
-  }, []);
+  const isadminpath = location.pathname.split("/")[1] === "admin";
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 700);
@@ -52,11 +35,11 @@ const App = () => {
       {loading && <Preloader />}
       {!loading && (
         <>
-          <Navbar />
+          {!isadminpath && <Navbar />}
           <main>
             <Outlet />
           </main>
-          <Footer />
+          {!isadminpath && <Footer />}
         </>
       )}
     </div>
