@@ -169,7 +169,9 @@ const AdminUser = () => {
                                 src={order.hotel.images[0]}
                                 alt="Booking"
                             />
-                            <h1 className="font-semibold">Hotel Name: {order.hotel.title}</h1>
+                            <h1 className="font-semibold">
+                                Hotel Name: {order.hotel.title}
+                            </h1>
                             <h1 className="font-semibold">
                                 Order id: {order._id}
                             </h1>
@@ -191,8 +193,14 @@ const AdminUser = () => {
                                 <p>{getDate(order.checkin)}</p> to
                                 <p>{getDate(order.checkout)}</p>
                             </div>
-                            <p>Payment Order Id: {order.paymentDetails.razorpay_payment_id}</p> 
-                            <p>Payment Id: {order.paymentDetails.razorpay_payment_id}</p>
+                            <p>
+                                Payment Order Id:{" "}
+                                {order.paymentDetails.razorpay_payment_id}
+                            </p>
+                            <p>
+                                Payment Id:{" "}
+                                {order.paymentDetails.razorpay_payment_id}
+                            </p>
                             <button
                                 onClick={() =>
                                     navigate(`/hotel/${pastbookings.hotel._id}`)
@@ -230,7 +238,9 @@ const AdminUser = () => {
                                 Date of Creation:{" "}
                                 {getDate(createdhotel.createdAt)}
                             </p>
-                            <p className="font-semibold">Approval Status: {createdhotel.approvalStatus}</p>
+                            <p className="font-semibold">
+                                Approval Status: {createdhotel.approvalStatus}
+                            </p>
                             <button
                                 onClick={() =>
                                     navigate(`/hotel/${createdhotel.hotel._id}`)
@@ -271,11 +281,25 @@ const AdminUser = () => {
                                     )
                                     .join(", ")}
                             </p>
-                            <p>Approval Status: {pastbookings.approvalStatus}</p>
+                            <p>
+                                Approval Status: {pastbookings.approvalStatus}
+                            </p>
                             <p>Order Date: {getDate(pastbookings.createdAt)}</p>
                             <p>Rooms: {pastbookings.rooms}</p>
-                            <p>Razorpay Order Id: {pastbookings.paymentDetails.razorpay_payment_id}</p> 
-                            <p>Razorpay Payment Id: {pastbookings.paymentDetails.razorpay_payment_id}</p> 
+                            <p>
+                                Razorpay Order Id:{" "}
+                                {
+                                    pastbookings.paymentDetails
+                                        .razorpay_payment_id
+                                }
+                            </p>
+                            <p>
+                                Razorpay Payment Id:{" "}
+                                {
+                                    pastbookings.paymentDetails
+                                        .razorpay_payment_id
+                                }
+                            </p>
 
                             <div className="flex gap-2 font-semibold">
                                 <p>{getDate(pastbookings.checkin)}</p> to
@@ -287,7 +311,6 @@ const AdminUser = () => {
                             <p className="font-semibold">
                                 order id: {pastbookings._id}
                             </p>
-                            
                         </div>
                     )}
                 </div>
