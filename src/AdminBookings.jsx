@@ -49,6 +49,7 @@ const AdminBookings = () => {
                         </div>
                         <img src={order.hotel.images[0]} alt="" />
                         <h1>{order.hotel.title}</h1>
+                        <p>Customer: {order.customer.username}</p>
                         <p className=" text-black font-semibold">
                             Guests:{" "}
                             {order.guests
@@ -58,11 +59,14 @@ const AdminBookings = () => {
                                 )
                                 .join(", ")}
                         </p>
+                        <p>Order Date: {getDate(order.createdAt)}</p>
+                        <p>Payment Id: {order.paymentDetails.razorpay_payment_id}</p>
+                        <p>Razorpay Order Id: {order.paymentDetails.razorpay_payment_id}</p>
                         <Link
                             to={`/hotel/${order.hotel._id}`}
                             className="btn bg-zinc-200"
                         >
-                            More
+                            Hotel Details
                         </Link>
                     </div>
                 </div>
