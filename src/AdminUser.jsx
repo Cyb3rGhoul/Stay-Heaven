@@ -173,6 +173,7 @@ const AdminUser = () => {
                             <h1 className="font-semibold">
                                 Order id: {order._id}
                             </h1>
+                            <p>Price: {order.amount}</p>
                             <p>Order Date: {getDate(order.createdAt)}</p>
                             <p>Rooms: {order.rooms}</p>
                             <p className=" text-black font-semibold">
@@ -189,7 +190,6 @@ const AdminUser = () => {
                             <div className="flex gap-2 font-semibold">
                                 <p>{getDate(order.checkin)}</p> to
                                 <p>{getDate(order.checkout)}</p>
-                                {console.log(order)}
                             </div>
                             <p>Payment Order Id: {order.paymentDetails.razorpay_payment_id}</p> 
                             <p>Payment Id: {order.paymentDetails.razorpay_payment_id}</p>
@@ -370,7 +370,6 @@ const AdminUser = () => {
                                                             selectedOrderId
                                                     );
                                                 if (selectedOrder) {
-                                                    console.log(selectedOrder);
                                                     setPastbookings(
                                                         selectedOrder
                                                     );
@@ -441,7 +440,6 @@ const AdminUser = () => {
                                                             hoteltitle
                                                     );
                                                 if (selectedHotel) {
-                                                    console.log(selectedHotel);
                                                     setCreatedHotel(
                                                         selectedHotel
                                                     );
@@ -475,9 +473,6 @@ const AdminUser = () => {
                                                             receivedbooking
                                                     );
                                                 if (selectedbooking) {
-                                                    console.log(
-                                                        selectedbooking
-                                                    );
                                                     setOrder(selectedbooking);
                                                 }
                                             }}

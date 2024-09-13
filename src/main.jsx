@@ -126,7 +126,6 @@ function Base() {
         const user = await axios.get("/user/current-user", {
             withCredentials: true,
         });
-        console.log(user);
         if (user) {
             dispatch(toggleLogin(true));
             dispatch(setUser(user.data.data));

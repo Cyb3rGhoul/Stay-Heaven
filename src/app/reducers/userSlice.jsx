@@ -15,7 +15,6 @@ export const userSlice = createSlice({
         },
         setUser: (state, action) => {
             state.userData = action.payload
-            console.log("ho gya ", state.userData)
         },
         setSearch: (state, action) => {
             state.searchTerm = action.payload
