@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "./utils/axios";
 import { Link } from "react-router-dom";
+import socket from "./utils/socket";
 
 const AdminHotels = () => {
     const [hotels, setHotels] = useState([]);
@@ -35,6 +36,16 @@ const AdminHotels = () => {
     };
     useEffect(() => {
         getAllHotels();
+
+        socket.on('hotel_is_created', (data) => {
+            console.log('New hotel created:', data);
+            setHotels((prev)=> [...prev , data.hotel]);
+        });
+
+        return () => {
+            socket.off('new-hotel');
+        };
+
     }, []);
     return (
         <div>

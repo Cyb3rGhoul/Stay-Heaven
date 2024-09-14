@@ -4,6 +4,7 @@ import "./Home.css";
 import axios from "./utils/axios";
 import { useDispatch } from 'react-redux';
 import { setSearch } from "./app/reducers/userSlice";
+import socket from "./utils/socket";
 
 const Landing = () => {
     const navigate = useNavigate();
@@ -26,6 +27,15 @@ const Landing = () => {
 
     useEffect(() => {
         gethotels();
+
+        socket.on('hotel_is_approved', (data) => {
+            console.log('New hotel approved:', data);
+            setHotels((prev)=> [...prev , data.hotel]);
+        });
+
+        return () => {
+            socket.off('new-hotel');
+        };
     }, []);
 
     const cities = [

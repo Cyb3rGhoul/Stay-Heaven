@@ -3,9 +3,13 @@ import tick from "./assets/tick.png";
 import cross from "./assets/cross.png";
 import axios from "./utils/axios";
 import { Link } from "react-router-dom";
+import socket from "./utils/socket";
+
 
 const AdminRequests = () => {
     const [hotels, setHotels] = useState([]);
+
+
     const getAllPendingHotels = async () => {
         try {
             const response = await axios.post(
@@ -35,9 +39,22 @@ const AdminRequests = () => {
             console.log(error);
         }
     };
+
     useEffect(() => {
+        
         getAllPendingHotels();
+
+
+        socket.on('hotel_is_created', (data) => {
+            console.log('New hotel created:', data);
+            setHotels((prev)=> [...prev , data.hotel]);
+        });
+
+        return () => {
+            socket.off('new-hotel');
+        };
     }, []);
+    
     return (
         <div>
             <div className="overflow-x-auto">

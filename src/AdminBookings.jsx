@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "./utils/axios";
 import { Link } from "react-router-dom";
+import socket from "./utils/socket";
 
 const AdminBookings = () => {
     const [orders, setOrders] = useState([]);
@@ -35,6 +36,16 @@ const AdminBookings = () => {
     };
     useEffect(() => {
         getAllOrders();
+
+
+        socket.on('order_is_created', (data) => {
+            console.log('New hotel created:', data);
+            setOrders((prev)=> [...prev , data.order]);
+        });
+
+        return () => {
+            socket.off('new-hotel');
+        };
     }, []);
     return (
         <div className="relative">

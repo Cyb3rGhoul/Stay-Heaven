@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "./utils/axios";
 import { useNavigate } from "react-router-dom";
+import socket from "./utils/socket";
 
 const AdminUser = () => {
     const [users, setUsers] = useState([]);
@@ -151,6 +152,15 @@ const AdminUser = () => {
     };
     useEffect(() => {
         getUsers();
+
+        socket.on('user_is_created', (data) => {
+            console.log('New hotel created:', data);
+            setUsers((prev)=> [...prev , data.user]);
+        });
+
+        return () => {
+            socket.off('new-hotel');
+        };
     }, []);
     return (
         <div>
