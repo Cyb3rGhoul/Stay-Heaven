@@ -40,7 +40,7 @@ const App = () => {
           <main>
             <Outlet />
           </main>
-          {!isadminpath && <Footer />}
+          {!isadminpath && !issellerpath && <Footer />}
         </>
       )}
     </div>

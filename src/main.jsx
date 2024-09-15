@@ -29,6 +29,7 @@ import axios from "./utils/axios.jsx";
 import Seller from "./Seller.jsx";
 import SellerDashboard from "./SellerDashboard.jsx";
 import CreateHotel from "./CreateHotel.jsx";
+import SellerHotels from "./SellerHotels.jsx";
 
 const router = createBrowserRouter([
     {
@@ -107,7 +108,7 @@ const router = createBrowserRouter([
                     },
                     {
                         path: "hotels",
-                        element: <AdminHotels />,
+                        element: <SellerHotels />,
                     },
                     {
                         path: "users",

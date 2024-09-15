@@ -37,15 +37,14 @@ const AdminHotels = () => {
     useEffect(() => {
         getAllHotels();
 
-        socket.on('hotel_is_created', (data) => {
-            console.log('New hotel created:', data);
-            setHotels((prev)=> [...prev , data.hotel]);
+        socket.on("hotel_is_created", (data) => {
+            console.log("New hotel created:", data);
+            setHotels((prev) => [...prev, data.hotel]);
         });
 
         return () => {
-            socket.off('new-hotel');
+            socket.off("new-hotel");
         };
-
     }, []);
     return (
         <div>
