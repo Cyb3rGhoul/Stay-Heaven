@@ -14,7 +14,6 @@ import PaymentF from "./PaymentF.jsx";
 import Notfound from "./Notfound.jsx";
 import ForgotPassword from "./ForgotPage.jsx";
 import PreviousBookings from "./PreviousBookings.jsx";
-import CreatePlace from "./CreatePlace.jsx";
 import Admin from "./Admin.jsx";
 import AdminDashboard from "./AdminDashboard.jsx";
 import AdminRequests from "./AdminRequests.jsx";
@@ -27,6 +26,9 @@ import { store } from "./app/store";
 import { Provider, useDispatch } from "react-redux";
 import { setUser, toggleLogin } from "./app/reducers/userSlice.jsx";
 import axios from "./utils/axios.jsx";
+import Seller from "./Seller.jsx";
+import SellerDashboard from "./SellerDashboard.jsx";
+import CreateHotel from "./CreateHotel.jsx";
 
 const router = createBrowserRouter([
     {
@@ -62,16 +64,8 @@ const router = createBrowserRouter([
                 element: <PreviousBookings />,
             },
             {
-                path: "/createPlace",
-                element: <CreatePlace />,
-            },
-            {
                 path: "*",
                 element: <Notfound />,
-            },
-            {
-                path: "/seller",
-                element: <SellerFormPage />,
             },
             {
                 path: "/admin",
@@ -84,6 +78,32 @@ const router = createBrowserRouter([
                     {
                         path: "requests",
                         element: <AdminRequests />,
+                    },
+                    {
+                        path: "hotels",
+                        element: <AdminHotels />,
+                    },
+                    {
+                        path: "users",
+                        element: <AdminUser />,
+                    },
+                    {
+                        path: "bookings",
+                        element: <AdminBookings />,
+                    },
+                ],
+            },
+            {
+                path: "/seller",
+                element: <Seller />,
+                children: [
+                    {
+                        path: "dashboard",
+                        element: <SellerDashboard />,
+                    },
+                    {
+                        path: "requests",
+                        element: <CreateHotel />,
                     },
                     {
                         path: "hotels",

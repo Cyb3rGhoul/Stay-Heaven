@@ -14,6 +14,7 @@ const App = () => {
   const location = useLocation();
   const navigationType = useNavigationType();
   const isadminpath = location.pathname.split("/")[1] === "admin";
+  const issellerpath = location.pathname.split("/")[1] === "seller";
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 700);
@@ -35,7 +36,7 @@ const App = () => {
       {loading && <Preloader />}
       {!loading && (
         <>
-          {!isadminpath && <Navbar />}
+          {!isadminpath && !issellerpath && <Navbar />}
           <main>
             <Outlet />
           </main>

@@ -25,6 +25,9 @@ const Navbar = () => {
     const [isBan, setIsBan] = useState(
         useSelector((state) => state.user.userData.isban)
     );
+    const [isSeller, setIsSeller] = useState(
+        useSelector((state) => state.user.userData.isCreator)
+    );
     const [fixed, setfixed] = useState(false);
     const location = useLocation();
     const currentPath = location.pathname.split("/")[1];
@@ -117,7 +120,7 @@ const Navbar = () => {
                                         <div className="">Admin Dashboard</div>
                                     </Link>
                                 )}
-                                {!isBan && <div>Seller Dashboard</div>}
+                                {isSeller && !isBan && <Link to={"/seller/dashboard"}><div className="">Seller Dashboard</div></Link>}
                                 <div onClick={logouthandler}>Logout</div>
                             </div>
                         )}
