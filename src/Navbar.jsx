@@ -9,6 +9,7 @@ import { current } from "@reduxjs/toolkit";
 
 const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
+    const [isSticky, setIsSticky] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(
         useSelector((state) => state.user.isLoggedIn)
@@ -65,7 +66,20 @@ const Navbar = () => {
 
     useEffect(() => {
         setfixed(currentPath === "admin");
-        // getLoginStatus();
+        
+        const handleScroll = () => {
+            if (window.scrollX > 0) {
+                setIsSticky(false);
+            } else {
+                setIsSticky(true);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
     }, []);
     const logouthandler = async () => {
         await axios.post(
@@ -82,8 +96,8 @@ const Navbar = () => {
 
     return (
         <nav
-            className={`navbar light  ${
-                fixed ? "fixed top-0 left-0 w-full z-10" : ""
+            className={`navbar ${fixed ? "fixed top-0 left-0 w-full z-10" : ""} ${
+                isSticky ? "" : "sticky"
             }`}
         >
             <div className="navbar__logo">
@@ -91,7 +105,9 @@ const Navbar = () => {
                     <img src={logo} alt="StayHeaven Logo" />
                 </Link>
             </div>
-            <ul className={`navbar__links ${menuOpen ? "active" : ""}`}>
+            <ul className={`navbar__links ${menuOpen ? "active" : ""}`} style={{
+                            marginTop: "0.5rem",
+                        }}>
                 {isLoggedIn ? (
                     <li className="navbar__username" onClick={toggleDropdown}>
                         <div className="flex gap-4">
@@ -127,10 +143,10 @@ const Navbar = () => {
                     </li>
                 ) : (
                     <div className="flex gap-1">
-                        <li>
+                        <li >
                             <Link to="/signup" onClick={toggleMenu}>
                                 <button className="button-animation relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-l font-medium text-gray-900 rounded-lg group dark:text-gray-900">
-                                    <span className="span-mother relative px-5 py-2.5 max-[500px]:px-2 max-[500px]:py-1.5 transition-all ease-in duration-75 bg-white rounded-md group-hover:bg-opacity-0">
+                                    <span className="span-mother relative px-5 py-2.5 max-[500px]:px-2 max-[500px]:py-1.5 transition-all ease-in duration-75 rounded-md group-hover:bg-opacity-0">
                                         <span>S</span>
                                         <span>i</span>
                                         <span>g</span>
@@ -154,7 +170,7 @@ const Navbar = () => {
                         <li>
                             <Link to="/login" onClick={toggleMenu}>
                                 <button className="button-animation relative inline-flex max-[500px]:mt-2 items-center justify-center mr-12 mb-2 me-2 overflow-hidden text-l font-medium text-gray-900 rounded-lg group dark:text-gray-900">
-                                    <span className="span-mother relative px-5 py-2.5 max-[500px]:px-2 max-[500px]:py-1.5 transition-all ease-in duration-75 bg-white rounded-md group-hover:bg-opacity-0">
+                                    <span className="span-mother relative px-5 py-2.5 max-[500px]:px-2 max-[500px]:py-1.5 transition-all ease-in duration-75 rounded-md group-hover:bg-opacity-0">
                                         <span>L</span>
                                         <span>o</span>
                                         <span>g</span>

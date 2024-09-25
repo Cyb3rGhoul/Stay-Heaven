@@ -104,7 +104,9 @@ const Landing = () => {
     return (
         <>
             <div className="landing">
-                <div className="landing__search-container">
+                <div className="landing__search-container" style={{
+                    marginTop: "5rem",
+                }}>
                     <input
                         onChange={(e) => setSearchTerm(e.target.value)}
                         type="text"

@@ -1,0 +1,88 @@
+.hotelPage{
+  font-family: "Josefin Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.comment-section {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px, rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px, rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px;
+  }
+  
+  .comment-box {
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .comment-input {
+    width: 100%;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 1rem;
+    color: #333;
+    transition: border-color 0.3s;
+  }
+  
+  .comment-input:focus {
+    border-color: #784c0a;
+  }
+  
+  .add-comment-btn {
+    background-color: #4caf50;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .add-comment-btn:hover {
+    background-color: #04af70;
+  }
+  
+  .reviews {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 10px;
+    border-radius: 10px;
+  }
+  
+  .review-box {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    transition: background-color 0.3s;
+  }
+  
+  .review-box:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .comment-text {
+    color: #333;
+    font-size: 1rem;
+  }
+  
+  .read-only-rating {
+    margin-top: 5px;
+    color: #ffb300;
+  }
+  
+  @media (max-width: 768px) {
+    .comment-box {
+      flex-direction: column;
+    }
+    .review-box {
+      width: 100%;
+    }
+  }
