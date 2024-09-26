@@ -1,4 +1,4 @@
-.hotelPage{
+#hotelPage{
   font-family: "Josefin Sans", sans-serif;
   font-optical-sizing: auto;
   font-weight: 400;
@@ -6,7 +6,7 @@
 }
 
 .comment-section {
-    background-color: #ffffff;
+  background-color: #fff8f0;
     padding: 20px;
     border-radius: 10px;
     border: 1px solid #ddd;
@@ -84,5 +84,12 @@
     }
     .review-box {
       width: 100%;
+    }
+  }
+  
+  
+  @media (max-width: 768px) {
+    .comment-section{
+      margin-top: 10px;
     }
   }

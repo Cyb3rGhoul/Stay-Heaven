@@ -49,6 +49,10 @@
   .navbar__logo img {
     max-width: 150px;
   }
+  .navbar.sticky{
+    left: -1px;
+    width: 95%;
+  }
 }
 
 .navbar__toggle {
@@ -176,9 +180,6 @@ body.light-theme {
   text-align: center;
 }
 
-.button-animation:hover {
-  
-}
 
 .button-animation .span-mother,
 .button-animation .span-mother2 {
@@ -333,4 +334,43 @@ body.light-theme {
 
 #toggle:checked + svg #stars {
   opacity: 1;
+}
+
+.navbar__toggle {
+  transition: all 0.5s ease;
+  display: none;
+  cursor: pointer;
+}
+
+.hamburger {
+  width: 25px;
+  height: 3px;
+  background-color: black;
+  transition: all 0.5s ease;
+}
+
+.hamburger.open {
+  transform: rotate(90deg);
+}
+
+@media (max-width: 768px) {
+  .navbar__links {
+      display: none;
+      flex-direction: column;
+      gap: 1rem;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background-color: white;
+      padding: 1rem 0;
+  }
+
+  .navbar__links.active {
+      display: flex;
+  }
+
+  .navbar__toggle {
+      display: block;
+  }
 }

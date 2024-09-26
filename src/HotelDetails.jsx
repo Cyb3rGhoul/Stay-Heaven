@@ -233,352 +233,362 @@ const HotelDetails = () => {
 
     return (
         <>
-            <div className="hotelPage">
+            <div className="hotelPage" id="hotelPage">
                 <Wrapper>
-                    <div style={{
-                        
-                        marginTop: "80px",
-                    }}>
-                    <TitleSection>
-                        <PropertyName style={{
-                            fontFamily: "Josefin Sans, sans-serif",
-                            fontOpticalSizing: "auto",
-                            fontWeight: 800,
-                            fontStyle: "normal",
-                        }}>
-                            {hotel.title}
-                        </PropertyName>
-                        <ActionButtons>
-                            <ShareButton onClick={handleShare}>
-                                <FaShareAlt />
-                            </ShareButton>
-                        </ActionButtons>
-                    </TitleSection>
-                    <GalleryContainer>
-                        <MainImage>
-                            <img
-                                src={
-                                    hotel.images?.length > 0
-                                        ? hotel.images[0]
-                                        : "https://via.placeholder.com/800x600"
-                                }
-                                alt="Gallery 1"
-                            />
-                        </MainImage>
-                        <SmallImages>
-                            <img
-                                src={
-                                    hotel.images?.length > 1
-                                        ? hotel.images[1]
-                                        : "https://via.placeholder.com/400x300"
-                                }
-                                alt="Gallery 2"
-                            />
-                            <img
-                                src={
-                                    hotel.images?.length > 2
-                                        ? hotel.images[2]
-                                        : "https://via.placeholder.com/400x300"
-                                }
-                                alt="Gallery 3"
-                            />
-                            <img
-                                src={
-                                    hotel.images?.length > 3
-                                        ? hotel.images[3]
-                                        : "https://via.placeholder.com/400x300"
-                                }
-                                alt="Gallery 4"
-                            />
-                            <img
-                                src={
-                                    hotel.images?.length > 4
-                                        ? hotel.images[4]
-                                        : "https://via.placeholder.com/400x300"
-                                }
-                                alt="Gallery 5"
-                            />
-                        </SmallImages>
-                    </GalleryContainer>
-                    <Details>
-                        <Left>
-                            <GuestReviews>
-                                <GuestFavourite>Guest favourite</GuestFavourite>
-                                <RatingWrapper>
-                                    <RatingValue>{hotelRating || 0}</RatingValue>
+                    <div>
+                        <TitleSection>
+                            <PropertyName style={{
+                                fontFamily: "Josefin Sans, sans-serif",
+                                fontOpticalSizing: "auto",
+                                fontWeight: 800,
+                                fontStyle: "normal",
+                                marginTop: "10px",
+                            }}>
+                                {hotel.title}
+                            </PropertyName>
+                            <ActionButtons>
+                                <ShareButton onClick={handleShare}>
+                                    <FaShareAlt />
+                                </ShareButton>
+                            </ActionButtons>
+                        </TitleSection>
+                        <GalleryContainer>
+                            <MainImage>
+                                <img
+                                    src={
+                                        hotel.images?.length > 0
+                                            ? hotel.images[0]
+                                            : "https://via.placeholder.com/800x600"
+                                    }
+                                    alt="Gallery 1"
+                                />
+                            </MainImage>
+                            <SmallImages>
+                                <img
+                                    src={
+                                        hotel.images?.length > 1
+                                            ? hotel.images[1]
+                                            : "https://via.placeholder.com/400x300"
+                                    }
+                                    alt="Gallery 2"
+                                />
+                                <img
+                                    src={
+                                        hotel.images?.length > 2
+                                            ? hotel.images[2]
+                                            : "https://via.placeholder.com/400x300"
+                                    }
+                                    alt="Gallery 3"
+                                />
+                                <img
+                                    src={
+                                        hotel.images?.length > 3
+                                            ? hotel.images[3]
+                                            : "https://via.placeholder.com/400x300"
+                                    }
+                                    alt="Gallery 4"
+                                />
+                                <img
+                                    src={
+                                        hotel.images?.length > 4
+                                            ? hotel.images[4]
+                                            : "https://via.placeholder.com/400x300"
+                                    }
+                                    alt="Gallery 5"
+                                />
+                            </SmallImages>
+                        </GalleryContainer>
+                        <Details>
+                            <Left>
+                                <GuestReviews>
+                                    <GuestFavourite>Guest favourite</GuestFavourite>
+                                    <RatingWrapper>
+                                        <RatingValue>{hotelRating || 0}</RatingValue>
+                                        <StyledRating
+                                            name="half-rating"
+                                            precision={0.5}
+                                            value={hotelRating}
+                                            readOnly
+                                        />
+                                    </RatingWrapper>
+                                    <ReviewCount>{reviews.length} Reviews</ReviewCount>
+                                </GuestReviews>
+
+                                <Features>
+                                    <CheckboxContainer>
+                                        {features.wifi && (
+                                            <CheckboxLabel checked={features.wifi}>
+                                                <IconWrapper>
+                                                    <FaWifi size={24} />
+                                                </IconWrapper>
+                                                WiFi
+                                            </CheckboxLabel>
+                                        )}
+                                        {features.ac && (
+                                            <CheckboxLabel checked={features.ac}>
+                                                <IconWrapper>
+                                                    <FaSnowflake size={24} />
+                                                </IconWrapper>
+                                                AC
+                                            </CheckboxLabel>
+                                        )}
+                                        {features.breakfast && (
+                                            <CheckboxLabel checked={features.breakfast}>
+                                                <IconWrapper>
+                                                    <FaCoffee size={24} />
+                                                </IconWrapper>
+                                                Breakfast
+                                            </CheckboxLabel>
+                                        )}
+                                        {features.parking && (
+                                            <CheckboxLabel checked={features.parking}>
+                                                <IconWrapper>
+                                                    <FaParking size={24} />
+                                                </IconWrapper>
+                                                Parking
+                                            </CheckboxLabel>
+                                        )}
+                                        {features.kitchen && (
+                                            <CheckboxLabel checked={features.kitchen}>
+                                                <IconWrapper>
+                                                    <FaUtensils size={24} />
+                                                </IconWrapper>
+                                                Kitchen
+                                            </CheckboxLabel>
+                                        )}
+                                        {features.gym && (
+                                            <CheckboxLabel checked={features.gym}>
+                                                <IconWrapper>
+                                                    <CgGym size={36} />
+                                                </IconWrapper>
+                                                Gym
+                                            </CheckboxLabel>
+                                        )}
+                                    </CheckboxContainer>
+                                </Features>
+
+                                <Description>
+                                    <p>Description: {hotel.description}</p>
+                                </Description>
+                                <Address>
+                                    <p>Address: {hotel.address}</p>
+                                </Address>
+                            </Left>
+                            <Right>
+                                <PriceSection>
+                                    <p>
+                                        <DiscountedPrice>
+                                            ₹ {hotel.price}
+                                        </DiscountedPrice>{" "}
+                                        per night
+                                    </p>
+                                    <p>Max guest per room : {hotel.maxGuests}</p>
+                                    <button onClick={handleBookClick}>Reserve</button>
+                                    {showPopup && (
+                                        <PopupOverlay onClick={handlePopupClose}>
+                                            <PopupContent
+                                                onClick={(e) => e.stopPropagation()}
+                                            >
+                                                <PopupHeader>
+                                                    <h2>Booking Details</h2>
+                                                    <CloseButton
+                                                        onClick={handlePopupClose}
+                                                    >
+                                                        ×
+                                                    </CloseButton>
+                                                </PopupHeader>
+                                                <Form>
+                                                    {guestNames.map((guest, index) => (
+                                                        <GuestDetails key={index}>
+                                                            <FormItem>
+                                                                <label>
+                                                                    Guest {index + 1}{" "}
+                                                                    First Name:
+                                                                </label>
+                                                                <input
+                                                                    type="text"
+                                                                    value={
+                                                                        guest.firstName
+                                                                    }
+                                                                    onChange={(e) =>
+                                                                        handleGuestNameChange(
+                                                                            index,
+                                                                            "firstName",
+                                                                            e.target
+                                                                                .value
+                                                                        )
+                                                                    }
+                                                                />
+                                                            </FormItem>
+                                                            <FormItem>
+                                                                <label>
+                                                                    Guest {index + 1}{" "}
+                                                                    Last Name:
+                                                                </label>
+                                                                <input
+                                                                    type="text"
+                                                                    value={
+                                                                        guest.lastName
+                                                                    }
+                                                                    onChange={(e) =>
+                                                                        handleGuestNameChange(
+                                                                            index,
+                                                                            "lastName",
+                                                                            e.target
+                                                                                .value
+                                                                        )
+                                                                    }
+                                                                />
+                                                            </FormItem>
+                                                            <FormItem>
+                                                                <label>
+                                                                    Guest {index + 1}{" "}
+                                                                    Phone Number:
+                                                                </label>
+                                                                <input
+                                                                    type="text"
+                                                                    value={
+                                                                        guest.phoneNumber
+                                                                    }
+                                                                    onChange={(e) =>
+                                                                        handleGuestNameChange(
+                                                                            index,
+                                                                            "phoneNumber",
+                                                                            e.target
+                                                                                .value
+                                                                        )
+                                                                    }
+                                                                />
+                                                            </FormItem>
+                                                            {guestNames.length > 1 && (
+                                                                <RemoveGuestButton
+                                                                    type="button"
+                                                                    onClick={() =>
+                                                                        handleRemoveGuest(
+                                                                            index
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    Remove Guest
+                                                                </RemoveGuestButton>
+                                                            )}
+                                                        </GuestDetails>
+                                                    ))}
+                                                    <AddGuestButton
+                                                        type="button"
+                                                        onClick={handleAddGuest}
+                                                    >
+                                                        Add Guest
+                                                    </AddGuestButton>
+                                                    <div className="flex flex-row">
+                                                        <FormItem>
+                                                            <label>
+                                                                Check-In Date:
+                                                            </label>
+                                                            <DatePicker
+                                                                selected={checkInDate}
+                                                                onChange={(date) =>
+                                                                    setCheckInDate(date)
+                                                                }
+                                                                placeholderText="Check-In"
+                                                            />
+                                                        </FormItem>
+                                                        <div className="w-5"></div>
+                                                        <FormItem>
+                                                            <label>
+                                                                Check-Out Date:
+                                                            </label>
+                                                            <DatePicker
+                                                                selected={checkOutDate}
+                                                                onChange={(date) => {
+                                                                    setCheckOutDate(
+                                                                        date
+                                                                    );
+                                                                }}
+                                                                placeholderText="Check-Out"
+                                                            />
+                                                        </FormItem>
+                                                    </div>
+                                                    <FormItem className="self-center">
+                                                        <label>Rooms:</label>
+                                                        <p>{rooms || 0}</p>
+                                                    </FormItem>
+                                                    <FormItem className="self-center">
+                                                        <label>Final Price:</label>
+                                                        <p>₹ {amount || 0}</p>
+                                                    </FormItem>
+                                                    <PayButton
+                                                        type="button"
+                                                        onClick={handlePay}
+                                                    >
+                                                        Pay
+                                                    </PayButton>
+                                                </Form>
+                                            </PopupContent>
+                                        </PopupOverlay>
+                                    )}
+                                </PriceSection>
+                            </Right>
+                        </Details>
+                        <div className="comment-section flex flex-col gap-4 mx-auto w-4xl">
+                            <div className="comment-box flex flex-col md:flex-row gap-2 items-center md:items-start">
+                                <div className="rating-component flex-shrink-0">
                                     <Rating
                                         name="half-rating"
+                                        defaultValue={0}
                                         precision={0.5}
-                                        value={hotelRating}
-                                        readOnly
+                                        onChange={(e) => setComment({ ...comment, rating: e.target.value })}
+                                        value={comment.rating}
                                     />
-                                </RatingWrapper>
-                                <ReviewCount>{reviews.length} Reviews</ReviewCount>
-                            </GuestReviews>
-
-                            <Features>
-                                <CheckboxContainer>
-                                    {features.wifi && (
-                                        <CheckboxLabel checked={features.wifi}>
-                                            <FaWifi size={24} />
-                                            WiFi
-                                        </CheckboxLabel>
-                                    )}
-                                    {features.ac && (
-                                        <CheckboxLabel checked={features.ac}>
-                                            <FaSnowflake size={24} />
-                                            AC
-                                        </CheckboxLabel>
-                                    )}
-                                    {features.breakfast && (
-                                        <CheckboxLabel checked={features.breakfast}>
-                                            <FaCoffee size={24} />
-                                            Breakfast
-                                        </CheckboxLabel>
-                                    )}
-                                    {features.parking && (
-                                        <CheckboxLabel checked={features.parking}>
-                                            <FaParking size={24} />
-                                            Parking
-                                        </CheckboxLabel>
-                                    )}
-                                    {features.kitchen && (
-                                        <CheckboxLabel checked={features.kitchen}>
-                                            <FaUtensils size={24} />
-                                            Kitchen
-                                        </CheckboxLabel>
-                                    )}
-                                    {features.gym && (
-                                        <CheckboxLabel checked={features.gym}>
-                                            <CgGym size={36} />
-                                            Gym
-                                        </CheckboxLabel>
-                                    )}
-                                </CheckboxContainer>
-                            </Features>
-
-                            <Description>
-                                <p>Description: {hotel.description}</p>
-                            </Description>
-                            <Address>
-                                <p>Address: {hotel.address}</p>
-                            </Address>
-                        </Left>
-                        <Right>
-                            <PriceSection>
-                                <p>
-                                    <DiscountedPrice>
-                                        ₹{hotel.price}
-                                    </DiscountedPrice>{" "}
-                                    per night
-                                </p>
-                                <p>Max guest per room : {hotel.maxGuests}</p>
-                                <button onClick={handleBookClick}>Reserve</button>
-                                {showPopup && (
-                                    <PopupOverlay onClick={handlePopupClose}>
-                                        <PopupContent
-                                            onClick={(e) => e.stopPropagation()}
-                                        >
-                                            <PopupHeader>
-                                                <h2>Booking Details</h2>
-                                                <CloseButton
-                                                    onClick={handlePopupClose}
-                                                >
-                                                    ×
-                                                </CloseButton>
-                                            </PopupHeader>
-                                            <Form>
-                                                {guestNames.map((guest, index) => (
-                                                    <GuestDetails key={index}>
-                                                        <FormItem>
-                                                            <label>
-                                                                Guest {index + 1}{" "}
-                                                                First Name:
-                                                            </label>
-                                                            <input
-                                                                type="text"
-                                                                value={
-                                                                    guest.firstName
-                                                                }
-                                                                onChange={(e) =>
-                                                                    handleGuestNameChange(
-                                                                        index,
-                                                                        "firstName",
-                                                                        e.target
-                                                                            .value
-                                                                    )
-                                                                }
-                                                            />
-                                                        </FormItem>
-                                                        <FormItem>
-                                                            <label>
-                                                                Guest {index + 1}{" "}
-                                                                Last Name:
-                                                            </label>
-                                                            <input
-                                                                type="text"
-                                                                value={
-                                                                    guest.lastName
-                                                                }
-                                                                onChange={(e) =>
-                                                                    handleGuestNameChange(
-                                                                        index,
-                                                                        "lastName",
-                                                                        e.target
-                                                                            .value
-                                                                    )
-                                                                }
-                                                            />
-                                                        </FormItem>
-                                                        <FormItem>
-                                                            <label>
-                                                                Guest {index + 1}{" "}
-                                                                Phone Number:
-                                                            </label>
-                                                            <input
-                                                                type="text"
-                                                                value={
-                                                                    guest.phoneNumber
-                                                                }
-                                                                onChange={(e) =>
-                                                                    handleGuestNameChange(
-                                                                        index,
-                                                                        "phoneNumber",
-                                                                        e.target
-                                                                            .value
-                                                                    )
-                                                                }
-                                                            />
-                                                        </FormItem>
-                                                        {guestNames.length > 1 && (
-                                                            <RemoveGuestButton
-                                                                type="button"
-                                                                onClick={() =>
-                                                                    handleRemoveGuest(
-                                                                        index
-                                                                    )
-                                                                }
-                                                            >
-                                                                Remove Guest
-                                                            </RemoveGuestButton>
-                                                        )}
-                                                    </GuestDetails>
-                                                ))}
-                                                <AddGuestButton
-                                                    type="button"
-                                                    onClick={handleAddGuest}
-                                                >
-                                                    Add Guest
-                                                </AddGuestButton>
-                                                <div className="flex flex-row">
-                                                    <FormItem>
-                                                        <label>
-                                                            Check-In Date:
-                                                        </label>
-                                                        <DatePicker
-                                                            selected={checkInDate}
-                                                            onChange={(date) =>
-                                                                setCheckInDate(date)
-                                                            }
-                                                            placeholderText="Check-In"
-                                                        />
-                                                    </FormItem>
-                                                    <div className="w-5"></div>
-                                                    <FormItem>
-                                                        <label>
-                                                            Check-Out Date:
-                                                        </label>
-                                                        <DatePicker
-                                                            selected={checkOutDate}
-                                                            onChange={(date) => {
-                                                                setCheckOutDate(
-                                                                    date
-                                                                );
-                                                            }}
-                                                            placeholderText="Check-Out"
-                                                        />
-                                                    </FormItem>
-                                                </div>
-                                                <FormItem className="self-center">
-                                                    <label>Rooms:</label>
-                                                    <p>{rooms || 0}</p>
-                                                </FormItem>
-                                                <FormItem className="self-center">
-                                                    <label>Final Price:</label>
-                                                    <p>{amount || 0}</p>
-                                                </FormItem>
-                                                <PayButton
-                                                    type="button"
-                                                    onClick={handlePay}
-                                                >
-                                                    Pay
-                                                </PayButton>
-                                            </Form>
-                                        </PopupContent>
-                                    </PopupOverlay>
-                                )}
-                            </PriceSection>
-                        </Right>
-                    </Details>
-                    <div className="comment-section flex flex-col gap-4 mx-auto w-4xl">
-                        <div className="comment-box flex flex-col md:flex-row gap-2 items-center md:items-start">
-                            <div className="rating-component flex-shrink-0">
-                                <Rating
-                                    name="half-rating"
-                                    defaultValue={0}
-                                    precision={0.5}
-                                    onChange={(e) => setComment({ ...comment, rating: e.target.value })}
-                                    value={comment.rating}
+                                </div>
+                                <input
+                                    className="comment-input w-full md:w-3/4 border-2 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all"
+                                    type="text"
+                                    onChange={(e) => setComment({ ...comment, message: e.target.value })}
+                                    value={comment.message}
+                                    placeholder="Write a comment..."
                                 />
+                                <button
+                                    onClick={commentHandler}
+                                    className="add-comment-btn text-white bg-green-500 p-2 rounded-md hover:bg-green-600 transition-all"
+                                >
+                                    Add Comment
+                                </button>
                             </div>
-                            <input
-                                className="comment-input w-full md:w-3/4 border-2 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all"
-                                type="text"
-                                onChange={(e) => setComment({ ...comment, message: e.target.value })}
-                                value={comment.message}
-                                placeholder="Write a comment..."
-                            />
-                            <button
-                                onClick={commentHandler}
-                                className="add-comment-btn text-white bg-green-500 p-2 rounded-md hover:bg-green-600 transition-all"
-                            >
-                                Add Comment
-                            </button>
-                        </div>
 
 
 
-                        <ReviewsContainer>
-                            <Reviews>
-                                {reviews?.map((review, index) => (
-                                    <Review key={index} className="review-box flex items-center gap-4 p-4 border rounded-lg shadow-md">
-                                        <Avatar src={review.user.avatar} className="w-16 h-16 rounded-full" />
-                                        <Comment>
-                                            <ReviewHeader>
-                                                <strong className="text-lg">{review.user.username}</strong>
-                                            </ReviewHeader>
-                                            <p className="comment-text text-gray-700">{review.message}</p>
-                                            <Rating
-                                                name="half-rating-read"
-                                                className="read-only-rating"
-                                                defaultValue={0}
-                                                precision={0.5}
-                                                value={review.rating}
-                                                readOnly
-                                            />
-                                            {user && user._id === review.user._id && (
-                                                <MdDelete
-                                                    onClick={() => handleDeleteReview(review._id)}
-                                                    size={24}
-                                                    className="text-red-500 hover:text-red-700 cursor-pointer"
+                            <ReviewsContainer>
+                                <Reviews>
+                                    {reviews?.map((review, index) => (
+                                        <Review key={index} className="review-box flex items-center gap-4 p-4 border rounded-lg shadow-md">
+                                            <Avatar src={review.user.avatar} className="w-16 h-16 rounded-full" />
+                                            <Comment>
+                                                <ReviewHeader>
+                                                    <strong className="text-lg">{review.user.username}</strong>
+                                                </ReviewHeader>
+                                                <p className="comment-text text-gray-700">{review.message}</p>
+                                                <Rating
+                                                    name="half-rating-read"
+                                                    className="read-only-rating"
+                                                    defaultValue={0}
+                                                    precision={0.5}
+                                                    value={review.rating}
+                                                    readOnly
                                                 />
-                                            )}
-                                        </Comment>
-                                    </Review>
-                                ))}
-                            </Reviews>
-                        </ReviewsContainer>
-                    </div>
+                                                {user && user._id === review.user._id && (
+                                                    <MdDelete
+                                                        onClick={() => handleDeleteReview(review._id)}
+                                                        size={24}
+                                                        className="text-red-500 hover:text-red-700 cursor-pointer"
+                                                    />
+                                                )}
+                                            </Comment>
+                                        </Review>
+                                    ))}
+                                </Reviews>
+                            </ReviewsContainer>
+                        </div>
                     </div>
                 </Wrapper >
             </div >
@@ -589,7 +599,6 @@ const HotelDetails = () => {
 export default HotelDetails;
 
 const Wrapper = styled.div`
-    background-color: #f0f5ff;
     color: #333;
     min-height: 100vh;
     padding: 20px;
@@ -600,6 +609,7 @@ const TitleSection = styled.div`
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
+    margin-top: 60px;
 `;
 
 const PropertyName = styled.h1`
@@ -679,32 +689,65 @@ const Left = styled.div`
 
 const GuestReviews = styled.div`
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
+    gap: 10px;
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 `;
 
 const GuestFavourite = styled.div`
     font-size: 16px;
     font-weight: bold;
     color: #333;
+
+    @media (max-width: 768px) {
+        font-size: 14px;
+    }
 `;
 
 const RatingWrapper = styled.div`
     display: flex;
     align-items: center;
-    gap: 7px; /* Adjust the spacing between the number and stars */
+    gap: 7px;
+
+    @media (max-width: 768px) {
+        gap: 5px;
+    }
 `;
 
 const RatingValue = styled.div`
-    margin-top: 4.5px;
     font-size: 18px;
     color: #333;
+
+    @media (max-width: 768px) {
+        font-size: 16px;
+    }
 `;
 
 const ReviewCount = styled.div`
     font-size: 14px;
-    margin-top: 5px;
     color: #666;
+
+    @media (max-width: 768px) {
+        font-size: 12px;
+    }
+`;
+
+const StyledRating = styled(Rating)`
+    .MuiRating-icon {
+        font-size: 1.2rem;
+    }
+
+    @media (max-width: 768px) {
+        .MuiRating-icon {
+            font-size: 1rem;
+        }
+    }
 `;
 
 
@@ -720,12 +763,23 @@ const Features = styled.div`
             margin-right: 5px;
         }
     }
+
+
+     @media (max-width: 768px) {
+        label {
+        font-size: 10px;
+        }
+    }
 `;
 const CheckboxContainer = styled.div`
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 10px;
     justify-content: center;
+
+    @media (max-width: 768px) {
+        gap: 5px;
+    }
 `;
 
 const CheckboxLabel = styled.label`
@@ -738,6 +792,7 @@ const CheckboxLabel = styled.label`
     cursor: pointer;
     transition: all 0.3s ease;
     width: 100px;
+    height: 100px;
     text-align: center;
     background-color: ${({ checked }) => (checked ? "#CAFFCB" : "#fff")};
     border-color: ${({ checked }) => (checked ? "#04AF70" : "#ddd")};
@@ -749,6 +804,32 @@ const CheckboxLabel = styled.label`
     &:hover {
         border-color: #04af70;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    @media (max-width: 768px) {
+        width: 80px;
+        height: 80px;
+        padding: 5px;
+        font-size: 0.1rem;
+    }
+
+    @media (max-width: 480px) {
+        width: 60px;
+        height: 60px;
+        padding: 3px;
+        font-size: 0.1rem;
+    }
+`;
+
+const IconWrapper = styled.div`
+    margin: 5px;
+
+    @media (max-width: 768px) {
+        margin: 3px 0;
+    }
+
+    @media (max-width: 480px) {
+        margin-bottom: 2px;
     }
 `;
 
@@ -823,6 +904,7 @@ const ReviewsContainer = styled.div`
     justify-content: center;
     width: 100%;
     margin-top: 20px;
+    
 `;
 
 const Reviews = styled.div`
@@ -968,7 +1050,7 @@ const AddGuestButton = styled.button`
     margin-top: 10px;
     padding: 10px 20px;
     font-size: 1em;
-    background-color: #007bff;
+    background-color: #000;
     color: white;
     border: none;
     border-radius: 5px;

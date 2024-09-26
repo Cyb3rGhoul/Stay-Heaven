@@ -1,79 +1,52 @@
 import React from "react";
-import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faInstagram,
   faTwitter,
   faLinkedin,
 } from "@fortawesome/free-brands-svg-icons";
-import { faEnvelope } from "@fortawesome/free-solid-svg-icons"; // Updated import
+import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import logo from "./assets/logo.png";
-import "./Footer.css"
+import "./Footer.css";
 
 const Footer = () => (
-  <div className="footer" id="footer">
-    <div className="flex p-10 px-10 min-[1500px]:px-40 min-[1500px]:pr-60  flex-col lg:flex-row  justify-between h-full">
-
-      <div className=" lg:w-[30%] w-full flex flex-col gap-4 text-justify">
-        <img src={logo} alt="StayHeaven Logo"  className="h-8 w-56 m-auto lg:m-0"/>
-        <div className="">
+  <footer className="footer" id="footer">
+    <div className="footer-container">
+      <div className="footer-section logo-section">
+        <img src={logo} alt="StayHeaven Logo" className="footer-logo" />
+        <p className="footer-description">
           StayHeaven is an Indian marketplace that connects people looking to book and create hotels. It has revolutionized the travel industry by enabling hosts to offer unique, often cost-effective lodging options to guests in country.
-        </div>
+        </p>
       </div>
 
-      <div className=" h-full mt-10 lg:mt-0 text-center lg:text-left">
-        <div className="h-full">
-          <div className="h-full">
-            <div className="text-lg font-bold">Support</div>
-            <div className="flex flex-col mt-5 text-sm justify-around h-[90%]">
-            <a className="hover:text-[#04af70]" href="#help-centre">Help Centre</a>
-            <a className="hover:text-[#04af70]" href="#aircover">AirCover</a>
-            <a className="hover:text-[#04af70]" href="#anti-discrimination">Anti-discrimination</a>
-            <a className="hover:text-[#04af70]" href="#disability-support">Disability support</a>
-            <a className="hover:text-[#04af70]" href="#cancellation-options">Cancellation options</a>
-            <a className="hover:text-[#04af70]" href="#report-concern">Report neighbourhood concern</a>
-            </div>
-          </div>
-        </div>
+      <div className="footer-section support-section">
+        <h3 className="footer-heading">Support</h3>
+        <nav className="footer-nav">
+          <a href="#help-centre">Help Centre</a>
+          <a href="#aircover">AirCover</a>
+          <a href="#anti-discrimination">Anti-discrimination</a>
+          <a href="#disability-support">Disability support</a>
+          <a href="#cancellation-options">Cancellation options</a>
+          <a href="#report-concern">Report neighbourhood concern</a>
+        </nav>
       </div>
       
-        <div className="flex gap-0 lg:gap-6 flex-row mt-10 lg:mt-0 lg:flex-col items-center justify-between  text-l h-full">
-          <a
-          className="hover:text-[#04af70]"
-            href="https://instagram.com/stayheaven"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <FontAwesomeIcon icon={faInstagram} size="2x" />
-          </a>
-          <a
-          className="hover:text-[#04af70]"
-            href="https://twitter.com/stayheaven"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <FontAwesomeIcon icon={faTwitter} size="2x" />
-          </a>
-          <a
-          className="hover:text-[#04af70]"
-            href="https://linkedin.com/company/stayheaven"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <FontAwesomeIcon icon={faLinkedin} size="2x" />
-          </a>
-          <a
-          className="hover:text-[#04af70]"
-            href="mailto:support@stayheaven.com"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <FontAwesomeIcon icon={faEnvelope} size="2x" />
-          </a>
-        </div>
-      
+      <div className="footer-section social-section">
+        <a href="https://instagram.com/stayheaven" target="_blank" rel="noopener noreferrer">
+          <FontAwesomeIcon icon={faInstagram} size="lg" />
+        </a>
+        <a href="https://twitter.com/stayheaven" target="_blank" rel="noopener noreferrer">
+          <FontAwesomeIcon icon={faTwitter} size="lg" />
+        </a>
+        <a href="https://linkedin.com/company/stayheaven" target="_blank" rel="noopener noreferrer">
+          <FontAwesomeIcon icon={faLinkedin} size="lg" />
+        </a>
+        <a href="mailto:support@stayheaven.com" target="_blank" rel="noopener noreferrer">
+          <FontAwesomeIcon icon={faEnvelope} size="lg" />
+        </a>
+      </div>
     </div>
-  </div>
+  </footer>
 );
 
 export default Footer;

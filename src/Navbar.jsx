@@ -44,21 +44,21 @@ const Navbar = () => {
     };
     const getLoginStatus = async () => {
         try {
-          const user = await axios.get("/user/current-user", {
-            withCredentials: true,
-        });
-        if (user) {
-            dispatch(toggleLogin(true));
-            dispatch(setUser(user.data.data));
-            setIsLoggedIn(true);
-            setprofileImage(user.data.data.avatar);
-            setIsAdmin(user.data.data.isAdmin);
-            setIsCreator(user.data.data.isCreator);
-            setIsBan(user.data.data.isban);
-        } else {
-            dispatch(toggleLogin(false));
-            dispatch(setUser({}));
-        }
+            const user = await axios.get("/user/current-user", {
+                withCredentials: true,
+            });
+            if (user) {
+                dispatch(toggleLogin(true));
+                dispatch(setUser(user.data.data));
+                setIsLoggedIn(true);
+                setprofileImage(user.data.data.avatar);
+                setIsAdmin(user.data.data.isAdmin);
+                setIsCreator(user.data.data.isCreator);
+                setIsBan(user.data.data.isban);
+            } else {
+                dispatch(toggleLogin(false));
+                dispatch(setUser({}));
+            }
         } catch (error) {
             console.log(error);
         }
@@ -66,7 +66,7 @@ const Navbar = () => {
 
     useEffect(() => {
         setfixed(currentPath === "admin");
-        
+
         const handleScroll = () => {
             if (window.scrollX > 0) {
                 setIsSticky(false);
@@ -96,18 +96,30 @@ const Navbar = () => {
 
     return (
         <nav
-            className={`navbar ${fixed ? "fixed top-0 left-0 w-full z-10" : ""} ${
-                isSticky ? "" : "sticky"
-            }`}
+            className={`navbar ${fixed ? "fixed top-0 left-0 w-full z-10" : ""} ${isSticky ? "" : "sticky"
+                }`}
         >
             <div className="navbar__logo">
                 <Link to="/">
                     <img src={logo} alt="StayHeaven Logo" />
                 </Link>
             </div>
-            <ul className={`navbar__links ${menuOpen ? "active" : ""}`} style={{
-                            marginTop: "0.5rem",
-                        }}>
+            <ul
+                className={`navbar__links ${menuOpen ? "active" : ""}`}
+                style={{
+                    marginTop: "0.5rem",
+                }}
+            >
+                <li>
+                    <Link to="/book-hotel" onClick={toggleMenu}>
+                        Book Hotel
+                    </Link>
+                </li>
+                <li>
+                    <Link to="/contact" onClick={toggleMenu}>
+                        Contact
+                    </Link>
+                </li>
                 {isLoggedIn ? (
                     <li className="navbar__username" onClick={toggleDropdown}>
                         <div className="flex gap-4">
@@ -119,24 +131,25 @@ const Navbar = () => {
                         </div>
                         {dropdownOpen && (
                             <div className="navbar__dropdown">
-                                <button
-                                    className="navbar__close"
-                                    onClick={toggleMenu}
-                                >
+                                <button className="navbar__close" onClick={toggleMenu}>
                                     ✖
                                 </button>
                                 <Link to="/profile">
-                                    <div className="">Profile</div>
+                                    <div>Profile</div>
                                 </Link>
                                 <Link to="/previousBookings">
-                                    <div className="">Previous Bookings</div>
+                                    <div>Previous Bookings</div>
                                 </Link>
                                 {isAdmin && !isBan && (
                                     <Link to="/admin/dashboard">
-                                        <div className="">Admin Dashboard</div>
+                                        <div>Admin Dashboard</div>
                                     </Link>
                                 )}
-                                {isSeller && !isBan && <Link to={"/seller/dashboard"}><div className="">Seller Dashboard</div></Link>}
+                                {isSeller && !isBan && (
+                                    <Link to={"/seller/dashboard"}>
+                                        <div>Seller Dashboard</div>
+                                    </Link>
+                                )}
                                 <div onClick={logouthandler}>Logout</div>
                             </div>
                         )}
