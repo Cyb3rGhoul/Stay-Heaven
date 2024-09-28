@@ -10,7 +10,9 @@ import logo from "./assets/logo.png";
 import "./Footer.css";
 
 const Footer = () => (
-  <footer className="footer" id="footer">
+  <footer className="footer" id="footer" style={{
+    display: "flex",
+  }}>
     <div className="footer-container">
       <div className="footer-section logo-section">
         <img src={logo} alt="StayHeaven Logo" className="footer-logo" />

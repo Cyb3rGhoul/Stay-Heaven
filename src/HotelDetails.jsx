@@ -530,8 +530,8 @@ const HotelDetails = () => {
                                 </PriceSection>
                             </Right>
                         </Details>
-                        <div className="comment-section flex flex-col gap-4 mx-auto w-4xl">
-                            <div className="comment-box flex flex-col md:flex-row gap-2 items-center md:items-start">
+                        <div className="comment-section flex flex-col gap-6 mx-auto max-w-4xl p-6 bg-gray-50 rounded-lg shadow-lg">
+                            <div className="comment-box flex flex-col md:flex-row gap-4 items-start">
                                 <div className="rating-component flex-shrink-0">
                                     <Rating
                                         name="half-rating"
@@ -539,35 +539,30 @@ const HotelDetails = () => {
                                         precision={0.5}
                                         onChange={(e) => setComment({ ...comment, rating: e.target.value })}
                                         value={comment.rating}
+                                        size="large"
                                     />
                                 </div>
                                 <input
-                                    className="comment-input w-full md:w-3/4 border-2 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all"
+                                    className="comment-input w-full md:flex-grow border-2 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all text-gray-700"
                                     type="text"
                                     onChange={(e) => setComment({ ...comment, message: e.target.value })}
                                     value={comment.message}
-                                    placeholder="Write a comment..."
+                                    placeholder="Share your thoughts..."
                                 />
                                 <button
                                     onClick={commentHandler}
-                                    className="add-comment-btn text-white bg-green-500 p-2 rounded-md hover:bg-green-600 transition-all"
+                                    className="add-comment-btn text-white bg-green-500 px-6 py-3 rounded-md hover:bg-green-600 transition-all font-semibold shadow-md hover:shadow-lg"
                                 >
-                                    Add Comment
+                                    Post
                                 </button>
                             </div>
-
-
-
-                            <ReviewsContainer>
-                                <Reviews>
-                                    {reviews?.map((review, index) => (
-                                        <Review key={index} className="review-box flex items-center gap-4 p-4 border rounded-lg shadow-md">
-                                            <Avatar src={review.user.avatar} className="w-16 h-16 rounded-full" />
-                                            <Comment>
-                                                <ReviewHeader>
-                                                    <strong className="text-lg">{review.user.username}</strong>
-                                                </ReviewHeader>
-                                                <p className="comment-text text-gray-700">{review.message}</p>
+                            <div className="reviews-container space-y-4">
+                                {reviews?.map((review, index) => (
+                                    <div key={index} className="review-box flex items-start gap-4 p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-all">
+                                        <Avatar src={review.user.avatar} className="w-18 h-8 rounded-full" />
+                                        <div className="flex-grow">
+                                            <div className="flex justify-between items-center mb-2">
+                                                <strong className="text-lg text-gray-800">{review.user.username}</strong>
                                                 <Rating
                                                     name="half-rating-read"
                                                     className="read-only-rating"
@@ -575,19 +570,22 @@ const HotelDetails = () => {
                                                     precision={0.5}
                                                     value={review.rating}
                                                     readOnly
+                                                    size="small"
                                                 />
-                                                {user && user._id === review.user._id && (
-                                                    <MdDelete
-                                                        onClick={() => handleDeleteReview(review._id)}
-                                                        size={24}
-                                                        className="text-red-500 hover:text-red-700 cursor-pointer"
-                                                    />
-                                                )}
-                                            </Comment>
-                                        </Review>
-                                    ))}
-                                </Reviews>
-                            </ReviewsContainer>
+                                            </div>
+                                            <p className="comment-text text-gray-600 mb-2">{review.message}</p>
+                                            {user && user._id === review.user._id && (
+                                                <button
+                                                    onClick={() => handleDeleteReview(review._id)}
+                                                    className="text-red-500 hover:text-red-700 transition-colors focus:outline-none"
+                                                >
+                                                    <MdDelete size={20} />
+                                                </button>
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </Wrapper >

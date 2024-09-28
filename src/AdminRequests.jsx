@@ -56,7 +56,7 @@ const AdminRequests = () => {
     }, []);
     
     return (
-        <div>
+        <div className="mt-10">
             <div className="overflow-x-auto">
                 <table className="table">
                     <thead>

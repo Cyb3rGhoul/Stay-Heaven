@@ -45,7 +45,7 @@ const PreviousBookings = () => {
     };
 
     return (
-        <Container>
+        <Container style={{marginTop: "5em"}}>
             <Title>Previous Bookings</Title>
             <ScrollableContainer>
                 {previousBookings.map((booking) => (

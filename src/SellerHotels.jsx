@@ -43,22 +43,23 @@ const SellerHotels = () => {
         getAllSellerHotels();
     }, []);
     return (
-        <div>
+        <div className="mt-10">
             {(selectedHotel || isEditOpen) && (
                 <Edit selectedHotel={selectedHotel} EditPopup={EditPopup} />
             )}
             <div className="ml-2 py-4">
                 <select
-                    className="border-2 border-black rounded-md"
+                    className="border-2 border-green-500 rounded-md bg-white px-4 py-2 text-gray-700 shadow-md focus:ring-2 focus:ring-green-300 transition-all duration-200 ease-in-out hover:border-green-600 cursor-pointer"
                     name="filter"
                     id="filter"
                 >
-                    <option value="title">title</option>
-                    <option value="price">price</option>
-                    <option value="city">city</option>
-                    <option value="state">state</option>
-                    <option value="state">revenue</option>
+                    <option value="title" className="text-gray-700">Title</option>
+                    <option value="price" className="text-gray-700">Price</option>
+                    <option value="city" className="text-gray-700">City</option>
+                    <option value="state" className="text-gray-700">State</option>
+                    <option value="revenue" className="text-gray-700">Revenue</option>
                 </select>
+
             </div>
             <div className="overflow-x-auto">
                 <table className="table">

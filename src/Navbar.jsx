@@ -5,7 +5,6 @@ import logo from "./assets/logo.png";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "./utils/axios";
 import { setUser, toggleLogin } from "./app/reducers/userSlice";
-import { current } from "@reduxjs/toolkit";
 
 const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -110,18 +109,8 @@ const Navbar = () => {
                     marginTop: "0.5rem",
                 }}
             >
-                <li>
-                    <Link to="/book-hotel" onClick={toggleMenu}>
-                        Book Hotel
-                    </Link>
-                </li>
-                <li>
-                    <Link to="/contact" onClick={toggleMenu}>
-                        Contact
-                    </Link>
-                </li>
                 {isLoggedIn ? (
-                    <li className="navbar__username" onClick={toggleDropdown}>
+                    <li className="navbar__username mr-2 mb-2" onClick={toggleDropdown}>
                         <div className="flex gap-4">
                             <img
                                 src={profileImage}
@@ -150,15 +139,15 @@ const Navbar = () => {
                                         <div>Seller Dashboard</div>
                                     </Link>
                                 )}
-                                <div onClick={logouthandler}>Logout</div>
+                                <div onClick={logouthandler} style={{cursor: "pointer"}}>Logout</div>
                             </div>
                         )}
                     </li>
                 ) : (
-                    <div className="flex gap-1">
-                        <li >
+                    <div className="flex">
+                        <li>
                             <Link to="/signup" onClick={toggleMenu}>
-                                <button className="button-animation relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-l font-medium text-gray-900 rounded-lg group dark:text-gray-900">
+                                <button className="sigg button-animation relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-l font-medium text-gray-900 rounded-lg group dark:text-gray-900">
                                     <span className="span-mother relative px-5 py-2.5 max-[500px]:px-2 max-[500px]:py-1.5 transition-all ease-in duration-75 rounded-md group-hover:bg-opacity-0">
                                         <span>S</span>
                                         <span>i</span>
@@ -182,7 +171,7 @@ const Navbar = () => {
                         </li>
                         <li>
                             <Link to="/login" onClick={toggleMenu}>
-                                <button className="button-animation relative inline-flex max-[500px]:mt-2 items-center justify-center mr-12 mb-2 me-2 overflow-hidden text-l font-medium text-gray-900 rounded-lg group dark:text-gray-900">
+                                <button className="logg button-animation relative inline-flex max-[500px]:mt-2 items-center justify-center mr-2 mb-2 me-2 overflow-hidden text-l font-medium text-gray-900 rounded-lg group dark:text-gray-900">
                                     <span className="span-mother relative px-5 py-2.5 max-[500px]:px-2 max-[500px]:py-1.5 transition-all ease-in duration-75 rounded-md group-hover:bg-opacity-0">
                                         <span>L</span>
                                         <span>o</span>
@@ -203,9 +192,7 @@ const Navbar = () => {
                     </div>
                 )}
             </ul>
-            <div className="navbar__toggle" onClick={toggleMenu}>
-                <div className={`hamburger ${menuOpen ? "open" : ""}`}></div>
-            </div>
+            {/* Only show hamburger when user is NOT logged in */}
         </nav>
     );
 };

@@ -30,7 +30,7 @@ const Landing = () => {
 
         socket.on('hotel_is_approved', (data) => {
             console.log('New hotel approved:', data);
-            setHotels((prev)=> [...prev , data.hotel]);
+            setHotels((prev) => [...prev, data.hotel]);
         });
 
         return () => {
@@ -114,9 +114,15 @@ const Landing = () => {
                         placeholder="Search Destination/Hotel"
                     />
                     <Link to={`/search`}>
-                        <button className="landing__search-button" onClick={()=>{
-                            dispatch(setSearch(searchTerm));
-                        }}>
+                        <button
+                            className="landing__search-button"
+                            onClick={() => {
+                                dispatch(setSearch(searchTerm));
+                            }}
+                            style={{
+                                padding: window.innerWidth < 768 ? "0.45rem 0.75rem" : "", 
+                            }}
+                        >
                             Search
                         </button>
                     </Link>
@@ -125,10 +131,10 @@ const Landing = () => {
                     <div className="landing__city-container">
                         <div className="landing__city-grid">
                             {cities.map((city, index) => (
-                                <div key={index} className="landing__city-item" onClick={()=>{
-                            dispatch(setSearch(city.name));
-                            navigate("/search");
-                        }}>
+                                <div key={index} className="landing__city-item" onClick={() => {
+                                    dispatch(setSearch(city.name));
+                                    navigate("/search");
+                                }}>
                                     <img
                                         src={city.image}
                                         alt={city.name}
@@ -183,10 +189,10 @@ const Landing = () => {
                         </span>
                         <div className="landing__modal-grid">
                             {allCities.map((city, index) => (
-                                <div key={index} className="landing__city-item" onClick={()=>{
-                            dispatch(setSearch(city.name));
-                            navigate("/search");
-                        }}>
+                                <div key={index} className="landing__city-item" onClick={() => {
+                                    dispatch(setSearch(city.name));
+                                    navigate("/search");
+                                }}>
                                     <p className="landing__city-name">
                                         {city.name}
                                     </p>

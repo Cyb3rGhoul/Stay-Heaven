@@ -37,7 +37,12 @@ const App = () => {
       {!loading && (
         <>
           {!isadminpath && !issellerpath && <Navbar />}
-          <main>
+          <main style={{
+                fontFamily: "Josefin Sans, sans-serif",
+                fontOpticalSizing: "auto",
+                fontWeight: 800,
+                fontStyle: "normal",
+            }}>
             <Outlet />
           </main>
           {!isadminpath && !issellerpath && <Footer />}

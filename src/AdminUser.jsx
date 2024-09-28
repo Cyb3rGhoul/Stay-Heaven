@@ -155,7 +155,7 @@ const AdminUser = () => {
 
         socket.on('user_is_created', (data) => {
             console.log('New hotel created:', data);
-            setUsers((prev)=> [...prev , data.user]);
+            setUsers((prev) => [...prev, data.user]);
         });
 
         return () => {
@@ -163,7 +163,7 @@ const AdminUser = () => {
         };
     }, []);
     return (
-        <div>
+        <div className="mt-10">
             {(order || createdhotel || pastbookings) && (
                 <div className="w-screen h-full bg-black/60 fixed top-0 left-0 z-10 flex items-center justify-center">
                     {order && (
@@ -327,19 +327,20 @@ const AdminUser = () => {
             )}
             <div className="ml-2 py-4">
                 <select
-                    className="border-2 border-black rounded-md"
+                    className="border-2 border-green-400 rounded-md p-2 text-gray-700 shadow-sm focus:border-green-600 focus:ring focus:ring-green-300 transition duration-200 ease-in-out"
                     name="filter"
                     id="filter"
                 >
-                    <option value="select">select</option>
-                    <option value="username">username</option>
-                    <option value="email">email</option>
-                    <option value="previousBookings">previous bookings</option>
-                    <option value="myCreatedPlaces">my created places</option>
-                    <option value="admin">admin</option>
-                    <option value="seller">seller</option>
-                    <option value="receivedOrders">received orders</option>
+                    <option value="select" className="bg-gray-100">Select</option>
+                    <option value="username" className="bg-gray-100">Username</option>
+                    <option value="email" className="bg-gray-100">Email</option>
+                    <option value="previousBookings" className="bg-gray-100">Previous Bookings</option>
+                    <option value="myCreatedPlaces" className="bg-gray-100">My Created Places</option>
+                    <option value="admin" className="bg-gray-100">Admin</option>
+                    <option value="seller" className="bg-gray-100">Seller</option>
+                    <option value="receivedOrders" className="bg-gray-100">Received Orders</option>
                 </select>
+
             </div>
             <div className="overflow-x-auto">
                 <table className="table">

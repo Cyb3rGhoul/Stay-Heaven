@@ -15,6 +15,7 @@ import { IoMdClose } from "react-icons/io";
 import randomImage from "./assets/random.jpg";
 import axios from "./utils/axios";
 
+
 const CreateHotel = () => {
     const [selectedBooking, setSelectedBooking] = useState(null);
     const [isCreateBookingOpen, setIsCreateBookingOpen] = useState(false);
@@ -37,8 +38,8 @@ const CreateHotel = () => {
                     name.split(",")[1]
                 )
                     ? selectedBooking.facilities.filter(
-                          (facility) => facility !== name.split(",")[1]
-                      )
+                        (facility) => facility !== name.split(",")[1]
+                    )
                     : [...selectedBooking.facilities, name.split(",")[1]],
             });
         } else {
@@ -113,8 +114,7 @@ const CreateHotel = () => {
                 );
 
                 const response = await axios.post(
-                    `https://api.cloudinary.com/v1_1/${
-                        import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+                    `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
                     }/image/upload`,
                     formdata
                 );
@@ -130,7 +130,7 @@ const CreateHotel = () => {
 
     const createHotel = async (hotel) => {
         try {
-            const response = await axios.post("/hotel/create", hotel, {withCredentials: true});
+            const response = await axios.post("/hotel/create", hotel, { withCredentials: true });
             console.log(response);
         } catch (error) {
             console.error("Error while creating the hotel", error);
@@ -138,21 +138,33 @@ const CreateHotel = () => {
         }
     };
     const handleSubmit = async () => {
-      const urls = await uploadImages();
-      const hotel = {...selectedBooking, images: urls};
-      createHotel(hotel);
-      alert("Hotel Created Successfully");
-      setFiles([]);
-      setPreviews([]);
-      setSelectedBooking(null);
-      handleClosePopup();
-  };
+        const urls = await uploadImages();
+        const hotel = { ...selectedBooking, images: urls };
+        createHotel(hotel);
+        alert("Hotel Created Successfully");
+        setFiles([]);
+        setPreviews([]);
+        setSelectedBooking(null);
+        handleClosePopup();
+    };
     return (
-        <Container>
-            <Title>My Created Places</Title>
-            <CreateButton onClick={handleCreateBooking}>
-                Create a Place
-            </CreateButton>
+        <Container style={{
+            marginTop: "1em",
+        }}>
+            <div className="flex items-center justify-center h-[85vh]">
+                <div className="w-80 h-80 bg-white shadow-lg rounded-lg flex flex-col items-center justify-center p-5 transform transition-all duration-300 ease-in-out hover:scale-105">
+                    <Title className="text-center mb-4">
+                        My Created Places
+                    </Title>
+                    <CreateButton
+                        onClick={handleCreateBooking}
+                        className="mt-4 bg-green-500 text-white rounded-md py-2 px-4 transition-all duration-300 ease-in-out hover:bg-green-600"
+                    >
+                        Create a Place
+                    </CreateButton>
+                </div>
+            </div>
+
             {(selectedBooking || isCreateBookingOpen) && (
                 <PopupOverlay>
                     <Popup>
