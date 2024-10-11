@@ -7,6 +7,7 @@ const AdminBookings = () => {
     const [orders, setOrders] = useState([]);
     const [order, setOrder] = useState({});
     const [modal, setModal] = useState(false);
+
     const getAllOrders = async () => {
         try {
             const response = await axios.post(
@@ -16,7 +17,6 @@ const AdminBookings = () => {
                     withCredentials: true,
                 }
             );
-            console.log(response.data.data.orders);
             setOrders(response.data.data.orders);
         } catch (error) {
             console.log(error);
@@ -25,126 +25,111 @@ const AdminBookings = () => {
 
     const getDate = (date) => {
         const specificDate = new Date(date);
-
-        const day = String(specificDate.getDate()).padStart(2, "0");
-        const month = String(specificDate.getMonth() + 1).padStart(2, "0");
-        const year = specificDate.getFullYear();
-
-        const formattedDate = `${day}-${month}-${year}`;
-
-        return formattedDate;
+        return specificDate.toLocaleDateString('en-GB');
     };
+
     useEffect(() => {
         getAllOrders();
 
-
         socket.on('order_is_created', (data) => {
-            console.log('New hotel created:', data);
             setOrders((prev) => [...prev, data.order]);
         });
 
         return () => {
-            socket.off('new-hotel');
+            socket.off('order_is_created');
         };
     }, []);
+
     return (
-        <div className="relative mt-10">
+        <div className="mt-10 px-4 sm:px-6 lg:px-8">
             {modal && (
-                <div className="fixed inset-0 z-10 flex items-center justify-center bg-black/60 transition-opacity duration-300 ease-in-out">
-                    <div className="mt-16 w-[40vw] max-h-[90vh] bg-white rounded-lg shadow-lg transform transition-transform duration-300 ease-in-out overflow-hidden flex flex-col">
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white rounded-lg shadow-xl w-full max-w-md mx-4 max-h-[90vh] overflow-y-auto">
                         <div className="relative">
-                            <img src={order.hotel.images[0]} alt={order.hotel.title} className="object-cover w-full h-48 rounded-t-lg" />
-                            <div
-                                className="absolute right-3 top-3 text-xl font-bold cursor-pointer text-black-100 hover:text-black-100 bg-white rounded-full w-8 h-8 flex items-center justify-center"
+                            <img src={order.hotel.images[0]} alt={order.hotel.title} className="w-full h-48 object-cover rounded-t-lg" />
+                            <button
+                                className="absolute top-2 right-2 bg-white rounded-full p-2 text-gray-600 hover:text-gray-800"
                                 onClick={() => setModal(false)}
                             >
-                                ✘
-                            </div>
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
                         </div>
-                        <div className="flex-1 overflow-y-auto scrollbar-hide">
-                            <div className="p-5 flex flex-col gap-3">
-                                <h1 className="text-2xl font-semibold text-gray-800">{order.hotel.title}</h1>
-                                <p className="text-gray-600">Customer: <span className="font-semibold">{order.customer.username}</span></p>
-                                <p className="text-gray-600 font-semibold">
-                                    Guests: {order.guests.map(guest => `${guest.firstName} ${guest.lastName}`).join(", ")}
-                                </p>
-                                <p className="text-gray-600">Order Date: <span className="font-semibold">{getDate(order.createdAt)}</span></p>
-                                <p className="text-gray-600">Payment ID: <span className="font-semibold">{order.paymentDetails.razorpay_payment_id}</span></p>
-                                <p className="text-gray-600">Razorpay Order ID: <span className="font-semibold">{order.paymentDetails.razorpay_order_id}</span></p>
-                                <Link
-                                    to={`/hotel/${order.hotel._id}`}
-                                    className="bg-green-500 text-white rounded-md py-2 text-center transition duration-200 hover:bg-green-600 mt-4"
-                                >
-                                    Hotel Details
-                                </Link>
-                            </div>
+                        <div className="p-6 space-y-4">
+                            <h2 className="text-2xl font-bold text-gray-800">{order.hotel.title}</h2>
+                            <p className="text-gray-600">Customer: <span className="font-semibold">{order.customer.username}</span></p>
+                            <p className="text-gray-600">Guests: <span className="font-semibold">{order.guests.map(guest => `${guest.firstName} ${guest.lastName}`).join(", ")}</span></p>
+                            <p className="text-gray-600">Order Date: <span className="font-semibold">{getDate(order.createdAt)}</span></p>
+                            <p className="text-gray-600">Payment ID: <span className="font-semibold">{order.paymentDetails.razorpay_payment_id}</span></p>
+                            <p className="text-gray-600">Razorpay Order ID: <span className="font-semibold">{order.paymentDetails.razorpay_order_id}</span></p>
+                            <Link
+                                to={`/hotel/${order.hotel._id}`}
+                                className="block w-full bg-emerald-500 text-white text-center py-2 px-4 rounded-md hover:bg-emerald-600 transition duration-300"
+                            >
+                                Hotel Details
+                            </Link>
                         </div>
                     </div>
                 </div>
             )}
 
-
-            <div className="ml-2 py-4">
+            <div className="mb-6">
                 <select
-                    className="border-2 border-green-500 rounded-md bg-white px-4 py-2 text-gray-700 shadow-md focus:ring-2 focus:ring-green-300 transition-all duration-200 ease-in-out hover:border-green-600 cursor-pointer"
+                    className="w-full sm:w-auto border-2 border-emerald-500 rounded-md bg-white px-4 py-2 text-gray-700 shadow-md focus:outline-none focus:ring-2 focus:ring-emerald-300 transition-all duration-200 ease-in-out hover:border-emerald-600 cursor-pointer"
                     name="filter"
                     id="filter"
                 >
-                    <option value="hotelid" className="text-gray-700">Hotel ID</option>
-                    <option value="checkin" className="text-gray-700">Check-in</option>
-                    <option value="checkout" className="text-gray-700">Check-out</option>
-                    <option value="userid" className="text-gray-700">User ID</option>
-                    <option value="approvalStatus" className="text-gray-700">Approval Status</option>
+                    <option value="hotelid">Hotel ID</option>
+                    <option value="checkin">Check-in</option>
+                    <option value="checkout">Check-out</option>
+                    <option value="userid">User ID</option>
+                    <option value="approvalStatus">Approval Status</option>
                 </select>
-
             </div>
-            <div className="overflow-x-auto">
-                <table className="table">
-                    <thead>
-                        <tr className="font-bold text-lg">
-                            <th>S.No.</th>
-                            <th className="text-center">Order Id</th>
-                            <th className="text-center">Check-in Date</th>
-                            <th className="text-center">Check-out Date</th>
-                            <th className="text-center">Rooms</th>
-                            <th className="text-center">Amount</th>
-                            <th className="text-center">Details</th>
-                            <th className="text-center">Status</th>
+
+            <div className="overflow-x-auto shadow-md rounded-lg">
+                <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-emerald-500">
+                        <tr>
+                            {["S.No.", "Order Id", "Check-in", "Check-out", "Rooms", "Amount", "Details", "Status"].map((header) => (
+                                <th
+                                    key={header}
+                                    scope="col"
+                                    className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"
+                                >
+                                    {header}
+                                </th>
+                            ))}
                         </tr>
                     </thead>
-                    <tbody>
-                        {orders.map((order, index) => {
-                            return (
-                                <tr>
-                                    <th className="text-center">{index + 1}</th>
-                                    <td className="text-center">{order._id}</td>
-                                    <td className="text-center">
-                                        {getDate(order.checkin)}
-                                    </td>
-                                    <td className="text-center">
-                                        {getDate(order.checkout)}
-                                    </td>
-                                    <td className="text-center">
-                                        {order.rooms}
-                                    </td>
-                                    <td className="text-center">
-                                        ₹ {order.amount}
-                                    </td>
-                                    <td className="text-center">
-                                        <button
-                                            className="btn bg-zinc-200"
-                                            onClick={() => {
-                                                setModal(true);
-                                                setOrder(order);
-                                            }}
-                                        >
-                                            More
-                                        </button>
-                                    </td>
-                                    <td className="text-center">Confirmed</td>
-                                </tr>
-                            );
-                        })}
+                    <tbody className="bg-white divide-y divide-gray-200">
+                        {orders.map((order, index) => (
+                            <tr key={order._id} className="hover:bg-gray-50">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{index + 1}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{order._id}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{getDate(order.checkin)}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{getDate(order.checkout)}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{order.rooms}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">₹ {order.amount}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <button
+                                        onClick={() => {
+                                            setModal(true);
+                                            setOrder(order);
+                                        }}
+                                        className="text-emerald-600 hover:text-emerald-900 transition duration-300"
+                                    >
+                                        More
+                                    </button>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                        Confirmed
+                                    </span>
+                                </td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
             </div>

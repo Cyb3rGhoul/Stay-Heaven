@@ -111,11 +111,11 @@ const Profile = () => {
 export default Profile;
 
 const Container = styled.div`
+  margin-top: 70px;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 90%;
-  background-color: #f0f0f0;
   padding: 20px;
 `;
 

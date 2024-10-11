@@ -8,7 +8,6 @@ const AdminHotels = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     const popup = () => {
-        console.log("hi");
         setIsOpen((prev) => !prev);
     };
 
@@ -22,7 +21,6 @@ const AdminHotels = () => {
                 }
             );
             setHotels(response.data.data.hotels);
-            console.log(response.data.data.hotels);
         } catch (error) {
             console.log(error);
         }
@@ -50,7 +48,7 @@ const AdminHotels = () => {
         const approvalStatus = formData.get("ApprovalStatus");
 
         const filters = { price, revenue, approvalStatus };
-
+        // Implement filter logic here
     };
 
     const reset = () => {
@@ -58,6 +56,7 @@ const AdminHotels = () => {
            radio.checked = false;
        });
     };
+
     useEffect(() => {
         getAllHotels();
 
@@ -71,115 +70,78 @@ const AdminHotels = () => {
     }, []);
 
     return (
-        <div className="mt-10 max-w-7xl mx-auto">
-            <div className="ml-2 py-4">
+        <div className="mt-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="mb-6">
                 <button
                     onClick={popup}
-                    className="btn text-white bg-green-600 hover:bg-green-700"
+                    className="btn text-white bg-emerald-600 hover:bg-emerald-700 transition-colors duration-300 shadow-md"
                 >
                     Apply Filters
                 </button>
             </div>
             {isOpen && (
-                <div className="fixed inset-0 z-10 flex items-center justify-center bg-black/60 transition-opacity duration-300 ease-in-out">
-                    <div className="mt-16 w-[40vw] max-h-[90vh] p-4 relative bg-white rounded-lg shadow-lg transform transition-transform duration-300 ease-in-out overflow-hidden flex flex-col">
-                        <div
-                            className="absolute right-3 top-3 text-xl font-bold cursor-pointer text-black-100 hover:text-black-100 bg-white rounded-full w-8 h-8 flex items-center justify-center"
-                            onClick={() => setIsOpen(false)}
-                        >
-                            ✘
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 transition-opacity duration-300 ease-in-out">
+                    <div className="bg-white rounded-lg shadow-xl p-6 m-4 max-w-xl w-full max-h-[90vh] overflow-y-auto">
+                        <div className="flex justify-between items-center mb-4">
+                            <h2 className="text-2xl font-semibold text-emerald-700">Filters</h2>
+                            <button
+                                className="text-gray-500 hover:text-gray-700"
+                                onClick={() => setIsOpen(false)}
+                            >
+                                ✕
+                            </button>
                         </div>
-                        <form onSubmit={submitHandler}>
-                            <div className="w-1/2">
-                                <h1 className="text-xl mb-4">Sort By Price</h1>
-                                <div className="flex items-center gap-2 mb-4">
-                                    <input
-                                        type="radio"
-                                        name="price"
-                                        className="radio radio-success"
-                                        id="p-lowToHigh"
-                                        value="lowToHigh"
-                                    />
-                                    <label htmlFor="p-lowToHigh">
-                                        Low to High
+                        <form onSubmit={submitHandler} className="space-y-6">
+                            <div className="space-y-4">
+                                <h3 className="text-lg font-medium text-gray-900">Sort By Price</h3>
+                                <div className="space-y-2">
+                                    <label className="inline-flex items-center">
+                                        <input type="radio" name="price" value="lowToHigh" className="form-radio text-emerald-600" />
+                                        <span className="ml-2">Low to High</span>
                                     </label>
-                                </div>
-                                <div className="flex items-center gap-2 mb-4">
-                                    <input
-                                        type="radio"
-                                        name="price"
-                                        className="radio radio-success"
-                                        id="p-highToLow"
-                                        value="highToLow"
-                                    />
-                                    <label htmlFor="p-highToLow">
-                                        High to Low
+                                    <label className="inline-flex items-center">
+                                        <input type="radio" name="price" value="highToLow" className="form-radio text-emerald-600" />
+                                        <span className="ml-2">High to Low</span>
                                     </label>
-                                </div>
-
-                                <h1 className="text-xl mb-4">
-                                    Sort By Revenue
-                                </h1>
-                                <div className="flex items-center gap-2 mb-4">
-                                    <input
-                                        type="radio"
-                                        name="revenue"
-                                        className="radio radio-success"
-                                        id="r-lowToHigh"
-                                        value="lowToHigh"
-                                    />
-                                    <label htmlFor="r-lowToHigh">
-                                        Low to High
-                                    </label>
-                                </div>
-                                <div className="flex items-center gap-2 mb-4">
-                                    <input
-                                        type="radio"
-                                        name="revenue"
-                                        className="radio radio-success"
-                                        id="r-highToLow"
-                                        value="highToLow"
-                                    />
-                                    <label htmlFor="r-highToLow">
-                                        High to Low
-                                    </label>
-                                </div>
-
-                                <h1 className="text-xl mb-4">
-                                    Approval Status
-                                </h1>
-                                <div className="flex items-center gap-2 mb-4">
-                                    <input
-                                        type="radio"
-                                        name="ApprovalStatus"
-                                        className="radio radio-success"
-                                        id="a-approved"
-                                        value="approved"
-                                    />
-                                    <label htmlFor="a-approved">Approved</label>
-                                </div>
-                                <div className="flex items-center gap-2 mb-4">
-                                    <input
-                                        type="radio"
-                                        name="ApprovalStatus"
-                                        className="radio radio-success"
-                                        id="a-rejected"
-                                        value="rejected"
-                                    />
-                                    <label htmlFor="a-rejected">Rejected</label>
                                 </div>
                             </div>
-
-                            <div className="flex gap-4">
+                            <div className="space-y-4">
+                                <h3 className="text-lg font-medium text-gray-900">Sort By Revenue</h3>
+                                <div className="space-y-2">
+                                    <label className="inline-flex items-center">
+                                        <input type="radio" name="revenue" value="lowToHigh" className="form-radio text-emerald-600" />
+                                        <span className="ml-2">Low to High</span>
+                                    </label>
+                                    <label className="inline-flex items-center">
+                                        <input type="radio" name="revenue" value="highToLow" className="form-radio text-emerald-600" />
+                                        <span className="ml-2">High to Low</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div className="space-y-4">
+                                <h3 className="text-lg font-medium text-gray-900">Approval Status</h3>
+                                <div className="space-y-2">
+                                    <label className="inline-flex items-center">
+                                        <input type="radio" name="ApprovalStatus" value="approved" className="form-radio text-emerald-600" />
+                                        <span className="ml-2">Approved</span>
+                                    </label>
+                                    <label className="inline-flex items-center">
+                                        <input type="radio" name="ApprovalStatus" value="rejected" className="form-radio text-emerald-600" />
+                                        <span className="ml-2">Rejected</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div className="flex space-x-4">
                                 <button
                                     type="submit"
-                                    className="btn text-white bg-green-600 hover:bg-green-700"
+                                    className="px-4 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition-colors duration-300"
                                 >
                                     Apply
                                 </button>
                                 <button
-                                onClick={reset}
-                                    className="btn hover:text-white bg-white text-green-500 border-green-500 border-2 hover:bg-green-700"
+                                    onClick={reset}
+                                    type="button"
+                                    className="px-4 py-2 bg-white text-emerald-600 border border-emerald-600 rounded-md hover:bg-emerald-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition-colors duration-300"
                                 >
                                     Reset
                                 </button>
@@ -189,118 +151,52 @@ const AdminHotels = () => {
                 </div>
             )}
 
-            <div className="overflow-x-auto shadow-lg sm:rounded-lg bg-white p-6">
+            <div className="overflow-x-auto shadow-lg rounded-lg bg-white">
                 <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-green-600 text-white">
+                    <thead className="bg-emerald-600">
                         <tr>
-                            <th
-                                scope="col"
-                                className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider"
-                            >
-                                S.No.
-                            </th>
-                            <th
-                                scope="col"
-                                className="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider"
-                            >
-                                Hotel Name
-                            </th>
-                            <th
-                                scope="col"
-                                className="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider"
-                            >
-                                Owner
-                            </th>
-                            <th
-                                scope="col"
-                                className="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider"
-                            >
-                                Price
-                            </th>
-                            <th
-                                scope="col"
-                                className="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider"
-                            >
-                                City
-                            </th>
-                            <th
-                                scope="col"
-                                className="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider"
-                            >
-                                State
-                            </th>
-                            <th
-                                scope="col"
-                                className="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider"
-                            >
-                                Status
-                            </th>
-                            <th
-                                scope="col"
-                                className="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider"
-                            >
-                                Details
-                            </th>
+                            {["S.No.", "Hotel Name", "Owner", "Price", "City", "State", "Status", "Details"].map((header) => (
+                                <th
+                                    key={header}
+                                    scope="col"
+                                    className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"
+                                >
+                                    {header}
+                                </th>
+                            ))}
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
                         {hotels.map((hotel, index) => (
-                            <tr
-                                key={hotel._id}
-                                className="hover:bg-green-100 transition-colors duration-300"
-                            >
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                    {index + 1}
-                                </td>
-                                <td className="px-6 py-4 text-center">
-                                    {hotel.title}
-                                </td>
-                                <td className="px-6 py-4 text-center">
-                                    {hotel.owner.username}
-                                </td>
-                                <td className="px-6 py-4 text-center">
-                                    ₹ {hotel.price}
-                                </td>
-                                <td className="px-6 py-4 text-center">
-                                    {hotel.city}
-                                </td>
-                                <td className="px-6 py-4 text-center">
-                                    {hotel.state}
-                                </td>
-                                <td className="px-6 py-4 text-center">
+                            <tr key={hotel._id} className="hover:bg-emerald-50 transition-colors duration-300">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{index + 1}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{hotel.title}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{hotel.owner.username}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">₹ {hotel.price}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{hotel.city}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{hotel.state}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     <select
-                                        className="border-gray-300 rounded-md p-1 bg-white shadow-sm focus:ring focus:ring-green-200 transition ease-in-out"
+                                        className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"
                                         value={hotel.approvalStatus}
                                         onChange={(e) => {
-                                            approveHotel(
-                                                hotel._id,
-                                                e.target.value
-                                            );
+                                            approveHotel(hotel._id, e.target.value);
                                             setHotels((prev) =>
                                                 prev.map((h) =>
                                                     h._id === hotel._id
-                                                        ? {
-                                                              ...h,
-                                                              approvalStatus:
-                                                                  e.target
-                                                                      .value,
-                                                          }
+                                                        ? { ...h, approvalStatus: e.target.value }
                                                         : h
                                                 )
                                             );
                                         }}
                                     >
-                                        <option value="approved">
-                                            Approved
-                                        </option>
-                                        <option value="rejected">
-                                            Rejected
-                                        </option>
+                                        <option value="approved">Approved</option>
+                                        <option value="rejected">Rejected</option>
                                     </select>
                                 </td>
-                                <td className="px-6 py-4 text-center">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                     <Link to={`/hotel/${hotel._id}`}>
-                                        <button className="bg-green-600 text-white px-4 py-2 rounded-md shadow hover:bg-green-700 transition duration-300">
+                                        <button className="bg-emerald-100 text-emerald-700 px-4 py-2 rounded-md hover:bg-emerald-200 transition-colors duration-300">
                                             More
                                         </button>
                                     </Link>
