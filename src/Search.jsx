@@ -63,6 +63,7 @@ const Search = () => {
         const response = await axios.post(
             `/hotel/search?${queryParams}${searchParam}`
         );
+        console.log(response.data.data.hotels);
         setHotels(response.data.data.hotels);
     };
     const ResetHandler = () => {
@@ -82,7 +83,7 @@ const Search = () => {
         filterHandler();
     }, []);
     return (
-        <div>
+        <div className="mt-20">
             <Wrapper>
                 <Content>
                     <SearchResults>
@@ -415,6 +416,11 @@ const FilterBox = styled.div`
     border-radius: 10px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
     width: 350px;
+    @media (max-width: 768px) {
+        position: fixed;
+        top: 55%;
+        left: 6%;
+    }
 `;
 
 const CloseButton = styled.button`

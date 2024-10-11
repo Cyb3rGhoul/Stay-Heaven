@@ -75,7 +75,9 @@ const SignUp = () => {
   return (
     <>
       <Navbar />
-      <Wrapper>
+      <Wrapper style={{
+        marginTop: "65px"
+      }}>
         <Card>
           <Avatar onClick={() => {
             avatarRef.current.click();
@@ -165,7 +167,6 @@ const SignUp = () => {
 export default SignUp;
 
 const Wrapper = styled.div`
-  background-color: #f0f0f0;
   display: flex;
   justify-content: center;
   align-items: center;

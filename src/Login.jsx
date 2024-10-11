@@ -38,7 +38,9 @@ const Login = () => {
   return (
     <>
       <Navbar />
-      <Wrapper>
+      <Wrapper style={{
+        marginTop: "65px",
+      }}>
         <Card>
           <Form onSubmit={handleLogin}>
             <Input
@@ -84,7 +86,6 @@ const Login = () => {
 export default Login;
 
 const Wrapper = styled.div`
-  background-color: #f0f0f0;
   display: flex;
   justify-content: center;
   align-items: center;
