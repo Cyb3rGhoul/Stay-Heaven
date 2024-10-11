@@ -81,10 +81,11 @@ const HotelDetails = () => {
     useEffect(() => {
         getHotelRatings();
     }, [reviews]);
+
     const handleDeleteReview = (id) => {
         return async () => {
             try {
-                const response = await axios.post(
+                await axios.post(
                     `/comment/delete/${id}`,
                     { hotelId },
                     { withCredentials: true }
@@ -576,7 +577,7 @@ const HotelDetails = () => {
                                             <p className="comment-text text-gray-600 mb-2">{review.message}</p>
                                             {user && user._id === review.user._id && (
                                                 <button
-                                                    onClick={() => handleDeleteReview(review._id)}
+                                                    onClick={() => handleDeleteReview(review._id)()}
                                                     className="text-red-500 hover:text-red-700 transition-colors focus:outline-none"
                                                 >
                                                     <MdDelete size={20} />

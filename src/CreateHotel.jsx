@@ -28,7 +28,8 @@ const CreateHotel = () => {
         setPreviews([]);
         setIsCreateBookingOpen(false);
     };
-
+    const submitButton = useRef();
+    const closeButton = useRef();
     const handleDetailChange = (e) => {
         const { name, value, type, checked } = e.target;
         if (name.split(",")[0] === "facility") {
@@ -138,14 +139,17 @@ const CreateHotel = () => {
         }
     };
     const handleSubmit = async () => {
+        submitButton.current.disabled = true;
         const urls = await uploadImages();
         const hotel = { ...selectedBooking, images: urls };
         createHotel(hotel);
         alert("Hotel Created Successfully");
+        submitButton.current.disabled = true;
         setFiles([]);
         setPreviews([]);
         setSelectedBooking(null);
         handleClosePopup();
+        closeButton.current.click();
     };
     return (
         <Container style={{
@@ -168,7 +172,7 @@ const CreateHotel = () => {
             {(selectedBooking || isCreateBookingOpen) && (
                 <PopupOverlay>
                     <Popup>
-                        <CloseButton onClick={handleClosePopup}>✖</CloseButton>
+                        <CloseButton ref={closeButton} onClick={handleClosePopup}>✖</CloseButton>
                         <ScrollablePopupContent>
                             <input
                                 className="hidden"
@@ -357,7 +361,7 @@ const CreateHotel = () => {
                                     Breakfast
                                 </CheckboxLabel>
                             </CheckboxContainer>
-                            <SubmitButton onClick={handleSubmit}>
+                            <SubmitButton ref={submitButton} onClick={handleSubmit}>
                                 Submit
                             </SubmitButton>
                         </ScrollablePopupContent>

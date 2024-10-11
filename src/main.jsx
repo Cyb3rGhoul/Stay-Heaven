@@ -111,10 +111,6 @@ const router = createBrowserRouter([
                         element: <SellerHotels />,
                     },
                     {
-                        path: "users",
-                        element: <AdminUser />,
-                    },
-                    {
                         path: "bookings",
                         element: <AdminBookings />,
                     },

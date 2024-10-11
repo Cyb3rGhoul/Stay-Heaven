@@ -7,7 +7,7 @@ import { setUser } from "./app/reducers/userSlice";
 import "./Profile.css";
 
 const Profile = () => {
-  const [userdetail, setUserdetail] = useState(useSelector((state) => state.userData));
+  const [userdetail, setUserdetail] = useState(useSelector((state) => state.user.userData));
   const [selectedImage, setSelectedImage] = useState(userdetail.avatar);
   const [name, setName] = useState(userdetail.fullName);
   const [email, setEmail] = useState(userdetail.email);
