@@ -82,7 +82,7 @@ const Search = () => {
         filterHandler();
     }, []);
     return (
-        <div>
+        <div className="mt-20">
             <Wrapper>
                 <Content>
                     <SearchResults>
