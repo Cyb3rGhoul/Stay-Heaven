@@ -334,17 +334,32 @@ const FilterButton = styled.button`
 
 const ResultsGrid = styled.div`
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: 20px;
+    
+    @media (max-width: 1200px) {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    @media (max-width: 900px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    @media (max-width: 600px) {
+        grid-template-columns: 1fr;
+    }
 `;
 
 const ResultCard = styled.div`
     background-color: #fff;
     border-radius: 10px;
-    padding: 20px;
+    padding: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
     transition: transform 0.2s;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 
     &:hover {
         transform: translateY(-10px);
@@ -352,40 +367,49 @@ const ResultCard = styled.div`
 
     .result-card-image {
         width: 100%;
-        height: 200px;
+        height: 150px;
         object-fit: cover;
         border-radius: 10px 10px 0 0;
     }
 
     .result-card-content {
         padding: 10px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
 
         h3 {
             margin: 10px 0;
             color: #4caf50;
+            font-size: 1.2em;
         }
 
         p {
             margin: 10px 0;
             color: #333;
-            font-size: 16px;
+            font-size: 1em;
             font-weight: bold;
         }
     }
 
     .result-card-button {
-        padding: 10px 20px;
+        padding: 8px 16px;
         background-color: #4caf50;
         color: #fff;
         border: none;
         border-radius: 5px;
         cursor: pointer;
         transition: background-color 0.3s;
+        margin-top: auto;
 
         &:hover {
             background-color: #45a049;
         }
     }
+`;
+
+const Slider = styled.div`
 `;
 
 const MapContainer = styled.div`
@@ -494,6 +518,7 @@ const sliderStyles = `
   }
   
   .example-thumb {
+    margin-top: -4px;
     height: 20px;
     width: 20px;
     background-color: #4caf50;
@@ -505,6 +530,7 @@ const sliderStyles = `
   .example-track {
     background: #ccc;
     height: 10px;
+    border-radius: 15px;
   }
 `;
 

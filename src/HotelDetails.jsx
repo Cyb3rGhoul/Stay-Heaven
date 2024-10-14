@@ -374,15 +374,23 @@ const HotelDetails = () => {
                                 <Address>
                                     <p>Address: {hotel.address}</p>
                                 </Address>
+                                <City>
+                                    <p>City: Koi toh</p>
+                                </City>
+                                <State>
+                                    <p>State: Kahi dur</p>
+                                </State>
+
                             </Left>
                             <Right>
                                 <PriceSection>
                                     <p>
                                         <DiscountedPrice>
-                                            ₹ {hotel.price}
+                                            ₹ {typeof hotel.price === 'number' ? hotel.price.toLocaleString('en-IN') : "N/A"}
                                         </DiscountedPrice>{" "}
                                         per night
                                     </p>
+
                                     <p>Max guest per room : {hotel.maxGuests}</p>
                                     <button onClick={handleBookClick}>Reserve</button>
                                     {showPopup && (
@@ -845,6 +853,17 @@ const Address = styled.div`
     font-size: 18px;
     color: #333;
 `;
+
+const City = styled.div`
+    font-size: 18px;
+    color: #333;
+`;
+
+const State = styled.div`
+    font-size: 18px;
+    color: #333;
+`;
+
 
 const Right = styled.div`
     flex: 1;

@@ -120,7 +120,7 @@ const Landing = () => {
                                 dispatch(setSearch(searchTerm));
                             }}
                             style={{
-                                padding: window.innerWidth < 768 ? "0.45rem 0.75rem" : "", 
+                                padding: window.innerWidth < 768 ? "0.45rem 0.75rem" : "",
                             }}
                         >
                             Search
@@ -156,27 +156,38 @@ const Landing = () => {
                 </div>
                 <div className="landing__grid-container">
                     <div className="landing__grid">
-                        {hotels.map((hotel) => (
-                            <div
-                                key={hotel._id}
-                                className="landing__grid-item"
-                                onClick={() => navigate(`/hotel/${hotel._id}`)}
-                            >
-                                <img
-                                    src={hotel.images[0]}
-                                    alt={hotel.title}
-                                    className="landing__grid-item-image"
-                                />
-                                <div className="landing__grid-item-content flex flex-col gap-1">
-                                    <div className="text-lg font-bold">
-                                        {hotel.title}
+                        {hotels.map((hotel) => {
+                            // Generate a random number between 1 and 5 for stars
+                            const randomStars = Math.floor(Math.random() * 5) + 1;
+
+                            return (
+                                <div
+                                    key={hotel._id}
+                                    className="landing__grid-item"
+                                    onClick={() => navigate(`/hotel/${hotel._id}`)}
+                                >
+                                    <img
+                                        src={hotel.images[0]}
+                                        alt={hotel.title}
+                                        className="landing__grid-item-image"
+                                    />
+                                    <div className="landing__grid-item-content flex flex-col gap-1">
+                                        <div className="flex justify-between items-center">
+                                            <div className="text-lg font-bold">{hotel.title}</div>
+                                            <div className="flex items-center gap-1">
+                                                {Array.from({ length: randomStars }).map((_, index) => (
+                                                    <span key={index}>&#9733;</span> // Star symbol (filled star)
+                                                ))}
+                                            </div>
+                                        </div>
+                                        <div className="text-left">₹ {typeof hotel.price === 'number' ? hotel.price.toLocaleString('en-IN') : "N/A"}</div>
                                     </div>
-                                    <div>₹ {hotel.price}</div>
                                 </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </div>
+
             </div>
             {showAllCities && (
                 <div className="landing__modal">

@@ -120,27 +120,37 @@ const Navbar = () => {
                         </div>
                         {dropdownOpen && (
                             <div className="navbar__dropdown">
-                                <button className="navbar__close" onClick={toggleMenu}>
-                                    ✖
-                                </button>
-                                <Link to="/profile">
-                                    <div>Profile</div>
+                            <button className="navbar__close" onClick={toggleMenu}>
+                                ✖
+                            </button>
+                            <Link to="/profile">
+                                <div>Profile</div>
+                            </Link>
+                            <Link to="/previousBookings">
+                                <div>Previous Bookings</div>
+                            </Link>
+                            {isAdmin && !isBan && (
+                                <Link to="/admin/dashboard">
+                                    <div>Admin Dashboard</div>
                                 </Link>
-                                <Link to="/previousBookings">
-                                    <div>Previous Bookings</div>
+                            )}
+                            {isSeller && !isBan && (
+                                <Link to={"/seller/dashboard"}>
+                                    <div>Seller Dashboard</div>
                                 </Link>
-                                {isAdmin && !isBan && (
-                                    <Link to="/admin/dashboard">
-                                        <div>Admin Dashboard</div>
-                                    </Link>
-                                )}
-                                {isSeller && !isBan && (
-                                    <Link to={"/seller/dashboard"}>
-                                        <div>Seller Dashboard</div>
-                                    </Link>
-                                )}
-                                <div onClick={logouthandler} style={{cursor: "pointer"}}>Logout</div>
+                            )}
+                            <div
+                                onClick={logouthandler}
+                                style={{
+                                    cursor: "pointer",
+                                    textAlign: "left",
+                                    marginLeft: "12px",
+                                    paddingBottom: "8px",
+                                }}
+                            >
+                                Logout
                             </div>
+                        </div>                        
                         )}
                     </li>
                 ) : (

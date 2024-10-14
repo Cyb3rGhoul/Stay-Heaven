@@ -63,7 +63,7 @@ const SellerHotels = () => {
             )}
             <div className="ml-2 py-4">
                 <select
-                    className="border-2 border-green-500 rounded-md bg-white px-4 py-2 text-gray-700 shadow-md focus:ring-2 focus:ring-green-300 transition-all duration-200 ease-in-out hover:border-green-600 cursor-pointer"
+                    className="border-2 border-green-500 rounded-md bg-white px-4 py-2 text-gray-700 shadow-lg focus:ring-2 focus:ring-green-300 transition-all ease-in-out duration-200 hover:border-green-600 cursor-pointer w-3/4 md:w-auto"
                     name="filter"
                     id="filter"
                 >

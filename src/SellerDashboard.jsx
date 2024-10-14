@@ -1,63 +1,83 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import PieActiveArc from "./PieActiveArc";
-import "./SellerDashboard.css";
+import { motion } from "framer-motion";
 
 const SellerDashboard = () => {
-    return (
-        <div className="sell mt-12 w-full h-fit px-5">
-            <h1 className="text-3xl mb-10 font-semibold text-gray-800">
-                Hi, Welcome Back 👋
-            </h1>
-            <select
-                className="border-2 border-green-500 rounded-md bg-white px-4 py-2 text-gray-700 shadow-lg focus:ring-2 focus:ring-green-300 transition-all ease-in-out duration-200 hover:border-green-600 cursor-pointer absolute top-10 right-6"
-                name="filter"
-                id="filter"
-                onChange={(e) => {
-                    setDuration(e.target.value);
-                    console.log(e.target.value);
-                    getAdminDashboardData(e.target.value);
-                }}
-            >
-                <option value="overall" className="text-gray-700">Overall</option>
-                <option value="This Week" className="text-gray-700">This Week</option>
-                <option value="This Month" className="text-gray-700">This Month</option>
-                <option value="This Year" className="text-gray-700">This Year</option>
-            </select>
+    const [duration, setDuration] = useState("overall");
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-            <div className="flex gap-5">
-                {/* {data.map((item, index) => (
-            <div
-                key={item.title}
-                className="h-[20vh] w-1/3 relative transition-all duration-300 ease-in bg-[#6bac71] cursor-pointer hover:bg-[#43A344]  rounded-lg p-4 flex gap-5 items-center justify-center"
-            >
-                <img className="size-20" src={item.icon} alt="" />
-                <div className="flex flex-col gap-2 text-white">
-                    <h2 className="text-3xl font-semibold">
-                        {formatNumber(item.value)}
-                    </h2>
-                    <p className="text-md font-semibold opacity-50">
-                        {item.title}
-                    </p>
-                </div>
-                            </div>
-                ))} */}
-                <div
-                    className="h-[20vh] w-1/3 relative transition-transform duration-300 ease-in-out transform bg-[#6bac71] cursor-pointer bg-gradient-to-r from-green-400 to-green-600 rounded-lg shadow-lg hover:scale-105 p-4 flex gap-5 items-center justify-center"
+    useEffect(() => {
+        const handleResize = () => setWindowWidth(window.innerWidth);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    const isMobile = windowWidth < 768;
+
+    const data = [
+        { title: "Users", value: 123, icon: "https://cdn.iconscout.com/icon/free/png-256/airbnb-logo-2885-2194.png" },
+        { title: "Hotels", value: 45, icon: "https://cdn-icons-png.flaticon.com/512/2933/2933921.png" },
+        { title: "Bookings", value: 789, icon: "https://cdn-icons-png.flaticon.com/512/5998/5998796.png" },
+    ];
+
+    return (
+        <div className="sell mt-12 w-full h-fit px-5 md:px-10">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10">
+                <motion.h1 
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="text-2xl md:text-3xl font-semibold text-gray-800 mb-4 md:mb-0"
                 >
-                    <img
-                        className="w-16 h-16"
-                        src="https://cdn.iconscout.com/icon/free/png-256/airbnb-logo-2885-2194.png"
-                        alt="Icon"
-                    />
-                    <div className="flex flex-col gap-2 text-white">
-                        <h2 className="text-3xl font-semibold">123</h2>
-                        <p className="text-md font-semibold opacity-75">Users</p>
-                    </div>
-                </div>
+                    Hi, Welcome Back 👋
+                </motion.h1>
+                <motion.select
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.2 }}
+                    className="border-2 border-green-500 rounded-md bg-white px-4 py-2 text-gray-700 shadow-lg focus:ring-2 focus:ring-green-300 transition-all ease-in-out duration-200 hover:border-green-600 cursor-pointer w-3/4 md:w-auto"
+                    name="filter"
+                    id="filter"
+                    value={duration}
+                    onChange={(e) => {
+                        setDuration(e.target.value);
+                        getAdminDashboardData(e.target.value);
+                    }}
+                >
+                    <option value="overall">Overall</option>
+                    <option value="This Week">This Week</option>
+                    <option value="This Month">This Month</option>
+                    <option value="This Year">This Year</option>
+                </motion.select>
             </div>
 
-            <section className="flex items-center justify-center">
-                <div className="w-1/2 my-10 flex flex-col gap-5 rounded-lg bg-[#D6EFD8] h-fit pb-10 shadow-lg">
+            <div className={`flex flex-col md:flex-row gap-5 ${isMobile ? 'items-center' : ''}`}>
+                {data.map((item, index) => (
+                    <motion.div
+                        key={item.title}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: index * 0.1 }}
+                        className={`h-[20vh] ${isMobile ? 'w-full' : 'w-1/3'} relative transition-all duration-300 ease-in bg-gradient-to-r from-green-400 to-green-600 cursor-pointer hover:shadow-xl rounded-lg p-4 flex gap-5 items-center justify-center`}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                    >
+                        <img className="w-16 h-16" src={item.icon} alt={item.title} />
+                        <div className="flex flex-col gap-2 text-white">
+                            <h2 className="text-3xl font-semibold">{item.value.toLocaleString()}</h2>
+                            <p className="text-md font-semibold opacity-75">{item.title}</p>
+                        </div>
+                    </motion.div>
+                ))}
+            </div>
+
+            <motion.section 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.5 }}
+                className="flex items-center justify-center mt-10"
+            >
+                <div className={`${isMobile ? 'w-full' : 'w-2/3'} my-10 flex flex-col gap-5 rounded-lg bg-gradient-to-br from-green-100 to-green-200 h-fit pt-10 pb-10 shadow-lg`}>
                     <PieActiveArc
                         data={[
                             { id: 0, value: 1, label: "Pending Bookings" },
@@ -66,7 +86,7 @@ const SellerDashboard = () => {
                         ]}
                     />
                 </div>
-            </section>
+            </motion.section>
         </div>
     );
 };
