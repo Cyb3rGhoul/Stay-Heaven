@@ -35,16 +35,16 @@ const Footer = () => (
       
       <div className="footer-section social-section">
         <a href="https://instagram.com/stayheaven" target="_blank" rel="noopener noreferrer">
-          <FontAwesomeIcon icon={faInstagram} size="lg" />
+          <FontAwesomeIcon icon={faInstagram} size="xl" />
         </a>
         <a href="https://twitter.com/stayheaven" target="_blank" rel="noopener noreferrer">
-          <FontAwesomeIcon icon={faTwitter} size="lg" />
+          <FontAwesomeIcon icon={faTwitter} size="xl" />
         </a>
         <a href="https://linkedin.com/company/stayheaven" target="_blank" rel="noopener noreferrer">
-          <FontAwesomeIcon icon={faLinkedin} size="lg" />
+          <FontAwesomeIcon icon={faLinkedin} size="xl" />
         </a>
         <a href="mailto:support@stayheaven.com" target="_blank" rel="noopener noreferrer">
-          <FontAwesomeIcon icon={faEnvelope} size="lg" />
+          <FontAwesomeIcon icon={faEnvelope} size="xl" />
         </a>
       </div>
     </div>
