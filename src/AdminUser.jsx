@@ -142,19 +142,18 @@ const AdminUser = () => {
     const getDate = (date) => {
         const specificDate = new Date(date);
 
-        const day = String(specificDate.getDate()).padStart(2, "0"); // Ensures two digits
-        const month = String(specificDate.getMonth() + 1).padStart(2, "0"); // Months are zero-indexed
+        const day = String(specificDate.getDate()).padStart(2, "0");
+        const month = String(specificDate.getMonth() + 1).padStart(2, "0"); 
         const year = specificDate.getFullYear();
 
         const formattedDate = `${day}-${month}-${year}`;
 
-        return formattedDate; // Correctly returning formattedDate
+        return formattedDate; 
     };
     useEffect(() => {
         getUsers();
 
         socket.on('user_is_created', (data) => {
-            console.log('New hotel created:', data);
             setUsers((prev) => [...prev, data.user]);
         });
 

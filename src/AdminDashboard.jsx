@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import bookings from "./assets/bookings.png";
 import total from "./assets/total.png";
-import profit from "./assets/profit.png";
+import profiticon from "./assets/profit.png";
 import users from "./assets/users.png";
 import PieActiveArc from "./PieActiveArc";
 import ChartsOverview from "./ChartsOverview";
@@ -20,6 +20,11 @@ const AdminDashboard = () => {
             icon: total,
         },
         {
+            title: "Profit",
+            value: "714K",
+            icon: profiticon,
+        },
+        {
             title: "Users",
             value: "714K",
             icon: users,
@@ -29,6 +34,7 @@ const AdminDashboard = () => {
     const [orders, setOrders] = useState();
     const [totalusers, setTotalUsers] = useState();
     const [totalAmount, setTotalAmount] = useState();
+    const [profit, setProfit] = useState();
     const [pendingOrders, setPendingOrders] = useState();
     const [successOrders, setSuccessOrders] = useState();
     const [cancelledOrders, setCancelledOrders] = useState();
@@ -47,7 +53,8 @@ const AdminDashboard = () => {
                 (acc, order) => acc + order.amount,
                 0
             );
-            data[2].value = response.data.data.users.length;
+            data[2].value = 0.05 * data[1].value;
+            data[3].value = response.data.data.users.length;
 
             setTotalUsers(response.data.data.users.length);
             setTotalAmount(
@@ -56,6 +63,7 @@ const AdminDashboard = () => {
                     0
                 )
             );
+            setProfit(response.data.data.orders - 0.05 * response.data.data.orders)
             setPendingOrders(
                 response.data.data.orders.filter(
                     (order) => order.approvalStatus === "in-progress"
@@ -128,7 +136,7 @@ const AdminDashboard = () => {
                 >
                   <img className="w-12 h-12 sm:w-16 sm:h-16" src={item.icon} alt={item.title} />
                   <div className="flex flex-col text-white items-end">
-                    <h2 className="text-xl sm:text-4xl font-bold">{formatNumber(item.value)}</h2>
+                    <h2 className="text-xl sm:text-4xl font-bold"><span className="font-semibold">{index == 1 || index == 2 ? "₹" : ""}</span>{formatNumber(item.value)}</h2>
                     <p className="text-xs sm:text-lg font-medium opacity-80">{item.title}</p>
                   </div>
                 </div>

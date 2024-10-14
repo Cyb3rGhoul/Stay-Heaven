@@ -30,6 +30,8 @@ import Seller from "./Seller.jsx";
 import SellerDashboard from "./SellerDashboard.jsx";
 import CreateHotel from "./CreateHotel.jsx";
 import SellerHotels from "./SellerHotels.jsx";
+import SellerRequests from "./SellerRequests.jsx";
+import SellerBookings from "./SellerBookings.jsx";
 
 const router = createBrowserRouter([
     {
@@ -107,12 +109,16 @@ const router = createBrowserRouter([
                         element: <CreateHotel />,
                     },
                     {
+                        path: "order-requests",
+                        element: <SellerRequests />,
+                    },
+                    {
                         path: "hotels",
                         element: <SellerHotels />,
                     },
                     {
                         path: "bookings",
-                        element: <AdminBookings />,
+                        element: <SellerBookings />,
                     },
                 ],
             },

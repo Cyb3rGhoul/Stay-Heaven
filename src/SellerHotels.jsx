@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import axios from "./utils/axios";
 import styled from "styled-components";
 import Edit from "./Edit";
+import socket from "./utils/socket";
+import { Link } from "react-router-dom";
 
 const SellerHotels = () => {
     const [hotels, setHotels] = useState([]);
@@ -41,6 +43,18 @@ const SellerHotels = () => {
 
     useEffect(() => {
         getAllSellerHotels();
+
+        socket.on("hotel_is_approved", (data) => {
+            setHotels((prev) =>
+                prev.map((hotel) =>
+                    hotel._id === data.hotel._id ? data.hotel : hotel
+                )
+            );
+        });
+
+        return () => {
+            socket.off("new-hotel");
+        };
     }, []);
     return (
         <div className="mt-10">
@@ -53,13 +67,22 @@ const SellerHotels = () => {
                     name="filter"
                     id="filter"
                 >
-                    <option value="title" className="text-gray-700">Title</option>
-                    <option value="price" className="text-gray-700">Price</option>
-                    <option value="city" className="text-gray-700">City</option>
-                    <option value="state" className="text-gray-700">State</option>
-                    <option value="revenue" className="text-gray-700">Revenue</option>
+                    <option value="title" className="text-gray-700">
+                        Title
+                    </option>
+                    <option value="price" className="text-gray-700">
+                        Price
+                    </option>
+                    <option value="city" className="text-gray-700">
+                        City
+                    </option>
+                    <option value="state" className="text-gray-700">
+                        State
+                    </option>
+                    <option value="revenue" className="text-gray-700">
+                        Revenue
+                    </option>
                 </select>
-
             </div>
             <div className="overflow-x-auto">
                 <table className="table">
@@ -72,13 +95,14 @@ const SellerHotels = () => {
                             <th className="text-center">State</th>
                             <th className="text-center">Revenue</th>
                             <th className="text-center">Details</th>
+                            <th className="text-center">Document</th>
                             <th className="text-center">Status</th>
                         </tr>
                     </thead>
                     <tbody>
                         {hotels.map((hotel, index) => {
                             return (
-                                <tr>
+                                <tr key={hotel._id}>
                                     <th>{index + 1}</th>
                                     <td className="text-center">
                                         {hotel.title}
@@ -106,10 +130,16 @@ const SellerHotels = () => {
                                             Edit
                                         </button>
                                     </td>
+                                    
                                     <td className="text-center">
                                         {hotel.approvalStatus === "approved" ? (
                                             <button className="btn bg-green-500 text-white hover:bg-white hover:border-green-500 hover:border-2 hover:text-black transition-all duration-500">
                                                 Approved
+                                            </button>
+                                        ) : hotel.approvalStatus ===
+                                          "pending" ? (
+                                            <button className="btn bg-yellow-500 text-white">
+                                                Pending
                                             </button>
                                         ) : (
                                             <button className="btn bg-red-500 text-white">

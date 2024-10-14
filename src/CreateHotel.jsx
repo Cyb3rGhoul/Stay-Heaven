@@ -15,21 +15,26 @@ import { IoMdClose } from "react-icons/io";
 import randomImage from "./assets/random.jpg";
 import axios from "./utils/axios";
 
-
 const CreateHotel = () => {
     const [selectedBooking, setSelectedBooking] = useState(null);
     const [isCreateBookingOpen, setIsCreateBookingOpen] = useState(false);
     const [previews, setPreviews] = useState([]);
-    const file = useRef([]);
+    const fileInputRef = useRef([]);
+    const pdfInputRef = useRef();
     const [files, setFiles] = useState([]);
+    const [pdfFile, setPdfFile] = useState(null);
+    const [pdfError, setPdfError] = useState(null);
+    const submitButton = useRef();
+    const closeButton = useRef();
+
     const handleClosePopup = () => {
         setSelectedBooking(null);
         setFiles([]);
         setPreviews([]);
+        setPdfFile(null);
         setIsCreateBookingOpen(false);
     };
-    const submitButton = useRef();
-    const closeButton = useRef();
+
     const handleDetailChange = (e) => {
         const { name, value, type, checked } = e.target;
         if (name.split(",")[0] === "facility") {
@@ -44,11 +49,11 @@ const CreateHotel = () => {
                     : [...selectedBooking.facilities, name.split(",")[1]],
             });
         } else {
-            setSelectedBooking({
-                ...selectedBooking,
-                [name]: type === "checkbox" ? checked : value,
-            });
-        }
+        setSelectedBooking({
+            ...selectedBooking,
+            [name]: type === "checkbox" ? checked : value,
+        });
+    }
     };
 
     const handleCreateBooking = () => {
@@ -64,62 +69,80 @@ const CreateHotel = () => {
             state: "",
             pinCode: "",
             price: 0,
+            pdf: ""
         });
     };
 
     const removeFile = (index) => {
         const updatedFiles = files.filter((_, i) => i !== index);
         setFiles(updatedFiles);
-
         const updatedPreviews = previews.filter((_, i) => i !== index);
         setPreviews(updatedPreviews);
     };
-    const handleAttach = () => {
+
+    const handleImageAttach = () => {
         if (files.length < 5) {
-            file.current.disabled = false;
-            file.current.click();
+            fileInputRef.current.disabled = false;
+            fileInputRef.current.click();
         } else {
-            file.current.disabled = true;
+            fileInputRef.current.disabled = true;
         }
     };
 
-    const attachHandler = async (e) => {
+    const attachImageHandler = (e) => {
         const selectedFiles = Array.from(e.target.files);
         if (selectedFiles.length + files.length > 5) {
-            alert("You can only upload a maximum of 5 files.");
+            alert("You can only upload a maximum of 5 images.");
             return;
         }
-
         const updatedFiles = [...files, ...selectedFiles];
         setFiles(updatedFiles);
-
         const newPreviews = selectedFiles.map((file) =>
             URL.createObjectURL(file)
         );
         setPreviews((prevPreviews) => [...prevPreviews, ...newPreviews]);
     };
+
+    const handlePdfAttach = () => {
+        pdfInputRef.current.click();
+    };
+
+    const attachPdfHandler = (e) => {
+        const file = e.target.files[0];
+        if (file && file.type === "application/pdf") {
+            if (file.size <= 5 * 1024 * 1024) {
+                setPdfFile(file);
+                setPdfError(null);
+            } else {
+                setPdfError("The PDF file must be smaller than 5MB.");
+                setPdfFile(null);
+            }
+        } else {
+            setPdfError("Please upload a valid PDF file.");
+            setPdfFile(null);
+        }
+    };
+
     const uploadImages = async () => {
         let urls = [];
-
         try {
             for (const file of files) {
-                const formdata = new FormData();
-                formdata.append("file", file);
-                formdata.append(
+                const formData = new FormData();
+                formData.append("file", file);
+                formData.append(
                     "upload_preset",
                     import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
                 );
-                formdata.append(
+                formData.append(
                     "cloud_name",
                     import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
                 );
-
                 const response = await axios.post(
-                    `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+                    `https://api.cloudinary.com/v1_1/${
+                        import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
                     }/image/upload`,
-                    formdata
+                    formData
                 );
-
                 urls.push(response.data.secure_url);
             }
             return urls;
@@ -129,32 +152,73 @@ const CreateHotel = () => {
         }
     };
 
+    const uploadPdf = async () => {
+        if (!pdfFile) return null;
+
+        try {
+            const formData = new FormData();
+            formData.append("file", pdfFile);
+            formData.append(
+                "upload_preset",
+                import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
+            );
+            formData.append(
+                "cloud_name",
+                import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+            );
+            const response = await axios.post(
+                `https://api.cloudinary.com/v1_1/${
+                    import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+                }/raw/upload`,
+                formData
+            );
+            return response.data.secure_url;
+        } catch (error) {
+            console.error("Error while uploading the PDF", error);
+            return null;
+        }
+    };
+
     const createHotel = async (hotel) => {
         try {
-            const response = await axios.post("/hotel/create", hotel, { withCredentials: true });
+            const response = await axios.post("/hotel/create", hotel, {
+                withCredentials: true,
+            });
             console.log(response);
         } catch (error) {
             console.error("Error while creating the hotel", error);
             return;
         }
     };
+
     const handleSubmit = async () => {
         submitButton.current.disabled = true;
-        const urls = await uploadImages();
-        const hotel = { ...selectedBooking, images: urls };
+        const imageUrls = await uploadImages();
+        const pdfUrl = await uploadPdf();
+
+        const hotel = {
+            ...selectedBooking,
+            images: imageUrls,
+            pdf: pdfUrl,
+        };
         createHotel(hotel);
+
         alert("Hotel Created Successfully");
-        submitButton.current.disabled = true;
+        submitButton.current.disabled = false;
         setFiles([]);
         setPreviews([]);
+        setPdfFile(null);
         setSelectedBooking(null);
         handleClosePopup();
         closeButton.current.click();
     };
+
     return (
-        <Container style={{
-            marginTop: "1em",
-        }}>
+        <Container
+            style={{
+                marginTop: "1em",
+            }}
+        >
             <div className="flex items-center justify-center h-[85vh]">
                 <div className="w-80 h-80 bg-white shadow-lg rounded-lg flex flex-col items-center justify-center p-5 transform transition-all duration-300 ease-in-out hover:scale-105">
                     <Title className="text-center mb-4">
@@ -172,12 +236,17 @@ const CreateHotel = () => {
             {(selectedBooking || isCreateBookingOpen) && (
                 <PopupOverlay>
                     <Popup>
-                        <CloseButton ref={closeButton} onClick={handleClosePopup}>✖</CloseButton>
+                        <CloseButton
+                            ref={closeButton}
+                            onClick={handleClosePopup}
+                        >
+                            ✖
+                        </CloseButton>
                         <ScrollablePopupContent>
                             <input
                                 className="hidden"
-                                onChange={attachHandler}
-                                ref={file}
+                                ref={fileInputRef}
+                                onChange={attachImageHandler}
                                 type="file"
                                 accept="image/*"
                                 multiple
@@ -205,13 +274,12 @@ const CreateHotel = () => {
                             )}
                             <button
                                 style={{
-                                    opacity: files.length == 5 ? "0.2" : "1",
+                                    opacity: files.length === 5 ? "0.2" : "1",
                                 }}
-                                onClick={handleAttach}
+                                onClick={handleImageAttach}
                                 className="flex border-green-500 border-2 w-fit px-2 py-1 rounded-md gap-2"
                             >
-                                <img src="/Attach.svg" alt="" />
-                                Attach
+                                Attach Images
                             </button>
                             <Label>Hotel Title</Label>
                             <Input
@@ -234,7 +302,13 @@ const CreateHotel = () => {
                                 value={selectedBooking.guests}
                                 onChange={handleDetailChange}
                             />
-                            <Label>Price: (in INR)</Label>
+                            <Label>
+                                Price: (in INR) (
+                                <span className="text-red-500">
+                                    5% will be deducted
+                                </span>
+                                )
+                            </Label>
                             <Input
                                 type="number"
                                 name="price"
@@ -361,7 +435,32 @@ const CreateHotel = () => {
                                     Breakfast
                                 </CheckboxLabel>
                             </CheckboxContainer>
-                            <SubmitButton ref={submitButton} onClick={handleSubmit}>
+                            <input
+                                className="hidden"
+                                ref={pdfInputRef}
+                                onChange={attachPdfHandler}
+                                type="file"
+                                accept="application/pdf"
+                            />
+                            <button
+                                onClick={handlePdfAttach}
+                                className="flex border-green-500 border-2 w-fit px-2 py-1 rounded-md gap-2"
+                            >
+                                Attach PDF
+                            </button>
+                            {pdfError && (
+                                <p className="text-red-500">{pdfError}</p>
+                            )}
+                            {pdfFile && (
+                                <p className="text-green-500">
+                                    PDF: {pdfFile.name}
+                                </p>
+                            )}
+
+                            <SubmitButton
+                                ref={submitButton}
+                                onClick={handleSubmit}
+                            >
                                 Submit
                             </SubmitButton>
                         </ScrollablePopupContent>
@@ -401,45 +500,6 @@ const CreateButton = styled.button`
     cursor: pointer;
     display: block;
     margin: 0 auto 20px;
-`;
-
-const ScrollableContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-`;
-
-const BookingCard = styled.div`
-    display: flex;
-    flex-direction: row;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    @media (max-width: 768px) {
-        flex-direction: column;
-        align-items: center;
-    }
-`;
-
-const Image = styled.img`
-    width: 150px;
-    height: 150px;
-    border-radius: 8px;
-    margin-right: 20px;
-    @media (max-width: 768px) {
-        margin-right: 0;
-        margin-bottom: 20px;
-    }
-`;
-
-const Description = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    font-size: 14px;
-    color: #333;
 `;
 
 const PopupOverlay = styled.div`
@@ -483,43 +543,6 @@ const ScrollablePopupContent = styled.div`
     display: flex;
     flex-direction: column;
     gap: 10px;
-`;
-
-const ImageUploadContainer = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: space-between;
-`;
-
-const ImageUpload = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 48%;
-    position: relative;
-`;
-
-const ImageInput = styled.input`
-    display: none;
-`;
-
-const PopupImage = styled.img`
-    width: 100%;
-    height: auto;
-    border-radius: 8px;
-    cursor: pointer;
-    margin-top: 10px;
-`;
-
-const AddImageButton = styled.button`
-    padding: 10px;
-    background-color: #2a9d8f;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    align-self: center;
 `;
 
 const Label = styled.label`

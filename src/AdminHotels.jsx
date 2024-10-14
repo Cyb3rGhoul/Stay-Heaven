@@ -5,6 +5,7 @@ import socket from "./utils/socket";
 
 const AdminHotels = () => {
     const [hotels, setHotels] = useState([]);
+    const [filteredHotels, setFilteredHotels] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
 
     const popup = () => {
@@ -21,6 +22,8 @@ const AdminHotels = () => {
                 }
             );
             setHotels(response.data.data.hotels);
+            console.log(response.data.data.hotels)
+            setFilteredHotels(response.data.data.hotels);
         } catch (error) {
             console.log(error);
         }
@@ -43,12 +46,31 @@ const AdminHotels = () => {
     const submitHandler = (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
-        const price = formData.get("price");
-        const revenue = formData.get("revenue");
+        const sort = formData.get("sort");
         const approvalStatus = formData.get("ApprovalStatus");
 
-        const filters = { price, revenue, approvalStatus };
-        // Implement filter logic here
+        const filters = { sort, approvalStatus };
+        console.log(filters)
+        const type = sort.split('-')[0];
+        const order = sort.split('-')[1];
+
+        if(!sort && !approvalStatus) {
+            setFilteredHotels(hotels);
+        }
+
+        if(type === 'p') {
+            if(order[0] == 'l') setFilteredHotels(() => filteredHotels.sort((a, b) => a.price - b.price));
+            else setFilteredHotels(() => filteredHotels.sort((a, b) => b.price - a.price));
+        } else if(type == 'r') {
+            if(order[0] == 'l') setFilteredHotels(() => filteredHotels.sort((a, b) => a.revenue - b.revenue));
+            else setFilteredHotels(() => filteredHotels.sort((a, b) => b.revenue - a.revenue));
+        }
+
+        if(approvalStatus == "approved") {
+            setFilteredHotels(() => filteredHotels.filter(hotel => hotel.approvalStatus === "approved"));
+        } else if(approvalStatus == "rejected") {
+            setFilteredHotels(() => filteredHotels.filter(hotel => hotel.approvalStatus === "rejected"));
+        }
     };
 
     const reset = () => {
@@ -93,28 +115,27 @@ const AdminHotels = () => {
                         </div>
                         <form onSubmit={submitHandler} className="space-y-6">
                             <div className="space-y-4">
-                                <h3 className="text-lg font-medium text-gray-900">Sort By Price</h3>
+                                <h3 className="text-lg font-medium text-gray-900">Sort By</h3>
                                 <div className="space-y-2">
                                     <label className="inline-flex items-center">
-                                        <input type="radio" name="price" value="lowToHigh" className="form-radio text-emerald-600" />
-                                        <span className="ml-2">Low to High</span>
+                                        <input type="radio" name="sort" value="p-lowToHigh" className="form-radio text-emerald-600" />
+                                        <span className="ml-2">Low to High (Price)</span>
                                     </label>
                                     <label className="inline-flex items-center">
-                                        <input type="radio" name="price" value="highToLow" className="form-radio text-emerald-600" />
-                                        <span className="ml-2">High to Low</span>
+                                        <input type="radio" name="sort" value="p-highToLow" className="form-radio text-emerald-600" />
+                                        <span className="ml-2">High to Low (Price)</span>
                                     </label>
                                 </div>
                             </div>
                             <div className="space-y-4">
-                                <h3 className="text-lg font-medium text-gray-900">Sort By Revenue</h3>
                                 <div className="space-y-2">
                                     <label className="inline-flex items-center">
-                                        <input type="radio" name="revenue" value="lowToHigh" className="form-radio text-emerald-600" />
-                                        <span className="ml-2">Low to High</span>
+                                        <input type="radio" name="sort" value="r-lowToHigh" className="form-radio text-emerald-600" />
+                                        <span className="ml-2">Low to High (Revenue)</span>
                                     </label>
                                     <label className="inline-flex items-center">
-                                        <input type="radio" name="revenue" value="highToLow" className="form-radio text-emerald-600" />
-                                        <span className="ml-2">High to Low</span>
+                                        <input type="radio" name="sort" value="r-highToLow" className="form-radio text-emerald-600" />
+                                        <span className="ml-2">High to Low (Revenue)</span>
                                     </label>
                                 </div>
                             </div>
@@ -155,7 +176,7 @@ const AdminHotels = () => {
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-emerald-600">
                         <tr>
-                            {["S.No.", "Hotel Name", "Owner", "Price", "City", "State", "Status", "Details"].map((header) => (
+                            {["S.No.", "Hotel Name", "Owner", "Price", "City", "State","Document", "Status", "Details"].map((header) => (
                                 <th
                                     key={header}
                                     scope="col"
@@ -167,7 +188,7 @@ const AdminHotels = () => {
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                        {hotels.map((hotel, index) => (
+                        {filteredHotels.map((hotel, index) => (
                             <tr key={hotel._id} className="hover:bg-emerald-50 transition-colors duration-300">
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{index + 1}</td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{hotel.title}</td>
@@ -175,6 +196,13 @@ const AdminHotels = () => {
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">₹ {hotel.price}</td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{hotel.city}</td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{hotel.state}</td>
+                                <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                            <Link target="_blank" to={`${hotel.pdf}`}>
+                                                <button className="px-3 py-1 bg-zinc-200 rounded-md hover:bg-zinc-300 transition-colors">
+                                                   Document
+                                                </button>
+                                            </Link>
+                                        </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     <select
                                         className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"

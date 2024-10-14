@@ -31,6 +31,11 @@ const SellerNavbar = () => {
                             icon: requests,
                         },
                         {
+                            path: "/seller/order-requests",
+                            label: "Pending Order Requests",
+                            icon: requests,
+                        },
+                        {
                             path: "/seller/hotels",
                             label: "Hotels",
                             icon: hotels,

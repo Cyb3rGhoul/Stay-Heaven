@@ -42,7 +42,6 @@ const AdminRequests = () => {
         getAllPendingHotels();
 
         socket.on('hotel_is_created', (data) => {
-            console.log('New hotel created:', data);
             setHotels((prev) => [...prev, data.hotel]);
         });
 
@@ -65,6 +64,7 @@ const AdminRequests = () => {
                                     <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Price</th>
                                     <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">City</th>
                                     <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Status</th>
+                                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Document</th>
                                     <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Details</th>
                                 </tr>
                             </thead>
@@ -91,6 +91,13 @@ const AdminRequests = () => {
                                                     onClick={() => approveHotel(hotel._id, "rejected")}
                                                 />
                                             </div>
+                                        </td>
+                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                            <Link target="_blank" to={`${hotel.pdf}`}>
+                                                <button className="px-3 py-1 bg-zinc-200 rounded-md hover:bg-zinc-300 transition-colors">
+                                                   Document
+                                                </button>
+                                            </Link>
                                         </td>
                                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                             <Link to={`/hotel/${hotel._id}`}>
