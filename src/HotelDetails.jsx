@@ -19,11 +19,12 @@ import Rating from "@mui/material/Rating";
 import { useSelector } from "react-redux";
 import "./HotelDetails.css";
 
-
 const HotelDetails = () => {
     const { id } = useParams();
     const hotelId = id;
-    const [user, setUser] = useState(useSelector((state) => state.user.userData));
+    const [user, setUser] = useState(
+        useSelector((state) => state.user.userData)
+    );
     const [features, setFeatures] = useState({
         wifi: false,
         ac: false,
@@ -55,7 +56,9 @@ const HotelDetails = () => {
         );
         if (days == 0) days = 1;
         setTotalDays(days);
-        setAmount(rooms * hotel.price * days);
+        if (checkInDate && checkOutDate) {
+            setAmount(rooms * hotel.price * days);
+        }
     }, [guestNames, checkInDate, checkOutDate]);
 
     const getHotelRatings = () => {
@@ -191,9 +194,11 @@ const HotelDetails = () => {
         setShowPopup(false);
 
         try {
-
-
-            const { data: { data: { order } } } = await axios.post(
+            const {
+                data: {
+                    data: { order },
+                },
+            } = await axios.post(
                 `/payment/checkout`,
                 {
                     rooms,
@@ -202,8 +207,15 @@ const HotelDetails = () => {
                 },
                 { withCredentials: true }
             );
-            const { data: { data: { key } } } = await axios.post(`/payment/getkey`, { userId: user._id, guestNames, checkInDate, checkOutDate },
-                { withCredentials: true });
+            const {
+                data: {
+                    data: { key },
+                },
+            } = await axios.post(
+                `/payment/getkey`,
+                { userId: user._id, guestNames, checkInDate, checkOutDate },
+                { withCredentials: true }
+            );
 
             var options = {
                 key,
@@ -212,22 +224,22 @@ const HotelDetails = () => {
                 name: "Stay Heaven",
                 image: "https://res.cloudinary.com/djsdjtkyu/image/upload/v1725702771/cuktnsvqx7fstqfsxb4p.png",
                 order_id: order.id,
-                callback_url: import.meta.env.VITE_BACKEND_URL + "/payment/paymentverification",
+                callback_url:
+                    import.meta.env.VITE_BACKEND_URL +
+                    "/payment/paymentverification",
                 prefill: {
-                    "name": user.fullName,
-                    "email": user.email,
-                    "contact": user.phoneNumber
+                    name: user.fullName,
+                    email: user.email,
+                    contact: user.phoneNumber,
                 },
 
                 theme: {
-                    "color": "#4CAF50"
-                }
-
+                    color: "#4CAF50",
+                },
             };
             const rzp1 = new window.Razorpay(options);
             rzp1.open();
-        }
-        catch (e) {
+        } catch (e) {
             console.log(e);
         }
     };
@@ -238,13 +250,15 @@ const HotelDetails = () => {
                 <Wrapper>
                     <div>
                         <TitleSection>
-                            <PropertyName style={{
-                                fontFamily: "Josefin Sans, sans-serif",
-                                fontOpticalSizing: "auto",
-                                fontWeight: 800,
-                                fontStyle: "normal",
-                                marginTop: "10px",
-                            }}>
+                            <PropertyName
+                                style={{
+                                    fontFamily: "Josefin Sans, sans-serif",
+                                    fontOpticalSizing: "auto",
+                                    fontWeight: 800,
+                                    fontStyle: "normal",
+                                    marginTop: "10px",
+                                }}
+                            >
                                 {hotel.title}
                             </PropertyName>
                             <ActionButtons>
@@ -302,9 +316,13 @@ const HotelDetails = () => {
                         <Details>
                             <Left>
                                 <GuestReviews>
-                                    <GuestFavourite>Guest favourite</GuestFavourite>
+                                    <GuestFavourite>
+                                        Guest favourite
+                                    </GuestFavourite>
                                     <RatingWrapper>
-                                        <RatingValue>{hotelRating || 0}</RatingValue>
+                                        <RatingValue>
+                                            {hotelRating || 0}
+                                        </RatingValue>
                                         <StyledRating
                                             name="half-rating"
                                             precision={0.5}
@@ -312,13 +330,17 @@ const HotelDetails = () => {
                                             readOnly
                                         />
                                     </RatingWrapper>
-                                    <ReviewCount>{reviews.length} Reviews</ReviewCount>
+                                    <ReviewCount>
+                                        {reviews.length} Reviews
+                                    </ReviewCount>
                                 </GuestReviews>
 
                                 <Features>
                                     <CheckboxContainer>
                                         {features.wifi && (
-                                            <CheckboxLabel checked={features.wifi}>
+                                            <CheckboxLabel
+                                                checked={features.wifi}
+                                            >
                                                 <IconWrapper>
                                                     <FaWifi size={24} />
                                                 </IconWrapper>
@@ -326,7 +348,9 @@ const HotelDetails = () => {
                                             </CheckboxLabel>
                                         )}
                                         {features.ac && (
-                                            <CheckboxLabel checked={features.ac}>
+                                            <CheckboxLabel
+                                                checked={features.ac}
+                                            >
                                                 <IconWrapper>
                                                     <FaSnowflake size={24} />
                                                 </IconWrapper>
@@ -334,7 +358,9 @@ const HotelDetails = () => {
                                             </CheckboxLabel>
                                         )}
                                         {features.breakfast && (
-                                            <CheckboxLabel checked={features.breakfast}>
+                                            <CheckboxLabel
+                                                checked={features.breakfast}
+                                            >
                                                 <IconWrapper>
                                                     <FaCoffee size={24} />
                                                 </IconWrapper>
@@ -342,7 +368,9 @@ const HotelDetails = () => {
                                             </CheckboxLabel>
                                         )}
                                         {features.parking && (
-                                            <CheckboxLabel checked={features.parking}>
+                                            <CheckboxLabel
+                                                checked={features.parking}
+                                            >
                                                 <IconWrapper>
                                                     <FaParking size={24} />
                                                 </IconWrapper>
@@ -350,7 +378,9 @@ const HotelDetails = () => {
                                             </CheckboxLabel>
                                         )}
                                         {features.kitchen && (
-                                            <CheckboxLabel checked={features.kitchen}>
+                                            <CheckboxLabel
+                                                checked={features.kitchen}
+                                            >
                                                 <IconWrapper>
                                                     <FaUtensils size={24} />
                                                 </IconWrapper>
@@ -358,7 +388,9 @@ const HotelDetails = () => {
                                             </CheckboxLabel>
                                         )}
                                         {features.gym && (
-                                            <CheckboxLabel checked={features.gym}>
+                                            <CheckboxLabel
+                                                checked={features.gym}
+                                            >
                                                 <IconWrapper>
                                                     <CgGym size={36} />
                                                 </IconWrapper>
@@ -380,109 +412,147 @@ const HotelDetails = () => {
                                 <State>
                                     <p>State: Kahi dur</p>
                                 </State>
-
                             </Left>
                             <Right>
                                 <PriceSection>
                                     <p>
                                         <DiscountedPrice>
-                                            ₹ {typeof hotel.price === 'number' ? hotel.price.toLocaleString('en-IN') : "N/A"}
+                                            ₹{" "}
+                                            {typeof hotel.price === "number"
+                                                ? hotel.price.toLocaleString(
+                                                      "en-IN"
+                                                  )
+                                                : "N/A"}
                                         </DiscountedPrice>{" "}
                                         per night
                                     </p>
 
-                                    <p>Max guest per room : {hotel.maxGuests}</p>
-                                    <button onClick={handleBookClick}>Reserve</button>
+                                    <p>
+                                        Max guest per room : {hotel.maxGuests}
+                                    </p>
+                                    <button onClick={handleBookClick}>
+                                        Reserve
+                                    </button>
                                     {showPopup && (
-                                        <PopupOverlay onClick={handlePopupClose}>
+                                        <PopupOverlay
+                                            onClick={handlePopupClose}
+                                        >
                                             <PopupContent
-                                                onClick={(e) => e.stopPropagation()}
+                                                onClick={(e) =>
+                                                    e.stopPropagation()
+                                                }
                                             >
                                                 <PopupHeader>
                                                     <h2>Booking Details</h2>
                                                     <CloseButton
-                                                        onClick={handlePopupClose}
+                                                        onClick={
+                                                            handlePopupClose
+                                                        }
                                                     >
                                                         ×
                                                     </CloseButton>
                                                 </PopupHeader>
                                                 <Form>
-                                                    {guestNames.map((guest, index) => (
-                                                        <GuestDetails key={index}>
-                                                            <FormItem>
-                                                                <label>
-                                                                    Guest {index + 1}{" "}
-                                                                    First Name:
-                                                                </label>
-                                                                <input
-                                                                    type="text"
-                                                                    value={
-                                                                        guest.firstName
-                                                                    }
-                                                                    onChange={(e) =>
-                                                                        handleGuestNameChange(
-                                                                            index,
-                                                                            "firstName",
-                                                                            e.target
-                                                                                .value
-                                                                        )
-                                                                    }
-                                                                />
-                                                            </FormItem>
-                                                            <FormItem>
-                                                                <label>
-                                                                    Guest {index + 1}{" "}
-                                                                    Last Name:
-                                                                </label>
-                                                                <input
-                                                                    type="text"
-                                                                    value={
-                                                                        guest.lastName
-                                                                    }
-                                                                    onChange={(e) =>
-                                                                        handleGuestNameChange(
-                                                                            index,
-                                                                            "lastName",
-                                                                            e.target
-                                                                                .value
-                                                                        )
-                                                                    }
-                                                                />
-                                                            </FormItem>
-                                                            <FormItem>
-                                                                <label>
-                                                                    Guest {index + 1}{" "}
-                                                                    Phone Number:
-                                                                </label>
-                                                                <input
-                                                                    type="text"
-                                                                    value={
-                                                                        guest.phoneNumber
-                                                                    }
-                                                                    onChange={(e) =>
-                                                                        handleGuestNameChange(
-                                                                            index,
-                                                                            "phoneNumber",
-                                                                            e.target
-                                                                                .value
-                                                                        )
-                                                                    }
-                                                                />
-                                                            </FormItem>
-                                                            {guestNames.length > 1 && (
-                                                                <RemoveGuestButton
-                                                                    type="button"
-                                                                    onClick={() =>
-                                                                        handleRemoveGuest(
-                                                                            index
-                                                                        )
-                                                                    }
-                                                                >
-                                                                    Remove Guest
-                                                                </RemoveGuestButton>
-                                                            )}
-                                                        </GuestDetails>
-                                                    ))}
+                                                    {guestNames.map(
+                                                        (guest, index) => (
+                                                            <GuestDetails
+                                                                key={index}
+                                                            >
+                                                                <FormItem>
+                                                                    <label>
+                                                                        Guest{" "}
+                                                                        {index +
+                                                                            1}{" "}
+                                                                        First
+                                                                        Name:
+                                                                    </label>
+                                                                    <input
+                                                                        type="text"
+                                                                        value={
+                                                                            guest.firstName
+                                                                        }
+                                                                        onChange={(
+                                                                            e
+                                                                        ) =>
+                                                                            handleGuestNameChange(
+                                                                                index,
+                                                                                "firstName",
+                                                                                e
+                                                                                    .target
+                                                                                    .value
+                                                                            )
+                                                                        }
+                                                                    />
+                                                                </FormItem>
+                                                                <FormItem>
+                                                                    <label>
+                                                                        Guest{" "}
+                                                                        {index +
+                                                                            1}{" "}
+                                                                        Last
+                                                                        Name:
+                                                                    </label>
+                                                                    <input
+                                                                        type="text"
+                                                                        value={
+                                                                            guest.lastName
+                                                                        }
+                                                                        onChange={(
+                                                                            e
+                                                                        ) =>
+                                                                            handleGuestNameChange(
+                                                                                index,
+                                                                                "lastName",
+                                                                                e
+                                                                                    .target
+                                                                                    .value
+                                                                            )
+                                                                        }
+                                                                    />
+                                                                </FormItem>
+                                                                <FormItem>
+                                                                    <label>
+                                                                        Guest{" "}
+                                                                        {index +
+                                                                            1}{" "}
+                                                                        Phone
+                                                                        Number:
+                                                                    </label>
+                                                                    <input
+                                                                        type="text"
+                                                                        value={
+                                                                            guest.phoneNumber
+                                                                        }
+                                                                        onChange={(
+                                                                            e
+                                                                        ) =>
+                                                                            handleGuestNameChange(
+                                                                                index,
+                                                                                "phoneNumber",
+                                                                                e
+                                                                                    .target
+                                                                                    .value
+                                                                            )
+                                                                        }
+                                                                    />
+                                                                </FormItem>
+                                                                {guestNames.length >
+                                                                    1 && (
+                                                                    <RemoveGuestButton
+                                                                        type="button"
+                                                                        onClick={() =>
+                                                                            handleRemoveGuest(
+                                                                                index
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        Remove
+                                                                        Guest
+                                                                    </RemoveGuestButton>
+                                                                )}
+                                                            </GuestDetails>
+                                                        )
+                                                    )}
                                                     <AddGuestButton
                                                         type="button"
                                                         onClick={handleAddGuest}
@@ -495,9 +565,15 @@ const HotelDetails = () => {
                                                                 Check-In Date:
                                                             </label>
                                                             <DatePicker
-                                                                selected={checkInDate}
-                                                                onChange={(date) =>
-                                                                    setCheckInDate(date)
+                                                                selected={
+                                                                    checkInDate
+                                                                }
+                                                                onChange={(
+                                                                    date
+                                                                ) =>
+                                                                    setCheckInDate(
+                                                                        date
+                                                                    )
                                                                 }
                                                                 placeholderText="Check-In"
                                                             />
@@ -508,8 +584,12 @@ const HotelDetails = () => {
                                                                 Check-Out Date:
                                                             </label>
                                                             <DatePicker
-                                                                selected={checkOutDate}
-                                                                onChange={(date) => {
+                                                                selected={
+                                                                    checkOutDate
+                                                                }
+                                                                onChange={(
+                                                                    date
+                                                                ) => {
                                                                     setCheckOutDate(
                                                                         date
                                                                     );
@@ -523,7 +603,9 @@ const HotelDetails = () => {
                                                         <p>{rooms || 0}</p>
                                                     </FormItem>
                                                     <FormItem className="self-center">
-                                                        <label>Final Price:</label>
+                                                        <label>
+                                                            Final Price:
+                                                        </label>
                                                         <p>₹ {amount || 0}</p>
                                                     </FormItem>
                                                     <PayButton
@@ -546,7 +628,12 @@ const HotelDetails = () => {
                                         name="half-rating"
                                         defaultValue={0}
                                         precision={0.5}
-                                        onChange={(e) => setComment({ ...comment, rating: e.target.value })}
+                                        onChange={(e) =>
+                                            setComment({
+                                                ...comment,
+                                                rating: e.target.value,
+                                            })
+                                        }
                                         value={comment.rating}
                                         size="large"
                                     />
@@ -554,7 +641,12 @@ const HotelDetails = () => {
                                 <input
                                     className="comment-input w-full md:flex-grow border-2 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all text-gray-700"
                                     type="text"
-                                    onChange={(e) => setComment({ ...comment, message: e.target.value })}
+                                    onChange={(e) =>
+                                        setComment({
+                                            ...comment,
+                                            message: e.target.value,
+                                        })
+                                    }
                                     value={comment.message}
                                     placeholder="Share your thoughts..."
                                 />
@@ -567,11 +659,19 @@ const HotelDetails = () => {
                             </div>
                             <div className="reviews-container space-y-4">
                                 {reviews?.map((review, index) => (
-                                    <div key={index} className="review-box flex items-start gap-4 p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-all">
-                                        <Avatar src={review.user.avatar} className="w-18 h-8 rounded-full" />
+                                    <div
+                                        key={index}
+                                        className="review-box flex items-start gap-4 p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-all"
+                                    >
+                                        <Avatar
+                                            src={review.user.avatar}
+                                            className="w-18 h-8 rounded-full"
+                                        />
                                         <div className="flex-grow">
                                             <div className="flex justify-between items-center mb-2">
-                                                <strong className="text-lg text-gray-800">{review.user.username}</strong>
+                                                <strong className="text-lg text-gray-800">
+                                                    {review.user.username}
+                                                </strong>
                                                 <Rating
                                                     name="half-rating-read"
                                                     className="read-only-rating"
@@ -582,23 +682,31 @@ const HotelDetails = () => {
                                                     size="small"
                                                 />
                                             </div>
-                                            <p className="comment-text text-gray-600 mb-2">{review.message}</p>
-                                            {user && user._id === review.user._id && (
-                                                <button
-                                                    onClick={() => handleDeleteReview(review._id)()}
-                                                    className="text-red-500 hover:text-red-700 transition-colors focus:outline-none"
-                                                >
-                                                    <MdDelete size={20} />
-                                                </button>
-                                            )}
+                                            <p className="comment-text text-gray-600 mb-2">
+                                                {review.message}
+                                            </p>
+                                            {user &&
+                                                user._id ===
+                                                    review.user._id && (
+                                                    <button
+                                                        onClick={() =>
+                                                            handleDeleteReview(
+                                                                review._id
+                                                            )()
+                                                        }
+                                                        className="text-red-500 hover:text-red-700 transition-colors focus:outline-none"
+                                                    >
+                                                        <MdDelete size={20} />
+                                                    </button>
+                                                )}
                                         </div>
                                     </div>
                                 ))}
                             </div>
                         </div>
                     </div>
-                </Wrapper >
-            </div >
+                </Wrapper>
+            </div>
         </>
     );
 };
@@ -757,7 +865,6 @@ const StyledRating = styled(Rating)`
     }
 `;
 
-
 const Features = styled.div`
     display: flex;
     justify-content: space-between;
@@ -771,10 +878,9 @@ const Features = styled.div`
         }
     }
 
-
-     @media (max-width: 768px) {
+    @media (max-width: 768px) {
         label {
-        font-size: 10px;
+            font-size: 10px;
         }
     }
 `;
@@ -864,7 +970,6 @@ const State = styled.div`
     color: #333;
 `;
 
-
 const Right = styled.div`
     flex: 1;
     display: flex;
@@ -916,13 +1021,11 @@ const DiscountedPrice = styled.span`
     color: #e57373;
 `;
 
-
 const ReviewsContainer = styled.div`
     display: flex;
     justify-content: center;
     width: 100%;
     margin-top: 20px;
-    
 `;
 
 const Reviews = styled.div`

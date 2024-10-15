@@ -148,7 +148,7 @@ const AdminDashboard = () => {
                 <h2 className="text-lg sm:text-2xl font-semibold text-center text-gray-800 pt-5">
                   Booking Overview
                 </h2>
-                <div className="px-2 sm:px-6 flex items-center justify-center">
+                <div className="px-2 xl:px-6 flex items-center justify-center ">
                   <PieActiveArc
                     data={[
                       { id: 0, value: pendingOrders, label: "Pending Bookings" },

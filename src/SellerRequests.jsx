@@ -3,19 +3,24 @@ import { useSelector } from "react-redux";
 import tick from "./assets/tick.png";
 import cross from "./assets/cross.png";
 import { Link } from "react-router-dom";
-import axios from "./utils/axios"
+import axios from "./utils/axios";
+import socket from "./utils/socket";
 
 const SellerRequests = () => {
     const [user, setUser] = useState(
         useSelector((state) => state.user.userData)
     );
-    const [orders, setOrders] = useState(user.receivedOrders.filter(order => order.approvalStatus == "in-progress"));
+    const [orders, setOrders] = useState(
+        user.receivedOrders.filter(
+            (order) => order.approvalStatus == "in-progress"
+        )
+    );
 
     const getDate = (date) => {
         const specificDate = new Date(date);
         return specificDate.toLocaleDateString("en-GB");
     };
-    
+
     const approveOrder = async (id, approvalStatus) => {
         try {
             await axios.post(
@@ -25,11 +30,29 @@ const SellerRequests = () => {
                     withCredentials: true,
                 }
             );
-            setOrders(user.receivedOrders.filter(order => order.approvalStatus == "in-progress"))
+            setOrders(
+                user.receivedOrders.filter(
+                    (order) => order.approvalStatus == "in-progress"
+                )
+            );
         } catch (error) {
             console.log(error);
         }
-    }
+    };
+
+    useEffect(() => {
+        socket.on("order_approved_or_rejected", (data) => {
+            setOrders(
+                user.receivedOrders.filter(
+                    (order) => order._id != data.order._id
+                )
+            );
+        });
+
+        return () => {
+            socket.off("new-hotel");
+        };
+    }, []);
     return (
         <div className="mt-10 px-4 sm:px-6 lg:px-8">
             <div className="overflow-x-auto">
@@ -80,7 +103,8 @@ const SellerRequests = () => {
                                             {order.rooms}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            ₹ {order.amount - 0.05 * order.amount}
+                                            ₹{" "}
+                                            {order.amount - 0.05 * order.amount}
                                         </td>
                                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                             <div className="flex justify-center gap-2">
@@ -88,13 +112,23 @@ const SellerRequests = () => {
                                                     src={tick}
                                                     alt="approve"
                                                     className="w-6 h-6 cursor-pointer"
-                                                    onClick={() => approveOrder(order._id, "confirmed")}
+                                                    onClick={() =>
+                                                        approveOrder(
+                                                            order._id,
+                                                            "confirmed"
+                                                        )
+                                                    }
                                                 />
                                                 <img
                                                     src={cross}
                                                     alt="reject"
                                                     className="w-6 h-6 cursor-pointer"
-                                                    onClick={() => approveOrder(order._id, "cancelled")}
+                                                    onClick={() =>
+                                                        approveOrder(
+                                                            order._id,
+                                                            "cancelled"
+                                                        )
+                                                    }
                                                 />
                                             </div>
                                         </td>

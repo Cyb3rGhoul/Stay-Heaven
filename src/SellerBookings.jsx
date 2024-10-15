@@ -1,4 +1,4 @@
-import axios from "./utils/axios"
+import axios from "./utils/axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -169,7 +169,16 @@ const SellerBookings = () => {
                                     </button>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                    <span
+                                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                                            order.approvalStatus === "confirmed"
+                                                ? "bg-green-100 text-green-800"
+                                                : order.approvalStatus ===
+                                                  "in-progress"
+                                                ? "bg-yellow-100 text-yellow-800"
+                                                : "bg-red-100 text-red-800"
+                                        }`}
+                                    >
                                         {order.approvalStatus}
                                     </span>
                                 </td>
