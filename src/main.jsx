@@ -67,6 +67,10 @@ const router = createBrowserRouter([
                 element: <PreviousBookings />,
             },
             {
+                path: "/sellerForm",
+                element: <SellerFormPage />,
+            },
+            {
                 path: "*",
                 element: <Notfound />,
             },

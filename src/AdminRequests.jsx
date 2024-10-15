@@ -74,7 +74,7 @@ const AdminRequests = () => {
                                         <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{index + 1}</td>
                                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{hotel.title}</td>
                                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{hotel.owner.username}</td>
-                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">₹ {hotel.price}</td>
+                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">₹ {typeof hotel.price === 'number' ? hotel.price.toLocaleString('en-IN') : "N/A"}</td>
                                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{hotel.city}</td>
                                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                             <div className="flex justify-start gap-2">

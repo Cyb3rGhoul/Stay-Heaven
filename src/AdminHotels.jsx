@@ -193,7 +193,7 @@ const AdminHotels = () => {
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{index + 1}</td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{hotel.title}</td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{hotel.owner.username}</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">₹ {hotel.price}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">₹ {typeof hotel.price === 'number' ? hotel.price.toLocaleString('en-IN') : "N/A"}</td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{hotel.city}</td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{hotel.state}</td>
                                 <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">

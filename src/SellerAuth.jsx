@@ -23,15 +23,23 @@ const SellerFormPage = () => {
             <Input type="text" required />
             <Label>Address</Label>
           </InputField>
-          <div className="mb-4">
-            <label className="block text-gray-700">Upload Aadhar Card (Images)</label>
+          <div className="mb-1">
+            <label className="block text-gray-700">Upload Aadhar Card (Image/PDF)</label>
             <input
               type="file"
-              accept=".jpg, .jpeg, .png"
+              accept=".jpg, .jpeg, .png, .pdf"
               className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
             />
           </div>
-          <div className="mb-4">
+          <div className="mb-1">
+            <label className="block text-gray-700">Pan Card (Image/PDF)</label>
+            <input
+              type="file"
+              accept=".jpg, .jpeg, .png, .pdf"
+              className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
+            />
+          </div>
+          <div className="mb-1">
             <label className="block text-gray-700">Upload Property Paper (Images)</label>
             <input
               type="file"
@@ -50,6 +58,7 @@ const SellerFormPage = () => {
 export default SellerFormPage;
 
 const Container = styled.div`
+  margin-top: 40px;
   min-height: 100vh;
   display: flex;
   align-items: center;

@@ -139,6 +139,11 @@ const Navbar = () => {
                                     <div>Seller Dashboard</div>
                                 </Link>
                             )}
+                            {isSeller && !isBan && (
+                                <Link to="/sellerForm">
+                                    <div>Become a Seller</div>
+                                </Link>
+                            )}
                             <div
                                 onClick={logouthandler}
                                 style={{

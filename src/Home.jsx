@@ -81,6 +81,21 @@ const Landing = () => {
         },
     ];
 
+    const StarRating = ({ value }) => {
+        return (
+            <div className="flex items-center">
+                {[1, 2, 3, 4, 5].map((star) => (
+                    <span
+                        key={star}
+                        className={`text-xl ${star <= value ? 'text-yellow-400' : 'text-gray-300'}`}
+                    >
+                        ★
+                    </span>
+                ))}
+            </div>
+        );
+    };
+
     const internationalCities = [
         { name: "Nagpur" },
         { name: "Bhopal" },
@@ -157,7 +172,6 @@ const Landing = () => {
                 <div className="landing__grid-container">
                     <div className="landing__grid">
                         {hotels.map((hotel) => {
-                            // Generate a random number between 1 and 5 for stars
                             const randomStars = Math.floor(Math.random() * 5) + 1;
 
                             return (
@@ -174,20 +188,17 @@ const Landing = () => {
                                     <div className="landing__grid-item-content flex flex-col gap-1">
                                         <div className="flex justify-between items-center">
                                             <div className="text-lg font-bold">{hotel.title}</div>
-                                            <div className="flex items-center gap-1">
-                                                {Array.from({ length: randomStars }).map((_, index) => (
-                                                    <span key={index}>&#9733;</span> // Star symbol (filled star)
-                                                ))}
-                                            </div>
+                                            <StarRating value={randomStars} />
                                         </div>
-                                        <div className="text-left">₹ {typeof hotel.price === 'number' ? hotel.price.toLocaleString('en-IN') : "N/A"}</div>
+                                        <div className="text-left">
+                                            ₹ {typeof hotel.price === 'number' ? hotel.price.toLocaleString('en-IN') : "N/A"}
+                                        </div>
                                     </div>
                                 </div>
                             );
                         })}
                     </div>
                 </div>
-
             </div>
             {showAllCities && (
                 <div className="landing__modal">
