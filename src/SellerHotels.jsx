@@ -108,7 +108,7 @@ const SellerHotels = () => {
                                         {hotel.title}
                                     </td>
                                     <td className="text-center">
-                                        ₹ {hotel.price}
+                                        ₹ {typeof hotel.price === 'number' ? hotel.price.toLocaleString('en-IN') : "N/A"}
                                     </td>
                                     <td className="text-center">
                                         {hotel.city}

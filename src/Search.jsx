@@ -109,7 +109,7 @@ const Search = () => {
                                     />
                                     <div className="result-card-content">
                                         <h3>{hotel.title}</h3>
-                                        <p>₹ {hotel.price}</p>
+                                        <p>₹ {typeof hotel.price === 'number' ? hotel.price.toLocaleString('en-IN') : "N/A"}</p>
                                         <button
                                             className="result-card-button"
                                             // onClick={() =>
