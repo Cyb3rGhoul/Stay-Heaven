@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser as setUserRedux } from "./app/reducers/userSlice";
 import tick from "./assets/tick.png";
 import cross from "./assets/cross.png";
 import { Link } from "react-router-dom";
@@ -8,8 +9,11 @@ import socket from "./utils/socket";
 
 const SellerRequests = () => {
     const [user, setUser] = useState(
-        useSelector((state) => state.user.userData)
+        useSelector((state) => {
+            return state.user.userData;
+        })
     );
+    const dispatch = useDispatch();
     const [orders, setOrders] = useState(
         user.receivedOrders.filter(
             (order) => order.approvalStatus == "in-progress"
@@ -30,29 +34,29 @@ const SellerRequests = () => {
                     withCredentials: true,
                 }
             );
-            setOrders(
-                user.receivedOrders.filter(
-                    (order) => order.approvalStatus == "in-progress"
-                )
-            );
+            setOrders((prev) => prev.filter((order) => order._id != id));
+
+            setUser((prev) => {
+                const updatedUser = {
+                    ...prev,
+                    receivedOrders: prev.receivedOrders.map((order) =>
+                        order._id === id
+                            ? { ...order, approvalStatus: approvalStatus }
+                            : order
+                    ),
+                };
+    
+                dispatch(setUserRedux(updatedUser));
+    
+                return updatedUser;
+            });
+            
         } catch (error) {
             console.log(error);
         }
     };
 
-    useEffect(() => {
-        socket.on("order_approved_or_rejected", (data) => {
-            setOrders(
-                user.receivedOrders.filter(
-                    (order) => order._id != data.order._id
-                )
-            );
-        });
-
-        return () => {
-            socket.off("new-hotel");
-        };
-    }, []);
+    useEffect(() => {}, []);
     return (
         <div className="mt-10 px-4 sm:px-6 lg:px-8">
             <div className="overflow-x-auto">

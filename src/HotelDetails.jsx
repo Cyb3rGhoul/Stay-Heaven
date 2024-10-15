@@ -173,6 +173,11 @@ const HotelDetails = () => {
 
     const handlePopupClose = () => {
         setShowPopup(false);
+        setCheckInDate(null);
+        setCheckOutDate(null);
+        setGuestNames([{}]);
+        setRooms(0);
+        setAmount(0);
     };
 
     const handleBookClick = () => {
