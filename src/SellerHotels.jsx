@@ -11,8 +11,15 @@ const SellerHotels = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [orders, setOrders] = useState(null);
     const [revenue, setRevenue] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
     const [selectedHotel, setSelectedHotel] = useState(null);
     const [isEditOpen, setIsEditOpen] = useState(false);
+    const [sort, setSort] = useState(null);
+    const [approvalStatus, setApprovalStatus] = useState(null);
+    
+    const deleteRequest = async () => {
+
+    }
 
     const popup = () => {
         setIsOpen((prev) => !prev);
@@ -23,56 +30,57 @@ const SellerHotels = () => {
         const formData = new FormData(e.target);
         const sort = formData.get("sort");
         const approvalStatus = formData.get("ApprovalStatus");
-        console.log("hi");
-        const filters = { sort, approvalStatus };
-        console.log(filters);
         const type = sort?.split("-")[0];
         const order = sort?.split("-")[1];
-
+        setFilteredHotels(hotels);
         if (!sort && !approvalStatus) {
             setFilteredHotels(hotels);
         }
 
         if (type === "p") {
             if (order[0] == "l")
-                setFilteredHotels(() =>
-                    filteredHotels.sort((a, b) => a.price - b.price)
+                setFilteredHotels((prev) =>
+                    prev.sort((a, b) => a.price - b.price)
                 );
             else
-                setFilteredHotels(() =>
-                    filteredHotels.sort((a, b) => b.price - a.price)
+                setFilteredHotels((prev) =>
+                    prev.sort((a, b) => b.price - a.price)
                 );
         } else if (type == "r") {
             if (order[0] == "l")
-                setFilteredHotels(() =>
-                    filteredHotels.sort((a, b) => a.revenue - b.revenue)
+                setFilteredHotels((prev) =>
+                    prev.sort((a, b) => a.revenue - b.revenue)
                 );
             else
-                setFilteredHotels(() =>
-                    filteredHotels.sort((a, b) => b.revenue - a.revenue)
+                setFilteredHotels((prev) =>
+                    prev.sort((a, b) => b.revenue - a.revenue)
                 );
         }
 
         if (approvalStatus == "approved") {
-            setFilteredHotels(() =>
-                filteredHotels.filter(
+            setFilteredHotels((prev) =>
+                prev.filter(
                     (hotel) => hotel.approvalStatus === "approved"
                 )
             );
         } else if (approvalStatus == "rejected") {
-            setFilteredHotels(() =>
-                filteredHotels.filter(
+            setFilteredHotels((prev) =>
+                prev.filter(
                     (hotel) => hotel.approvalStatus === "rejected"
                 )
             );
         }
+
+        setIsOpen(prev => !prev)
     };
 
     const reset = () => {
         document.querySelectorAll('input[type="radio"]').forEach((radio) => {
             radio.checked = false;
         });
-        setFilteredHotels(hotels);
+        setFilteredHotels((prev) => hotels);
+        setSort(null)
+        setApprovalStatus(null)
     };
 
     const getAllSellerHotels = async () => {
@@ -125,13 +133,33 @@ const SellerHotels = () => {
             {(selectedHotel || isEditOpen) && (
                 <Edit selectedHotel={selectedHotel} EditPopup={EditPopup} />
             )}
-            <div className="mb-6">
+            <div className="mb-6 flex justify-between">
                 <button
                     onClick={popup}
                     className="btn text-white bg-emerald-600 hover:bg-emerald-700 transition-colors duration-300 shadow-md"
                 >
                     Apply Filters
                 </button>
+                <label className="input input-bordered flex items-center gap-2 mr-6">
+                    <input
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        type="text"
+                        className="grow"
+                        placeholder="Search"
+                    />
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 16 16"
+                        fill="currentColor"
+                        className="h-4 w-4 opacity-70"
+                    >
+                        <path
+                            fillRule="evenodd"
+                            d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+                            clipRule="evenodd"
+                        />
+                    </svg>
+                </label>
             </div>
             {isOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 transition-opacity duration-300 ease-in-out">
@@ -153,11 +181,13 @@ const SellerHotels = () => {
                                     Sort By
                                 </h3>
                                 <div className="space-y-2">
-                                    <label className="inline-flex items-center">
+                                    <label className="inline-flex items-center mr-2">
                                         <input
                                             type="radio"
                                             name="sort"
                                             value="p-lowToHigh"
+                                            checked={sort === "p-lowToHigh"}
+                                            onChange={(e) => setSort(e.target.value)}
                                             className="form-radio text-emerald-600"
                                         />
                                         <span className="ml-2">
@@ -169,6 +199,8 @@ const SellerHotels = () => {
                                             type="radio"
                                             name="sort"
                                             value="p-highToLow"
+                                            checked={sort === "p-highToLow"}
+                                            onChange={(e) => setSort(e.target.value)}
                                             className="form-radio text-emerald-600"
                                         />
                                         <span className="ml-2">
@@ -179,11 +211,13 @@ const SellerHotels = () => {
                             </div>
                             <div className="space-y-4">
                                 <div className="space-y-2">
-                                    <label className="inline-flex items-center">
+                                    <label className="inline-flex items-center mr-2">
                                         <input
                                             type="radio"
                                             name="sort"
                                             value="r-lowToHigh"
+                                            checked={sort === "r-lowToHigh"}
+                                            onChange={(e) => setSort(e.target.value)}
                                             className="form-radio text-emerald-600"
                                         />
                                         <span className="ml-2">
@@ -195,6 +229,8 @@ const SellerHotels = () => {
                                             type="radio"
                                             name="sort"
                                             value="r-highToLow"
+                                            checked={sort === "r-highToLow"}
+                                            onChange={(e) => setSort(e.target.value)}
                                             className="form-radio text-emerald-600"
                                         />
                                         <span className="ml-2">
@@ -208,11 +244,13 @@ const SellerHotels = () => {
                                     Approval Status
                                 </h3>
                                 <div className="space-y-2">
-                                    <label className="inline-flex items-center">
+                                    <label className="inline-flex items-center mr-2">
                                         <input
                                             type="radio"
                                             name="ApprovalStatus"
                                             value="approved"
+                                            checked={approvalStatus === "approved"}
+                                            onChange={(e) => setApprovalStatus(e.target.value)}
                                             className="form-radio text-emerald-600"
                                         />
                                         <span className="ml-2">Approved</span>
@@ -222,6 +260,8 @@ const SellerHotels = () => {
                                             type="radio"
                                             name="ApprovalStatus"
                                             value="rejected"
+                                            checked={approvalStatus === "rejected"}
+                                            onChange={(e) => setApprovalStatus(e.target.value)}
                                             className="form-radio text-emerald-600"
                                         />
                                         <span className="ml-2">Rejected</span>
@@ -260,77 +300,102 @@ const SellerHotels = () => {
                             <th className="text-center">Details</th>
                             <th className="text-center">Document</th>
                             <th className="text-center">Status</th>
+                            <th className="text-center">Delete</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {filteredHotels.map((hotel, index) => {
-                            return (
-                                <tr key={hotel._id}>
-                                    <th>{index + 1}</th>
-                                    <td className="text-center">
-                                        {hotel.title}
-                                    </td>
-                                    <td className="text-center">
-                                        ₹{" "}
-                                        {typeof hotel.price === "number"
-                                            ? hotel.price.toLocaleString(
-                                                  "en-IN"
-                                              )
-                                            : "N/A"}
-                                    </td>
-                                    <td className="text-center">
-                                        {hotel.city}
-                                    </td>
-                                    <td className="text-center">
-                                        {hotel.state}
-                                    </td>
-                                    <td className="text-center">
-                                        {typeof hotel.revenue === "number"
-                                            ? hotel.revenue.toLocaleString(
-                                                  "en-IN"
-                                              )
-                                            : "N/A"}
-                                    </td>
-                                    <td className="text-center flex justify-center ">
-                                        <button
-                                            onClick={() => {
-                                                setSelectedHotel(hotel);
-                                                setIsEditOpen();
-                                            }}
-                                            className="btn bg-zinc-200"
-                                        >
-                                            Edit
-                                        </button>
-                                    </td>
-                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                        <Link
-                                            target="_blank"
-                                            to={`${hotel.pdf}`}
-                                        >
-                                            <button className="px-3 py-1 bg-zinc-200 rounded-md hover:bg-zinc-300 transition-colors">
-                                                Document
+                        {filteredHotels
+                            .filter((item) => {
+                                return searchTerm.toLowerCase() === ""
+                                    ? item
+                                    : item.title
+                                          .toLowerCase()
+                                          .includes(searchTerm.toLowerCase()) ||
+                                          item.city
+                                              .toLowerCase()
+                                              .includes(
+                                                  searchTerm.toLowerCase()
+                                              ) ||
+                                          item.state
+                                              .toLowerCase()
+                                              .includes(
+                                                  searchTerm.toLowerCase()
+                                              );
+                            })
+                            .map((hotel, index) => {
+                                return (
+                                    <tr key={hotel._id}>
+                                        <th>{index + 1}</th>
+                                        <td className="text-center">
+                                            {hotel.title}
+                                        </td>
+                                        <td className="text-center">
+                                            ₹{" "}
+                                            {typeof hotel.price === "number"
+                                                ? hotel.price.toLocaleString(
+                                                      "en-IN"
+                                                  )
+                                                : "N/A"}
+                                        </td>
+                                        <td className="text-center">
+                                            {hotel.city}
+                                        </td>
+                                        <td className="text-center">
+                                            {hotel.state}
+                                        </td>
+                                        <td className="text-center">
+                                            {typeof hotel.revenue === "number"
+                                                ? hotel.revenue.toLocaleString(
+                                                      "en-IN"
+                                                  )
+                                                : "N/A"}
+                                        </td>
+                                        <td className="text-center flex justify-center ">
+                                            <button
+                                                onClick={() => {
+                                                    setSelectedHotel(hotel);
+                                                    setIsEditOpen();
+                                                }}
+                                                className="btn bg-zinc-200"
+                                            >
+                                                Edit
                                             </button>
-                                        </Link>
-                                    </td>
-                                    <td className="text-center">
-                                        {hotel.approvalStatus === "approved" ? (
-                                            <button className="btn bg-green-500 text-white hover:bg-white hover:border-green-500 hover:border-2 hover:text-black transition-all duration-500">
-                                                Approved
+                                        </td>
+                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                            <Link
+                                                target="_blank"
+                                                to={`${hotel.pdf}`}
+                                            >
+                                                <button className="px-3 py-1 bg-zinc-200 rounded-md hover:bg-zinc-300 transition-colors">
+                                                    Document
+                                                </button>
+                                            </Link>
+                                        </td>
+                                        <td className="text-center">
+                                            {hotel.approvalStatus ===
+                                            "approved" ? (
+                                                <button className="btn bg-green-500 text-white hover:bg-white hover:border-green-500 hover:border-2 hover:text-black transition-all duration-500">
+                                                    Approved
+                                                </button>
+                                            ) : hotel.approvalStatus ===
+                                              "pending" ? (
+                                                <button className="btn bg-yellow-500 text-white">
+                                                    Pending
+                                                </button>
+                                            ) : (
+                                                <button className="btn bg-red-500 text-white">
+                                                    Rejected
+                                                </button>
+                                            )}
+                                        </td>
+                                        <td>
+                                            <button onClick={() => deleteRequest(hotel._id)} className="btn bg-red-500 text-white">
+                                                Request Delete
                                             </button>
-                                        ) : hotel.approvalStatus ===
-                                          "pending" ? (
-                                            <button className="btn bg-yellow-500 text-white">
-                                                Pending
-                                            </button>
-                                        ) : (
-                                            <button className="btn bg-red-500 text-white">
-                                                Rejected
-                                            </button>
-                                        )}
-                                    </td>
-                                </tr>
-                            );
-                        })}
+                                        </td>
+                                    </tr>
+                                );
+                            })}
                     </tbody>
                 </table>
             </div>

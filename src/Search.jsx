@@ -18,7 +18,7 @@ import { useSelector } from "react-redux";
 const Search = () => {
     const navigate = useNavigate();
     const [filterOpen, setFilterOpen] = useState(false);
-    const [priceRange, setPriceRange] = useState([1000, 50000]);
+    const [priceRange, setPriceRange] = useState([0, 50000]);
     const [sortOption, setSortOption] = useState(null);
     const [search, setSearch] = useState(useSelector(state => state.user.searchTerm));
     const [hotels, setHotels] = useState([]);
@@ -63,7 +63,6 @@ const Search = () => {
         const response = await axios.post(
             `/hotel/search?${queryParams}${searchParam}`
         );
-        console.log(response.data.data.hotels);
         setHotels(response.data.data.hotels);
     };
     const ResetHandler = () => {
@@ -75,7 +74,7 @@ const Search = () => {
             kitchen: false,
             gym: false,
         });
-        setPriceRange([1000, 50000]);
+        setPriceRange([0, 50000]);
         setSortOption(null);
         setSearch("");
     };
@@ -136,7 +135,7 @@ const Search = () => {
                                 thumbClassName="example-thumb"
                                 trackClassName="example-track"
                                 value={priceRange}
-                                min={1000}
+                                min={0}
                                 max={50000}
                                 step={1000}
                                 onChange={(value) => setPriceRange(value)}

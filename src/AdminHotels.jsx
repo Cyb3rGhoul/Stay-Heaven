@@ -7,6 +7,9 @@ const AdminHotels = () => {
     const [hotels, setHotels] = useState([]);
     const [filteredHotels, setFilteredHotels] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [sort, setSort] = useState(null);
+    const [approvalStatus, setApprovalStatus] = useState(null);
 
     const popup = () => {
         setIsOpen((prev) => !prev);
@@ -47,49 +50,44 @@ const AdminHotels = () => {
         const formData = new FormData(e.target);
         const sort = formData.get("sort");
         const approvalStatus = formData.get("ApprovalStatus");
-        console.log("hi");
-        const filters = { sort, approvalStatus };
-        console.log(filters);
         const type = sort?.split("-")[0];
         const order = sort?.split("-")[1];
-
+        setFilteredHotels(hotels);
         if (!sort && !approvalStatus) {
             setFilteredHotels(hotels);
         }
 
         if (type === "p") {
             if (order[0] == "l")
-                setFilteredHotels(() =>
-                    filteredHotels.sort((a, b) => a.price - b.price)
+                setFilteredHotels((prev) =>
+                    prev.sort((a, b) => a.price - b.price)
                 );
             else
-                setFilteredHotels(() =>
-                    filteredHotels.sort((a, b) => b.price - a.price)
+                setFilteredHotels((prev) =>
+                    prev.sort((a, b) => b.price - a.price)
                 );
         } else if (type == "r") {
             if (order[0] == "l")
-                setFilteredHotels(() =>
-                    filteredHotels.sort((a, b) => a.revenue - b.revenue)
+                setFilteredHotels((prev) =>
+                    prev.sort((a, b) => a.revenue - b.revenue)
                 );
             else
-                setFilteredHotels(() =>
-                    filteredHotels.sort((a, b) => b.revenue - a.revenue)
+                setFilteredHotels((prev) =>
+                    prev.sort((a, b) => b.revenue - a.revenue)
                 );
         }
 
         if (approvalStatus == "approved") {
-            setFilteredHotels(() =>
-                filteredHotels.filter(
-                    (hotel) => hotel.approvalStatus === "approved"
-                )
+            setFilteredHotels((prev) =>
+                prev.filter((hotel) => hotel.approvalStatus === "approved")
             );
         } else if (approvalStatus == "rejected") {
-            setFilteredHotels(() =>
-                filteredHotels.filter(
-                    (hotel) => hotel.approvalStatus === "rejected"
-                )
+            setFilteredHotels((prev) =>
+                prev.filter((hotel) => hotel.approvalStatus === "rejected")
             );
         }
+
+        setIsOpen(prev => !prev)
     };
 
     const reset = () => {
@@ -97,6 +95,8 @@ const AdminHotels = () => {
             radio.checked = false;
         });
         setFilteredHotels(hotels);
+        setSort(null)
+        setApprovalStatus(null)
     };
 
     useEffect(() => {
@@ -113,13 +113,33 @@ const AdminHotels = () => {
 
     return (
         <div className="mt-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="mb-6">
+            <div className="mb-6 flex justify-between">
                 <button
                     onClick={popup}
                     className="btn text-white bg-emerald-600 hover:bg-emerald-700 transition-colors duration-300 shadow-md"
                 >
                     Apply Filters
                 </button>
+                <label className="input input-bordered flex items-center gap-2 mr-6">
+                    <input
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        type="text"
+                        className="grow"
+                        placeholder="Search"
+                    />
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 16 16"
+                        fill="currentColor"
+                        className="h-4 w-4 opacity-70"
+                    >
+                        <path
+                            fillRule="evenodd"
+                            d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+                            clipRule="evenodd"
+                        />
+                    </svg>
+                </label>
             </div>
             {isOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 transition-opacity duration-300 ease-in-out">
@@ -141,11 +161,13 @@ const AdminHotels = () => {
                                     Sort By
                                 </h3>
                                 <div className="space-y-2">
-                                    <label className="inline-flex items-center">
+                                    <label className="inline-flex items-center mr-2">
                                         <input
                                             type="radio"
                                             name="sort"
                                             value="p-lowToHigh"
+                                            checked={sort === "p-lowToHigh"}
+                                            onChange={(e) => setSort(e.target.value)}
                                             className="form-radio text-emerald-600"
                                         />
                                         <span className="ml-2">
@@ -157,6 +179,8 @@ const AdminHotels = () => {
                                             type="radio"
                                             name="sort"
                                             value="p-highToLow"
+                                            checked={sort === "p-highToLow"}
+                                            onChange={(e) => setSort(e.target.value)}
                                             className="form-radio text-emerald-600"
                                         />
                                         <span className="ml-2">
@@ -167,11 +191,13 @@ const AdminHotels = () => {
                             </div>
                             <div className="space-y-4">
                                 <div className="space-y-2">
-                                    <label className="inline-flex items-center">
+                                    <label className="inline-flex items-center mr-2">
                                         <input
                                             type="radio"
                                             name="sort"
                                             value="r-lowToHigh"
+                                            checked={sort === "r-lowToHigh"}
+                                            onChange={(e) => setSort(e.target.value)}
                                             className="form-radio text-emerald-600"
                                         />
                                         <span className="ml-2">
@@ -183,6 +209,8 @@ const AdminHotels = () => {
                                             type="radio"
                                             name="sort"
                                             value="r-highToLow"
+                                            checked={sort === "r-highToLow"}
+                                            onChange={(e) => setSort(e.target.value)}
                                             className="form-radio text-emerald-600"
                                         />
                                         <span className="ml-2">
@@ -196,11 +224,13 @@ const AdminHotels = () => {
                                     Approval Status
                                 </h3>
                                 <div className="space-y-2">
-                                    <label className="inline-flex items-center">
+                                    <label className="inline-flex items-center mr-2">
                                         <input
                                             type="radio"
                                             name="ApprovalStatus"
                                             value="approved"
+                                            checked={approvalStatus === "approved"}
+                                            onChange={(e) => setApprovalStatus(e.target.value)}
                                             className="form-radio text-emerald-600"
                                         />
                                         <span className="ml-2">Approved</span>
@@ -210,6 +240,8 @@ const AdminHotels = () => {
                                             type="radio"
                                             name="ApprovalStatus"
                                             value="rejected"
+                                            checked={approvalStatus === "rejected"}
+                                            onChange={(e) => setApprovalStatus(e.target.value)}
                                             className="form-radio text-emerald-600"
                                         />
                                         <span className="ml-2">Rejected</span>
@@ -263,85 +295,115 @@ const AdminHotels = () => {
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                        {filteredHotels.map((hotel, index) => (
-                            <tr
-                                key={hotel._id}
-                                className="hover:bg-emerald-50 transition-colors duration-300"
-                            >
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {index + 1}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                    {hotel.title}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {hotel.owner.username}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    ₹{" "}
-                                    {typeof hotel.price === "number"
-                                        ? hotel.price.toLocaleString("en-IN")
-                                        : "N/A"}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    ₹{" "}
-                                    {typeof hotel.revenue === "number"
-                                        ? hotel.revenue.toLocaleString("en-IN")
-                                        : "N/A"}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {hotel.city}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {hotel.state}
-                                </td>
-                                <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                    <Link target="_blank" to={`${hotel.pdf}`}>
-                                        <button className="px-3 py-1 bg-zinc-200 rounded-md hover:bg-zinc-300 transition-colors">
-                                            Document
-                                        </button>
-                                    </Link>
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    <select
-                                        className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"
-                                        value={hotel.approvalStatus}
-                                        onChange={(e) => {
-                                            approveHotel(
-                                                hotel._id,
-                                                e.target.value
-                                            );
-                                            setHotels((prev) =>
-                                                prev.map((h) =>
-                                                    h._id === hotel._id
-                                                        ? {
-                                                              ...h,
-                                                              approvalStatus:
-                                                                  e.target
-                                                                      .value,
-                                                          }
-                                                        : h
-                                                )
-                                            );
-                                        }}
-                                    >
-                                        <option value="approved">
-                                            Approved
-                                        </option>
-                                        <option value="rejected">
-                                            Rejected
-                                        </option>
-                                    </select>
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                    <Link to={`/hotel/${hotel._id}`}>
-                                        <button className="bg-emerald-100 text-emerald-700 px-4 py-2 rounded-md hover:bg-emerald-200 transition-colors duration-300">
-                                            More
-                                        </button>
-                                    </Link>
-                                </td>
-                            </tr>
-                        ))}
+                        {filteredHotels
+                            .filter((item) => {
+                                return searchTerm.toLowerCase() === ""
+                                    ? item
+                                    : item.title
+                                          .toLowerCase()
+                                          .includes(searchTerm.toLowerCase()) ||
+                                          item.city
+                                              .toLowerCase()
+                                              .includes(
+                                                  searchTerm.toLowerCase()
+                                              ) ||
+                                          item.state
+                                              .toLowerCase()
+                                              .includes(
+                                                  searchTerm.toLowerCase()
+                                              ) ||
+                                              item.owner.username
+                                                  .toLowerCase()
+                                                  .includes(
+                                                      searchTerm.toLowerCase()
+                                                  );
+                            })
+                            .map((hotel, index) => (
+                                <tr
+                                    key={hotel._id}
+                                    className="hover:bg-emerald-50 transition-colors duration-300"
+                                >
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {index + 1}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        {hotel.title}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {hotel.owner.username}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        ₹{" "}
+                                        {typeof hotel.price === "number"
+                                            ? hotel.price.toLocaleString(
+                                                  "en-IN"
+                                              )
+                                            : "N/A"}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        ₹{" "}
+                                        {typeof hotel.revenue === "number"
+                                            ? hotel.revenue.toLocaleString(
+                                                  "en-IN"
+                                              )
+                                            : "N/A"}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {hotel.city}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {hotel.state}
+                                    </td>
+                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                        <Link
+                                            target="_blank"
+                                            to={`${hotel.pdf}`}
+                                        >
+                                            <button className="px-3 py-1 bg-zinc-200 rounded-md hover:bg-zinc-300 transition-colors">
+                                                Document
+                                            </button>
+                                        </Link>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <select
+                                            className="block w-fit py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"
+                                            value={hotel.approvalStatus}
+                                            onChange={(e) => {
+                                                approveHotel(
+                                                    hotel._id,
+                                                    e.target.value
+                                                );
+                                                setHotels((prev) =>
+                                                    prev.map((h) =>
+                                                        h._id === hotel._id
+                                                            ? {
+                                                                  ...h,
+                                                                  approvalStatus:
+                                                                      e.target
+                                                                          .value,
+                                                              }
+                                                            : h
+                                                    )
+                                                );
+                                            }}
+                                        >
+                                            <option value="approved">
+                                                Approved
+                                            </option>
+                                            <option value="rejected">
+                                                Rejected
+                                            </option>
+                                        </select>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                        <Link to={`/hotel/${hotel._id}`}>
+                                            <button className="bg-emerald-100 text-emerald-700 px-4 py-2 rounded-md hover:bg-emerald-200 transition-colors duration-300">
+                                                More
+                                            </button>
+                                        </Link>
+                                    </td>
+                                </tr>
+                            ))}
                     </tbody>
                 </table>
             </div>

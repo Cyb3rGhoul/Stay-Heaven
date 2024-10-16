@@ -23,6 +23,11 @@ const SignUp = () => {
       return;
     }
 
+    if (/\s/.test(username) || /\s/.test(password)) {
+      alert("Username and password should not contain spaces.");
+      return;
+    }
+
     if(phone.length != 10){
       alert("Invalid phone number");
       return;

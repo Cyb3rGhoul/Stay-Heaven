@@ -79,7 +79,6 @@ const AdminDashboard = () => {
                     (order) => order.approvalStatus === "cancelled"
                 ).length
             );
-            console.log(response.data.data);
         } catch (error) {
             console.log(error);
         }

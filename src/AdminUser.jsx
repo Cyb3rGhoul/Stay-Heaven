@@ -10,6 +10,10 @@ const AdminUser = () => {
     const [createdhotel, setCreatedHotel] = useState(false);
     const [pastbookings, setPastbookings] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [isAdmin, setIsAdmin] = useState(null);
+    const [isSeller, setIsSeller] = useState(null);
+    const [isBan, setIsBan] = useState(null);
     const navigate = useNavigate();
 
     const popup = () => {
@@ -35,6 +39,8 @@ const AdminUser = () => {
                     (!isSeller || user.isCreator === (isSeller === "true"))
             )
         );
+
+        setIsOpen(prev => !prev)
     };
 
     const reset = () => {
@@ -42,6 +48,9 @@ const AdminUser = () => {
             radio.checked = false;
         });
         setFilteredUsers(users);
+        setIsAdmin(null)
+        setIsBan(null)
+        setIsSeller(null)
     };
 
     const makeAdmin = async (id) => {
@@ -315,13 +324,33 @@ const AdminUser = () => {
                     )}
                 </div>
             )}
-            <div className="mb-6">
+            <div className="mb-6 flex justify-between">
                 <button
                     onClick={popup}
                     className="btn text-white bg-emerald-600 hover:bg-emerald-700 transition-colors duration-300 shadow-md"
                 >
                     Apply Filters
                 </button>
+                <label className="input input-bordered flex items-center gap-2 mr-6">
+                    <input
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        type="text"
+                        className="grow"
+                        placeholder="Search"
+                    />
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 16 16"
+                        fill="currentColor"
+                        className="h-4 w-4 opacity-70"
+                    >
+                        <path
+                            fillRule="evenodd"
+                            d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+                            clipRule="evenodd"
+                        />
+                    </svg>
+                </label>
             </div>
             {isOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 transition-opacity duration-300 ease-in-out">
@@ -348,6 +377,8 @@ const AdminUser = () => {
                                             type="radio"
                                             name="isAdmin"
                                             value="false"
+                                            checked={isAdmin === "false"}
+                                            onChange={(e) => setIsAdmin(e.target.value)}
                                             className="form-radio text-emerald-600"
                                         />
                                         <span className="ml-2">Not Admin</span>
@@ -357,6 +388,8 @@ const AdminUser = () => {
                                             type="radio"
                                             name="isAdmin"
                                             value="true"
+                                            checked={isAdmin === "true"}
+                                            onChange={(e) => setIsAdmin(e.target.value)}
                                             className="form-radio text-emerald-600"
                                         />
                                         <span className="ml-2">Is Admin</span>
@@ -373,6 +406,8 @@ const AdminUser = () => {
                                             type="radio"
                                             name="isSeller"
                                             value="false"
+                                            checked={isSeller === "false"}
+                                            onChange={(e) => setIsSeller(e.target.value)}
                                             className="form-radio text-emerald-600"
                                         />
                                         <span className="ml-2">Not Seller</span>
@@ -382,6 +417,8 @@ const AdminUser = () => {
                                             type="radio"
                                             name="isSeller"
                                             value="true"
+                                            checked={isSeller === "true"}
+                                            onChange={(e) => setIsSeller(e.target.value)}
                                             className="form-radio text-emerald-600"
                                         />
                                         <span className="ml-2">Is Seller</span>
@@ -398,6 +435,8 @@ const AdminUser = () => {
                                             type="radio"
                                             name="isBan"
                                             value="false"
+                                            checked={isBan === "false"}
+                                            onChange={(e) => setIsBan(e.target.value)}
                                             className="form-radio text-emerald-600"
                                         />
                                         <span className="ml-2">Not Banned</span>
@@ -407,6 +446,8 @@ const AdminUser = () => {
                                             type="radio"
                                             name="isBan"
                                             value="true"
+                                            checked={isBan === "true"}
+                                            onChange={(e) => setIsBan(e.target.value)}
                                             className="form-radio text-emerald-600"
                                         />
                                         <span className="ml-2">Banned</span>
@@ -450,168 +491,203 @@ const AdminUser = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {filteredUsers.map((user, index) => (
-                            <tr key={index}>
-                                <th className="text-center">{index + 1}</th>
-                                <td className="flex items-center gap-3 text-center">
-                                    <div className="avatar">
-                                        <div className="mask mask-squircle h-12 w-12">
-                                            <img
-                                                src={user.avatar}
-                                                alt="Avatar"
-                                            />
+                        {filteredUsers
+                            .filter((item) => {
+                                return searchTerm.toLowerCase() === ""
+                                    ? item
+                                    : item.username
+                                          .toLowerCase()
+                                          .includes(searchTerm.toLowerCase()) ||
+                                          item.email
+                                              .toLowerCase()
+                                              .includes(
+                                                  searchTerm.toLowerCase()
+                                              ) ||
+                                          item.fullName
+                                              .toLowerCase()
+                                              .includes(
+                                                  searchTerm.toLowerCase()
+                                              );
+                            })
+                            .map((user, index) => (
+                                <tr key={index}>
+                                    <th className="text-center">{index + 1}</th>
+                                    <td className="flex items-center gap-3 text-center">
+                                        <div className="avatar">
+                                            <div className="mask mask-squircle h-12 w-12">
+                                                <img
+                                                    src={user.avatar}
+                                                    alt="Avatar"
+                                                />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="font-bold">
-                                        {user.username}
-                                    </div>
-                                </td>
-                                <td className="text-center">{user.email}</td>
-                                <td className="text-center">{user.fullName}</td>
-                                <td className="text-center">
-                                    +91 {user.phoneNumber}
-                                </td>
-                                <td className="text-center">
-                                    <select
-                                        className="select bg-zinc-200 select-ghost select-sm"
-                                        value=""
-                                        onChange={(e) => {
-                                            const selectedOrderId =
-                                                e.target.value;
-                                            const selectedOrder =
-                                                user.previousBookings.find(
-                                                    (order) =>
-                                                        order._id ===
-                                                        selectedOrderId
-                                                );
-                                            if (selectedOrder) {
-                                                setPastbookings(selectedOrder);
-                                            }
-                                        }}
-                                    >
-                                        <option value="" disabled selected>
-                                            Order ID
-                                        </option>
-                                        {user.previousBookings.map((order) => (
-                                            <option
-                                                key={order._id}
-                                                value={order._id}
-                                            >
-                                                {order._id}
+                                        <div className="font-bold">
+                                            {user.username}
+                                        </div>
+                                    </td>
+                                    <td className="text-center">
+                                        {user.email}
+                                    </td>
+                                    <td className="text-center">
+                                        {user.fullName}
+                                    </td>
+                                    <td className="text-center">
+                                        +91 {user.phoneNumber}
+                                    </td>
+                                    <td className="text-center">
+                                        <select
+                                            className="select bg-zinc-200 select-ghost select-sm"
+                                            value=""
+                                            onChange={(e) => {
+                                                const selectedOrderId =
+                                                    e.target.value;
+                                                const selectedOrder =
+                                                    user.previousBookings.find(
+                                                        (order) =>
+                                                            order._id ===
+                                                            selectedOrderId
+                                                    );
+                                                if (selectedOrder) {
+                                                    setPastbookings(
+                                                        selectedOrder
+                                                    );
+                                                }
+                                            }}
+                                        >
+                                            <option value="" disabled selected>
+                                                Order ID
                                             </option>
-                                        ))}
-                                    </select>
-                                </td>
-                                <td className="text-center mt-2">
-                                    <select
-                                        className="select bg-zinc-200 select-ghost select-sm w-full md:w-auto"
-                                        value={user.isAdmin ? "yes" : "no"}
-                                        onChange={(e) => {
-                                            if (e.target.value === "yes") {
-                                                makeAdmin(user._id);
-                                            } else {
-                                                removeAdmin(user._id);
+                                            {user.previousBookings.map(
+                                                (order) => (
+                                                    <option
+                                                        key={order._id}
+                                                        value={order._id}
+                                                    >
+                                                        {order._id}
+                                                    </option>
+                                                )
+                                            )}
+                                        </select>
+                                    </td>
+                                    <td className="text-center mt-2">
+                                        <select
+                                            className="select bg-zinc-200 select-ghost select-sm w-full md:w-auto"
+                                            value={user.isAdmin ? "yes" : "no"}
+                                            onChange={(e) => {
+                                                if (e.target.value === "yes") {
+                                                    makeAdmin(user._id);
+                                                } else {
+                                                    removeAdmin(user._id);
+                                                }
+                                            }}
+                                        >
+                                            <option value="yes">Yes</option>
+                                            <option value="no">No</option>
+                                        </select>
+                                    </td>
+                                    <td className="text-center mt-2">
+                                        <select
+                                            className="select bg-zinc-200 select-ghost select-sm w-full md:w-auto"
+                                            value={
+                                                user.isCreator ? "yes" : "no"
                                             }
-                                        }}
-                                    >
-                                        <option value="yes">Yes</option>
-                                        <option value="no">No</option>
-                                    </select>
-                                </td>
-                                <td className="text-center mt-2">
-                                    <select
-                                        className="select bg-zinc-200 select-ghost select-sm w-full md:w-auto"
-                                        value={user.isCreator ? "yes" : "no"}
-                                        onChange={(e) => {
-                                            if (e.target.value === "yes") {
-                                                makeCreator(user._id);
-                                            } else {
-                                                removeCreator(user._id);
-                                            }
-                                        }}
-                                    >
-                                        <option value="yes">Yes</option>
-                                        <option value="no">No</option>
-                                    </select>
-                                </td>
-                                <td className="text-center mt-2">
-                                    <select
-                                        disabled={!user.isCreator}
-                                        className="select bg-zinc-200 select-ghost select-sm w-full md:w-auto"
-                                        value=""
-                                        onChange={(e) => {
-                                            const hoteltitle = e.target.value;
-                                            const selectedHotel =
-                                                user.myCreatedPlaces.find(
-                                                    (hotel) =>
-                                                        hotel.title ===
-                                                        hoteltitle
-                                                );
-                                            if (selectedHotel) {
-                                                setCreatedHotel(selectedHotel);
-                                            }
-                                        }}
-                                    >
-                                        <option value="" disabled selected>
-                                            Hotels
-                                        </option>
-                                        {user.myCreatedPlaces.map((hotel) => (
-                                            <option key={hotel.title}>
-                                                {hotel.title}
+                                            onChange={(e) => {
+                                                if (e.target.value === "yes") {
+                                                    makeCreator(user._id);
+                                                } else {
+                                                    removeCreator(user._id);
+                                                }
+                                            }}
+                                        >
+                                            <option value="yes">Yes</option>
+                                            <option value="no">No</option>
+                                        </select>
+                                    </td>
+                                    <td className="text-center mt-2">
+                                        <select
+                                            disabled={!user.isCreator}
+                                            className="select bg-zinc-200 select-ghost select-sm w-full md:w-auto"
+                                            value=""
+                                            onChange={(e) => {
+                                                const hoteltitle =
+                                                    e.target.value;
+                                                const selectedHotel =
+                                                    user.myCreatedPlaces.find(
+                                                        (hotel) =>
+                                                            hotel.title ===
+                                                            hoteltitle
+                                                    );
+                                                if (selectedHotel) {
+                                                    setCreatedHotel(
+                                                        selectedHotel
+                                                    );
+                                                }
+                                            }}
+                                        >
+                                            <option value="" disabled selected>
+                                                Hotels
                                             </option>
-                                        ))}
-                                    </select>
-                                </td>
-                                <td className="text-center mt-2">
-                                    <select
-                                        disabled={!user.isCreator}
-                                        className="select bg-zinc-200 select-ghost select-sm w-full md:w-auto"
-                                        value=""
-                                        onChange={(e) => {
-                                            const receivedbooking =
-                                                e.target.value;
-                                            const selectedbooking =
-                                                user.receivedOrders.find(
-                                                    (order) =>
-                                                        order._id ===
-                                                        receivedbooking
-                                                );
-                                            if (selectedbooking) {
-                                                setOrder(selectedbooking);
-                                            }
-                                        }}
-                                    >
-                                        <option value="" disabled selected>
-                                            Received Order ID
-                                        </option>
-                                        {user.receivedOrders.map((order) => (
-                                            <option
-                                                key={order._id}
-                                                value={order._id}
-                                            >
-                                                {order._id}
+                                            {user.myCreatedPlaces.map(
+                                                (hotel) => (
+                                                    <option key={hotel.title}>
+                                                        {hotel.title}
+                                                    </option>
+                                                )
+                                            )}
+                                        </select>
+                                    </td>
+                                    <td className="text-center mt-2">
+                                        <select
+                                            disabled={!user.isCreator}
+                                            className="select bg-zinc-200 select-ghost select-sm w-full md:w-auto"
+                                            value=""
+                                            onChange={(e) => {
+                                                const receivedbooking =
+                                                    e.target.value;
+                                                const selectedbooking =
+                                                    user.receivedOrders.find(
+                                                        (order) =>
+                                                            order._id ===
+                                                            receivedbooking
+                                                    );
+                                                if (selectedbooking) {
+                                                    setOrder(selectedbooking);
+                                                }
+                                            }}
+                                        >
+                                            <option value="" disabled selected>
+                                                Received Order ID
                                             </option>
-                                        ))}
-                                    </select>
-                                </td>
-                                <td className="text-center mt-2">
-                                    <select
-                                        className="select bg-zinc-200 select-ghost select-sm w-full md:w-auto"
-                                        value={user.isban ? "yes" : "no"}
-                                        onChange={(e) => {
-                                            if (e.target.value === "yes") {
-                                                makeBan(user._id);
-                                            } else {
-                                                removeBan(user._id);
-                                            }
-                                        }}
-                                    >
-                                        <option value="yes">Yes</option>
-                                        <option value="no">No</option>
-                                    </select>
-                                </td>
-                            </tr>
-                        ))}
+                                            {user.receivedOrders.map(
+                                                (order) => (
+                                                    <option
+                                                        key={order._id}
+                                                        value={order._id}
+                                                    >
+                                                        {order._id}
+                                                    </option>
+                                                )
+                                            )}
+                                        </select>
+                                    </td>
+                                    <td className="text-center mt-2">
+                                        <select
+                                            className="select bg-zinc-200 select-ghost select-sm w-full md:w-auto"
+                                            value={user.isban ? "yes" : "no"}
+                                            onChange={(e) => {
+                                                if (e.target.value === "yes") {
+                                                    makeBan(user._id);
+                                                } else {
+                                                    removeBan(user._id);
+                                                }
+                                            }}
+                                        >
+                                            <option value="yes">Yes</option>
+                                            <option value="no">No</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            ))}
                     </tbody>
                 </table>
             </div>
