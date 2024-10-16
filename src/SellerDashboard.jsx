@@ -138,7 +138,7 @@ const SellerDashboard = () => {
                         />
                         <div className="flex flex-col gap-2 text-white">
                             <h2 className="text-3xl font-semibold">
-                                {index === 0
+                            {index == 0 ? "₹" : ""}{index === 0
                                     ? formatNumber(item.value)
                                     : item.value}
                             </h2>

@@ -5,14 +5,48 @@ import socket from "./utils/socket";
 
 const AdminUser = () => {
     const [users, setUsers] = useState([]);
+    const [filteredUsers, setFilteredUsers] = useState([]);
     const [order, setOrder] = useState(false);
     const [createdhotel, setCreatedHotel] = useState(false);
     const [pastbookings, setPastbookings] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
+
+    const popup = () => {
+        setIsOpen((prev) => !prev);
+    };
+
+    const submitHandler = (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const isBan = formData.get("isBan");
+        const isAdmin = formData.get("isAdmin");
+        const isSeller = formData.get("isSeller");
+
+        setFilteredUsers(users);
+        if (!isAdmin && !isSeller && !isBan) {
+            setFilteredUsers(users);
+        }
+        setFilteredUsers((prev) =>
+            prev.filter(
+                (user) =>
+                    (!isBan || user.isban === (isBan === "true")) &&
+                    (!isAdmin || user.isAdmin === (isAdmin === "true")) &&
+                    (!isSeller || user.isCreator === (isSeller === "true"))
+            )
+        );
+    };
+
+    const reset = () => {
+        document.querySelectorAll('input[type="radio"]').forEach((radio) => {
+            radio.checked = false;
+        });
+        setFilteredUsers(users);
+    };
 
     const makeAdmin = async (id) => {
         try {
-            const response = await axios.post(
+            await axios.post(
                 "/admin/make-admin",
                 { id },
                 {
@@ -88,7 +122,7 @@ const AdminUser = () => {
 
     const makeBan = async (id) => {
         try {
-            const response = await axios.post(
+            await axios.post(
                 "/admin/ban-user",
                 { id },
                 {
@@ -134,6 +168,7 @@ const AdminUser = () => {
                 }
             );
             setUsers(response.data.data.users);
+            setFilteredUsers(response.data.data.users);
         } catch (error) {
             console.log(error);
         }
@@ -143,22 +178,22 @@ const AdminUser = () => {
         const specificDate = new Date(date);
 
         const day = String(specificDate.getDate()).padStart(2, "0");
-        const month = String(specificDate.getMonth() + 1).padStart(2, "0"); 
+        const month = String(specificDate.getMonth() + 1).padStart(2, "0");
         const year = specificDate.getFullYear();
 
         const formattedDate = `${day}-${month}-${year}`;
 
-        return formattedDate; 
+        return formattedDate;
     };
     useEffect(() => {
         getUsers();
 
-        socket.on('user_is_created', (data) => {
+        socket.on("user_is_created", (data) => {
             setUsers((prev) => [...prev, data.user]);
         });
 
         return () => {
-            socket.off('new-hotel');
+            socket.off("new-hotel");
         };
     }, []);
     return (
@@ -190,15 +225,26 @@ const AdminUser = () => {
                             <p className="text-black font-semibold">
                                 Guests:{" "}
                                 {order.guests
-                                    .map((guest) => guest.firstName + " " + guest.lastName)
+                                    .map(
+                                        (guest) =>
+                                            guest.firstName +
+                                            " " +
+                                            guest.lastName
+                                    )
                                     .join(", ")}
                             </p>
                             <div className="flex gap-2 font-semibold text-center">
-                                <p>{getDate(order.checkin)}</p> to <p>{getDate(order.checkout)}</p>
+                                <p>{getDate(order.checkin)}</p> to{" "}
+                                <p>{getDate(order.checkout)}</p>
                             </div>
-                            <p>Payment Order Id: {order.paymentDetails.razorpay_payment_id}</p>
+                            <p>
+                                Payment Order Id:{" "}
+                                {order.paymentDetails.razorpay_payment_id}
+                            </p>
                             <button
-                                onClick={() => navigate(`/hotel/${pastbookings.hotel._id}`)}
+                                onClick={() =>
+                                    navigate(`/hotel/${pastbookings.hotel._id}`)
+                                }
                                 className="btn bg-green-500 text-white hover:bg-green-700"
                             >
                                 Hotel Details
@@ -225,9 +271,13 @@ const AdminUser = () => {
                             <p className="text-center text-black font-semibold">
                                 {createdhotel.description}
                             </p>
-                            <p className="font-semibold">Hotel id: {createdhotel._id}</p>
+                            <p className="font-semibold">
+                                Hotel id: {createdhotel._id}
+                            </p>
                             <button
-                                onClick={() => navigate(`/hotel/${createdhotel.hotel._id}`)}
+                                onClick={() =>
+                                    navigate(`/hotel/${createdhotel.hotel._id}`)
+                                }
                                 className="btn bg-green-500 text-white hover:bg-green-700"
                             >
                                 More Details
@@ -258,27 +308,130 @@ const AdminUser = () => {
                                 <p>{getDate(pastbookings.checkin)}</p> to{" "}
                                 <p>{getDate(pastbookings.checkout)}</p>
                             </div>
-                            <p className="font-semibold">Total: ₹{pastbookings.amount}</p>
+                            <p className="font-semibold">
+                                Total: ₹{pastbookings.amount}
+                            </p>
                         </div>
                     )}
                 </div>
             )}
-            <div className="ml-2 py-4">
-                <select
-                    className="border-2 border-green-400 rounded-md p-2 text-gray-700 shadow-sm focus:border-green-600 focus:ring focus:ring-green-300 transition duration-200 ease-in-out"
-                    name="filter"
-                    id="filter"
+            <div className="mb-6">
+                <button
+                    onClick={popup}
+                    className="btn text-white bg-emerald-600 hover:bg-emerald-700 transition-colors duration-300 shadow-md"
                 >
-                    <option value="select" className="bg-gray-100">Select</option>
-                    <option value="username" className="bg-gray-100">Username</option>
-                    <option value="email" className="bg-gray-100">Email</option>
-                    <option value="previousBookings" className="bg-gray-100">Previous Bookings</option>
-                    <option value="myCreatedPlaces" className="bg-gray-100">My Created Places</option>
-                    <option value="admin" className="bg-gray-100">Admin</option>
-                    <option value="seller" className="bg-gray-100">Seller</option>
-                    <option value="receivedOrders" className="bg-gray-100">Received Orders</option>
-                </select>
+                    Apply Filters
+                </button>
             </div>
+            {isOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 transition-opacity duration-300 ease-in-out">
+                    <div className="bg-white rounded-lg shadow-xl p-6 m-4 max-w-xl w-full max-h-[90vh] overflow-y-auto">
+                        <div className="flex justify-between items-center mb-4">
+                            <h2 className="text-2xl font-semibold text-emerald-700">
+                                Filters
+                            </h2>
+                            <button
+                                className="text-gray-500 hover:text-gray-700"
+                                onClick={() => setIsOpen(false)}
+                            >
+                                ✕
+                            </button>
+                        </div>
+                        <form onSubmit={submitHandler} className="space-y-6">
+                            <div className="space-y-4">
+                                <h3 className="text-lg font-medium text-gray-900">
+                                    Admin Status
+                                </h3>
+                                <div className="space-y-2">
+                                    <label className="inline-flex items-center mr-2">
+                                        <input
+                                            type="radio"
+                                            name="isAdmin"
+                                            value="false"
+                                            className="form-radio text-emerald-600"
+                                        />
+                                        <span className="ml-2">Not Admin</span>
+                                    </label>
+                                    <label className="inline-flex items-center">
+                                        <input
+                                            type="radio"
+                                            name="isAdmin"
+                                            value="true"
+                                            className="form-radio text-emerald-600"
+                                        />
+                                        <span className="ml-2">Is Admin</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div className="space-y-4">
+                                <h3 className="text-lg font-medium text-gray-900">
+                                    Seller Status
+                                </h3>
+                                <div className="space-y-2">
+                                    <label className="inline-flex items-center mr-2">
+                                        <input
+                                            type="radio"
+                                            name="isSeller"
+                                            value="false"
+                                            className="form-radio text-emerald-600"
+                                        />
+                                        <span className="ml-2">Not Seller</span>
+                                    </label>
+                                    <label className="inline-flex items-center">
+                                        <input
+                                            type="radio"
+                                            name="isSeller"
+                                            value="true"
+                                            className="form-radio text-emerald-600"
+                                        />
+                                        <span className="ml-2">Is Seller</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div className="space-y-4">
+                                <h3 className="text-lg font-medium text-gray-900">
+                                    Ban Status
+                                </h3>
+                                <div className="space-y-2">
+                                    <label className="inline-flex items-center mr-2">
+                                        <input
+                                            type="radio"
+                                            name="isBan"
+                                            value="false"
+                                            className="form-radio text-emerald-600"
+                                        />
+                                        <span className="ml-2">Not Banned</span>
+                                    </label>
+                                    <label className="inline-flex items-center">
+                                        <input
+                                            type="radio"
+                                            name="isBan"
+                                            value="true"
+                                            className="form-radio text-emerald-600"
+                                        />
+                                        <span className="ml-2">Banned</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div className="flex space-x-4">
+                                <button
+                                    type="submit"
+                                    className="px-4 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition-colors duration-300"
+                                >
+                                    Apply
+                                </button>
+                                <button
+                                    onClick={reset}
+                                    type="button"
+                                    className="px-4 py-2 bg-white text-emerald-600 border border-emerald-600 rounded-md hover:bg-emerald-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition-colors duration-300"
+                                >
+                                    Reset
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
             <div className="overflow-x-auto">
                 <table className="table min-w-full">
                     <thead>
@@ -297,7 +450,7 @@ const AdminUser = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {users.map((user, index) => (
+                        {filteredUsers.map((user, index) => (
                             <tr key={index}>
                                 <th className="text-center">{index + 1}</th>
                                 <td className="flex items-center gap-3 text-center">
@@ -309,20 +462,28 @@ const AdminUser = () => {
                                             />
                                         </div>
                                     </div>
-                                    <div className="font-bold">{user.username}</div>
+                                    <div className="font-bold">
+                                        {user.username}
+                                    </div>
                                 </td>
                                 <td className="text-center">{user.email}</td>
                                 <td className="text-center">{user.fullName}</td>
-                                <td className="text-center">+91 {user.phoneNumber}</td>
+                                <td className="text-center">
+                                    +91 {user.phoneNumber}
+                                </td>
                                 <td className="text-center">
                                     <select
                                         className="select bg-zinc-200 select-ghost select-sm"
                                         value=""
                                         onChange={(e) => {
-                                            const selectedOrderId = e.target.value;
-                                            const selectedOrder = user.previousBookings.find(
-                                                (order) => order._id === selectedOrderId
-                                            );
+                                            const selectedOrderId =
+                                                e.target.value;
+                                            const selectedOrder =
+                                                user.previousBookings.find(
+                                                    (order) =>
+                                                        order._id ===
+                                                        selectedOrderId
+                                                );
                                             if (selectedOrder) {
                                                 setPastbookings(selectedOrder);
                                             }
@@ -332,7 +493,10 @@ const AdminUser = () => {
                                             Order ID
                                         </option>
                                         {user.previousBookings.map((order) => (
-                                            <option key={order._id} value={order._id}>
+                                            <option
+                                                key={order._id}
+                                                value={order._id}
+                                            >
                                                 {order._id}
                                             </option>
                                         ))}
@@ -377,9 +541,12 @@ const AdminUser = () => {
                                         value=""
                                         onChange={(e) => {
                                             const hoteltitle = e.target.value;
-                                            const selectedHotel = user.myCreatedPlaces.find(
-                                                (hotel) => hotel.title === hoteltitle
-                                            );
+                                            const selectedHotel =
+                                                user.myCreatedPlaces.find(
+                                                    (hotel) =>
+                                                        hotel.title ===
+                                                        hoteltitle
+                                                );
                                             if (selectedHotel) {
                                                 setCreatedHotel(selectedHotel);
                                             }
@@ -389,7 +556,9 @@ const AdminUser = () => {
                                             Hotels
                                         </option>
                                         {user.myCreatedPlaces.map((hotel) => (
-                                            <option key={hotel.title}>{hotel.title}</option>
+                                            <option key={hotel.title}>
+                                                {hotel.title}
+                                            </option>
                                         ))}
                                     </select>
                                 </td>
@@ -399,10 +568,14 @@ const AdminUser = () => {
                                         className="select bg-zinc-200 select-ghost select-sm w-full md:w-auto"
                                         value=""
                                         onChange={(e) => {
-                                            const receivedbooking = e.target.value;
-                                            const selectedbooking = user.receivedOrders.find(
-                                                (order) => order._id === receivedbooking
-                                            );
+                                            const receivedbooking =
+                                                e.target.value;
+                                            const selectedbooking =
+                                                user.receivedOrders.find(
+                                                    (order) =>
+                                                        order._id ===
+                                                        receivedbooking
+                                                );
                                             if (selectedbooking) {
                                                 setOrder(selectedbooking);
                                             }
@@ -412,7 +585,10 @@ const AdminUser = () => {
                                             Received Order ID
                                         </option>
                                         {user.receivedOrders.map((order) => (
-                                            <option key={order._id} value={order._id}>
+                                            <option
+                                                key={order._id}
+                                                value={order._id}
+                                            >
                                                 {order._id}
                                             </option>
                                         ))}
@@ -434,14 +610,12 @@ const AdminUser = () => {
                                         <option value="no">No</option>
                                     </select>
                                 </td>
-
                             </tr>
                         ))}
                     </tbody>
                 </table>
             </div>
         </div>
-
     );
 };
 

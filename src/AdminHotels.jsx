@@ -22,7 +22,6 @@ const AdminHotels = () => {
                 }
             );
             setHotels(response.data.data.hotels);
-            console.log(response.data.data.hotels)
             setFilteredHotels(response.data.data.hotels);
         } catch (error) {
             console.log(error);
@@ -48,35 +47,56 @@ const AdminHotels = () => {
         const formData = new FormData(e.target);
         const sort = formData.get("sort");
         const approvalStatus = formData.get("ApprovalStatus");
-
+        console.log("hi");
         const filters = { sort, approvalStatus };
-        console.log(filters)
-        const type = sort.split('-')[0];
-        const order = sort.split('-')[1];
+        console.log(filters);
+        const type = sort?.split("-")[0];
+        const order = sort?.split("-")[1];
 
-        if(!sort && !approvalStatus) {
+        if (!sort && !approvalStatus) {
             setFilteredHotels(hotels);
         }
 
-        if(type === 'p') {
-            if(order[0] == 'l') setFilteredHotels(() => filteredHotels.sort((a, b) => a.price - b.price));
-            else setFilteredHotels(() => filteredHotels.sort((a, b) => b.price - a.price));
-        } else if(type == 'r') {
-            if(order[0] == 'l') setFilteredHotels(() => filteredHotels.sort((a, b) => a.revenue - b.revenue));
-            else setFilteredHotels(() => filteredHotels.sort((a, b) => b.revenue - a.revenue));
+        if (type === "p") {
+            if (order[0] == "l")
+                setFilteredHotels(() =>
+                    filteredHotels.sort((a, b) => a.price - b.price)
+                );
+            else
+                setFilteredHotels(() =>
+                    filteredHotels.sort((a, b) => b.price - a.price)
+                );
+        } else if (type == "r") {
+            if (order[0] == "l")
+                setFilteredHotels(() =>
+                    filteredHotels.sort((a, b) => a.revenue - b.revenue)
+                );
+            else
+                setFilteredHotels(() =>
+                    filteredHotels.sort((a, b) => b.revenue - a.revenue)
+                );
         }
 
-        if(approvalStatus == "approved") {
-            setFilteredHotels(() => filteredHotels.filter(hotel => hotel.approvalStatus === "approved"));
-        } else if(approvalStatus == "rejected") {
-            setFilteredHotels(() => filteredHotels.filter(hotel => hotel.approvalStatus === "rejected"));
+        if (approvalStatus == "approved") {
+            setFilteredHotels(() =>
+                filteredHotels.filter(
+                    (hotel) => hotel.approvalStatus === "approved"
+                )
+            );
+        } else if (approvalStatus == "rejected") {
+            setFilteredHotels(() =>
+                filteredHotels.filter(
+                    (hotel) => hotel.approvalStatus === "rejected"
+                )
+            );
         }
     };
 
     const reset = () => {
-       document.querySelectorAll('input[type="radio"]').forEach(radio => {
-           radio.checked = false;
-       });
+        document.querySelectorAll('input[type="radio"]').forEach((radio) => {
+            radio.checked = false;
+        });
+        setFilteredHotels(hotels);
     };
 
     useEffect(() => {
@@ -105,7 +125,9 @@ const AdminHotels = () => {
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 transition-opacity duration-300 ease-in-out">
                     <div className="bg-white rounded-lg shadow-xl p-6 m-4 max-w-xl w-full max-h-[90vh] overflow-y-auto">
                         <div className="flex justify-between items-center mb-4">
-                            <h2 className="text-2xl font-semibold text-emerald-700">Filters</h2>
+                            <h2 className="text-2xl font-semibold text-emerald-700">
+                                Filters
+                            </h2>
                             <button
                                 className="text-gray-500 hover:text-gray-700"
                                 onClick={() => setIsOpen(false)}
@@ -115,39 +137,81 @@ const AdminHotels = () => {
                         </div>
                         <form onSubmit={submitHandler} className="space-y-6">
                             <div className="space-y-4">
-                                <h3 className="text-lg font-medium text-gray-900">Sort By</h3>
+                                <h3 className="text-lg font-medium text-gray-900">
+                                    Sort By
+                                </h3>
                                 <div className="space-y-2">
                                     <label className="inline-flex items-center">
-                                        <input type="radio" name="sort" value="p-lowToHigh" className="form-radio text-emerald-600" />
-                                        <span className="ml-2">Low to High (Price)</span>
+                                        <input
+                                            type="radio"
+                                            name="sort"
+                                            value="p-lowToHigh"
+                                            className="form-radio text-emerald-600"
+                                        />
+                                        <span className="ml-2">
+                                            Low to High (Price)
+                                        </span>
                                     </label>
                                     <label className="inline-flex items-center">
-                                        <input type="radio" name="sort" value="p-highToLow" className="form-radio text-emerald-600" />
-                                        <span className="ml-2">High to Low (Price)</span>
+                                        <input
+                                            type="radio"
+                                            name="sort"
+                                            value="p-highToLow"
+                                            className="form-radio text-emerald-600"
+                                        />
+                                        <span className="ml-2">
+                                            High to Low (Price)
+                                        </span>
                                     </label>
                                 </div>
                             </div>
                             <div className="space-y-4">
                                 <div className="space-y-2">
                                     <label className="inline-flex items-center">
-                                        <input type="radio" name="sort" value="r-lowToHigh" className="form-radio text-emerald-600" />
-                                        <span className="ml-2">Low to High (Revenue)</span>
+                                        <input
+                                            type="radio"
+                                            name="sort"
+                                            value="r-lowToHigh"
+                                            className="form-radio text-emerald-600"
+                                        />
+                                        <span className="ml-2">
+                                            Low to High (Revenue)
+                                        </span>
                                     </label>
                                     <label className="inline-flex items-center">
-                                        <input type="radio" name="sort" value="r-highToLow" className="form-radio text-emerald-600" />
-                                        <span className="ml-2">High to Low (Revenue)</span>
+                                        <input
+                                            type="radio"
+                                            name="sort"
+                                            value="r-highToLow"
+                                            className="form-radio text-emerald-600"
+                                        />
+                                        <span className="ml-2">
+                                            High to Low (Revenue)
+                                        </span>
                                     </label>
                                 </div>
                             </div>
                             <div className="space-y-4">
-                                <h3 className="text-lg font-medium text-gray-900">Approval Status</h3>
+                                <h3 className="text-lg font-medium text-gray-900">
+                                    Approval Status
+                                </h3>
                                 <div className="space-y-2">
                                     <label className="inline-flex items-center">
-                                        <input type="radio" name="ApprovalStatus" value="approved" className="form-radio text-emerald-600" />
+                                        <input
+                                            type="radio"
+                                            name="ApprovalStatus"
+                                            value="approved"
+                                            className="form-radio text-emerald-600"
+                                        />
                                         <span className="ml-2">Approved</span>
                                     </label>
                                     <label className="inline-flex items-center">
-                                        <input type="radio" name="ApprovalStatus" value="rejected" className="form-radio text-emerald-600" />
+                                        <input
+                                            type="radio"
+                                            name="ApprovalStatus"
+                                            value="rejected"
+                                            className="form-radio text-emerald-600"
+                                        />
                                         <span className="ml-2">Rejected</span>
                                     </label>
                                 </div>
@@ -176,7 +240,18 @@ const AdminHotels = () => {
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-emerald-600">
                         <tr>
-                            {["S.No.", "Hotel Name", "Owner", "Price", "City", "State","Document", "Status", "Details"].map((header) => (
+                            {[
+                                "S.No.",
+                                "Hotel Name",
+                                "Owner",
+                                "Price",
+                                "Revenue",
+                                "City",
+                                "State",
+                                "Document",
+                                "Status",
+                                "Details",
+                            ].map((header) => (
                                 <th
                                     key={header}
                                     scope="col"
@@ -189,37 +264,73 @@ const AdminHotels = () => {
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
                         {filteredHotels.map((hotel, index) => (
-                            <tr key={hotel._id} className="hover:bg-emerald-50 transition-colors duration-300">
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{index + 1}</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{hotel.title}</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{hotel.owner.username}</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">₹ {typeof hotel.price === 'number' ? hotel.price.toLocaleString('en-IN') : "N/A"}</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{hotel.city}</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{hotel.state}</td>
+                            <tr
+                                key={hotel._id}
+                                className="hover:bg-emerald-50 transition-colors duration-300"
+                            >
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    {index + 1}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                    {hotel.title}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    {hotel.owner.username}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    ₹{" "}
+                                    {typeof hotel.price === "number"
+                                        ? hotel.price.toLocaleString("en-IN")
+                                        : "N/A"}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    ₹{" "}
+                                    {typeof hotel.revenue === "number"
+                                        ? hotel.revenue.toLocaleString("en-IN")
+                                        : "N/A"}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    {hotel.city}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    {hotel.state}
+                                </td>
                                 <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                            <Link target="_blank" to={`${hotel.pdf}`}>
-                                                <button className="px-3 py-1 bg-zinc-200 rounded-md hover:bg-zinc-300 transition-colors">
-                                                   Document
-                                                </button>
-                                            </Link>
-                                        </td>
+                                    <Link target="_blank" to={`${hotel.pdf}`}>
+                                        <button className="px-3 py-1 bg-zinc-200 rounded-md hover:bg-zinc-300 transition-colors">
+                                            Document
+                                        </button>
+                                    </Link>
+                                </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     <select
                                         className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"
                                         value={hotel.approvalStatus}
                                         onChange={(e) => {
-                                            approveHotel(hotel._id, e.target.value);
+                                            approveHotel(
+                                                hotel._id,
+                                                e.target.value
+                                            );
                                             setHotels((prev) =>
                                                 prev.map((h) =>
                                                     h._id === hotel._id
-                                                        ? { ...h, approvalStatus: e.target.value }
+                                                        ? {
+                                                              ...h,
+                                                              approvalStatus:
+                                                                  e.target
+                                                                      .value,
+                                                          }
                                                         : h
                                                 )
                                             );
                                         }}
                                     >
-                                        <option value="approved">Approved</option>
-                                        <option value="rejected">Rejected</option>
+                                        <option value="approved">
+                                            Approved
+                                        </option>
+                                        <option value="rejected">
+                                            Rejected
+                                        </option>
                                     </select>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">

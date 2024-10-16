@@ -108,7 +108,7 @@ const SellerRequests = () => {
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                             ₹{" "}
-                                            {order.amount - 0.05 * order.amount}
+                                           {typeof order.amount === 'number' ? (order.amount - 0.05 * order.amount).toLocaleString('en-IN') : "N/A"}
                                         </td>
                                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                             <div className="flex justify-center gap-2">

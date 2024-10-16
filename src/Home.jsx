@@ -172,8 +172,6 @@ const Landing = () => {
                 <div className="landing__grid-container">
                     <div className="landing__grid">
                         {hotels.map((hotel) => {
-                            const randomStars = Math.floor(Math.random() * 5) + 1;
-
                             return (
                                 <div
                                     key={hotel._id}
@@ -188,7 +186,7 @@ const Landing = () => {
                                     <div className="landing__grid-item-content flex flex-col gap-1">
                                         <div className="flex justify-between items-center">
                                             <div className="text-lg font-bold">{hotel.title}</div>
-                                            <StarRating value={randomStars} />
+                                            <StarRating value={hotel.rating} />
                                         </div>
                                         <div className="text-left">
                                             ₹ {typeof hotel.price === 'number' ? hotel.price.toLocaleString('en-IN') : "N/A"}

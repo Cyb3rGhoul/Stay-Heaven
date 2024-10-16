@@ -181,7 +181,8 @@ const HotelDetails = () => {
     };
 
     const handleBookClick = () => {
-        setShowPopup(true);
+        if(hotel.owner === user._id) alert("You can't book your own hotel");
+        else setShowPopup(true);
     };
 
     const handlePay = async () => {
@@ -249,10 +250,10 @@ const HotelDetails = () => {
         }
     };
     const formatPrice = (price) => {
-        return price.toLocaleString('en-IN', {
+        return price.toLocaleString("en-IN", {
             maximumFractionDigits: 2,
-            style: 'currency',
-            currency: 'INR'
+            style: "currency",
+            currency: "INR",
         });
     };
 
@@ -419,15 +420,14 @@ const HotelDetails = () => {
                                     <p>Address: {hotel.address}</p>
                                 </Address>
                                 <City>
-                                    <p>City: Koi toh</p>
+                                    <p>City: {hotel.city}</p>
                                 </City>
                                 <State>
-                                    <p>State: Kahi dur</p>
+                                    <p>State: {hotel.state}</p>
                                 </State>
                                 <PinCode>
-                                    <p>Pin Code: 696969</p>
+                                    <p>Pin Code: {hotel.pinCode}</p>
                                 </PinCode>
-
                             </Left>
                             <Right>
                                 <PriceSection>
@@ -450,56 +450,152 @@ const HotelDetails = () => {
                                         Reserve
                                     </button>
                                     {showPopup && (
-                                        <PopupOverlay onClick={handlePopupClose}>
-                                            <PopupContent onClick={(e) => e.stopPropagation()}>
+                                        <PopupOverlay
+                                            onClick={handlePopupClose}
+                                        >
+                                            <PopupContent
+                                                onClick={(e) =>
+                                                    e.stopPropagation()
+                                                }
+                                            >
                                                 <PopupHeader>
                                                     <h2>Booking Details</h2>
-                                                    <CloseButton style={{backgroundColor:"white",color:"black",border:"none",cursor:"pointer",position:"relative",  marginTop:"-25px",marginRight:"-10px", fontSize:"40px"
-                                                    }} onClick={handlePopupClose}>&times;</CloseButton>
+                                                    <CloseButton
+                                                        style={{
+                                                            backgroundColor:
+                                                                "white",
+                                                            color: "black",
+                                                            border: "none",
+                                                            cursor: "pointer",
+                                                            position:
+                                                                "relative",
+                                                            marginTop: "-25px",
+                                                            marginRight:
+                                                                "-10px",
+                                                            fontSize: "40px",
+                                                        }}
+                                                        onClick={
+                                                            handlePopupClose
+                                                        }
+                                                    >
+                                                        &times;
+                                                    </CloseButton>
                                                 </PopupHeader>
                                                 <Form>
-                                                    {guestNames.map((guest, index) => (
-                                                        <GuestDetails key={index}>
-                                                            <FormItem>
-                                                                <label>Guest {index + 1} First Name</label>
-                                                                <input
-                                                                    type="text"
-                                                                    value={guest.firstName}
-                                                                    onChange={(e) => handleGuestNameChange(index, "firstName", e.target.value)}
-                                                                    placeholder="Enter first name"
-                                                                />
-                                                            </FormItem>
-                                                            <FormItem>
-                                                                <label>Guest {index + 1} Last Name</label>
-                                                                <input
-                                                                    type="text"
-                                                                    value={guest.lastName}
-                                                                    onChange={(e) => handleGuestNameChange(index, "lastName", e.target.value)}
-                                                                    placeholder="Enter last name"
-                                                                />
-                                                            </FormItem>
-                                                            <FormItem>
-                                                                <label>Guest {index + 1} Phone Number</label>
-                                                                <input
-                                                                    type="tel"
-                                                                    value={guest.phoneNumber}
-                                                                    onChange={(e) => handleGuestNameChange(index, "phoneNumber", e.target.value)}
-                                                                    placeholder="Enter phone number"
-                                                                />
-                                                            </FormItem>
-                                                            {guestNames.length > 1 && (
-                                                                <RemoveGuestButton type="button" onClick={() => handleRemoveGuest(index)}>
-                                                                    Remove Guest
-                                                                </RemoveGuestButton>
-                                                            )}
-                                                        </GuestDetails>
-                                                    ))}
-                                                    <AddGuestButton type="button" onClick={handleAddGuest}>
+                                                    {guestNames.map(
+                                                        (guest, index) => (
+                                                            <GuestDetails
+                                                                key={index}
+                                                            >
+                                                                <FormItem>
+                                                                    <label>
+                                                                        Guest{" "}
+                                                                        {index +
+                                                                            1}{" "}
+                                                                        First
+                                                                        Name
+                                                                    </label>
+                                                                    <input
+                                                                        type="text"
+                                                                        value={
+                                                                            guest.firstName
+                                                                        }
+                                                                        onChange={(
+                                                                            e
+                                                                        ) =>
+                                                                            handleGuestNameChange(
+                                                                                index,
+                                                                                "firstName",
+                                                                                e
+                                                                                    .target
+                                                                                    .value
+                                                                            )
+                                                                        }
+                                                                        placeholder="Enter first name"
+                                                                    />
+                                                                </FormItem>
+                                                                <FormItem>
+                                                                    <label>
+                                                                        Guest{" "}
+                                                                        {index +
+                                                                            1}{" "}
+                                                                        Last
+                                                                        Name
+                                                                    </label>
+                                                                    <input
+                                                                        type="text"
+                                                                        value={
+                                                                            guest.lastName
+                                                                        }
+                                                                        onChange={(
+                                                                            e
+                                                                        ) =>
+                                                                            handleGuestNameChange(
+                                                                                index,
+                                                                                "lastName",
+                                                                                e
+                                                                                    .target
+                                                                                    .value
+                                                                            )
+                                                                        }
+                                                                        placeholder="Enter last name"
+                                                                    />
+                                                                </FormItem>
+                                                                <FormItem>
+                                                                    <label>
+                                                                        Guest{" "}
+                                                                        {index +
+                                                                            1}{" "}
+                                                                        Phone
+                                                                        Number
+                                                                    </label>
+                                                                    <input
+                                                                        type="tel"
+                                                                        value={
+                                                                            guest.phoneNumber
+                                                                        }
+                                                                        onChange={(
+                                                                            e
+                                                                        ) =>
+                                                                            handleGuestNameChange(
+                                                                                index,
+                                                                                "phoneNumber",
+                                                                                e
+                                                                                    .target
+                                                                                    .value
+                                                                            )
+                                                                        }
+                                                                        placeholder="Enter phone number"
+                                                                    />
+                                                                </FormItem>
+                                                                {guestNames.length >
+                                                                    1 && (
+                                                                    <RemoveGuestButton
+                                                                        type="button"
+                                                                        onClick={() =>
+                                                                            handleRemoveGuest(
+                                                                                index
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        Remove
+                                                                        Guest
+                                                                    </RemoveGuestButton>
+                                                                )}
+                                                            </GuestDetails>
+                                                        )
+                                                    )}
+                                                    <AddGuestButton
+                                                        type="button"
+                                                        onClick={handleAddGuest}
+                                                    >
                                                         Add Guest
                                                     </AddGuestButton>
                                                     <DatePickerWrapper>
                                                         <FormItem>
-                                                            <label>Check-In Date</label>
+                                                            <label>
+                                                                Check-In Date
+                                                            </label>
                                                             <DatePicker
                                                                 selected={
                                                                     checkInDate
@@ -515,10 +611,20 @@ const HotelDetails = () => {
                                                             />
                                                         </FormItem>
                                                         <FormItem>
-                                                            <label>Check-Out Date</label>
+                                                            <label>
+                                                                Check-Out Date
+                                                            </label>
                                                             <DatePicker
-                                                                selected={checkOutDate}
-                                                                onChange={(date) => setCheckOutDate(date)}
+                                                                selected={
+                                                                    checkOutDate
+                                                                }
+                                                                onChange={(
+                                                                    date
+                                                                ) =>
+                                                                    setCheckOutDate(
+                                                                        date
+                                                                    )
+                                                                }
                                                                 placeholderText="Select check-out date"
                                                             />
                                                         </FormItem>
@@ -529,11 +635,20 @@ const HotelDetails = () => {
                                                             <p>{rooms || 0}</p>
                                                         </SummaryItem>
                                                         <SummaryItem>
-                                                            <label>Final Price</label>
-                                                            <p>{formatPrice(amount || 0)}</p>
+                                                            <label>
+                                                                Final Price
+                                                            </label>
+                                                            <p>
+                                                                {formatPrice(
+                                                                    amount || 0
+                                                                )}
+                                                            </p>
                                                         </SummaryItem>
                                                     </SummarySection>
-                                                    <PayButton type="button" onClick={handlePay}>
+                                                    <PayButton
+                                                        type="button"
+                                                        onClick={handlePay}
+                                                    >
                                                         Proceed to Payment
                                                     </PayButton>
                                                 </Form>
@@ -587,7 +702,7 @@ const HotelDetails = () => {
                                     >
                                         <Avatar
                                             src={review.user.avatar}
-                                            className="w-18 h-8 rounded-full"
+                                            className="w-20 h-20 rounded-full"
                                         />
                                         <div className="flex-grow">
                                             <div className="flex justify-between items-center mb-2">
@@ -893,10 +1008,9 @@ const State = styled.div`
 `;
 
 const PinCode = styled.div`
-font-size: 18px;
-color: #333;
+    font-size: 18px;
+    color: #333;
 `;
-
 
 const Right = styled.div`
     flex: 1;
@@ -1018,183 +1132,184 @@ const ReviewDate = styled.span`
 `;
 
 const PopupOverlay = styled.div`
-  position: fixed;
-  z-index: 1000;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
 
 const PopupContent = styled.div`
-  background: white;
-  padding: 30px;
-  border-radius: 15px;
-  max-width: 800px;
-  width: 90%;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    max-width: 800px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 
-  &::-webkit-scrollbar {
-    display:none;
-    width: 0px;
-    background: transparent;
-  }
+    &::-webkit-scrollbar {
+        display: none;
+        width: 0px;
+        background: transparent;
+    }
 `;
 
 const PopupHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  border-bottom: 2px solid #f0f0f0;
-  padding-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 15px;
 
-  h2 {
-    font-size: 24px;
-    color: #333;
-    margin: 0;
-  }
+    h2 {
+        font-size: 24px;
+        color: #333;
+        margin: 0;
+    }
 `;
 
 const CloseButton = styled.button`
-  background-colour: transparent;
-  border: none;
-  color: #666;
-  font-size: 28px;
-  cursor: pointer;
-  transition: color 0.3s;
+    background-colour: transparent;
+    border: none;
+    color: #666;
+    font-size: 28px;
+    cursor: pointer;
+    transition: color 0.3s;
 
-  &:hover {
-    color: #333;
-  }
+    &:hover {
+        color: #333;
+    }
 `;
 
 const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
 `;
 
 const GuestDetails = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
-  background: #f9f9f9;
-  padding: 20px;
-  border-radius: 10px;
-  margin-bottom: 10px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 10px;
 `;
 
 const FormItem = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 
-  label {
-    font-weight: 600;
-    color: #555;
-    font-size: 14px;
-  }
-
-  input, .react-datepicker-wrapper {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 16px;
-    transition: border-color 0.3s;
-
-    &:focus {
-      outline: none;
-      border-color: #007bff;
+    label {
+        font-weight: 600;
+        color: #555;
+        font-size: 14px;
     }
-  }
+
+    input,
+    .react-datepicker-wrapper {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 16px;
+        transition: border-color 0.3s;
+
+        &:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+    }
 `;
 
 const Button = styled.button`
-  padding: 12px 20px;
-  font-size: 16px;
-  font-weight: 600;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.1s;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s;
 
-  &:hover {
-    transform: translateY(-2px);
-  }
+    &:hover {
+        transform: translateY(-2px);
+    }
 
-  &:active {
-    transform: translateY(0);
-  }
+    &:active {
+        transform: translateY(0);
+    }
 `;
 
 const AddGuestButton = styled(Button)`
-  background-color: #28a745;
-  align-self: flex-start;
+    background-color: #28a745;
+    align-self: flex-start;
 
-  &:hover {
-    background-color: #218838;
-  }
+    &:hover {
+        background-color: #218838;
+    }
 `;
 
 const PayButton = styled(Button)`
-  background-color: #007bff;
-  align-self: center;
-  width: 200px;
+    background-color: #007bff;
+    align-self: center;
+    width: 200px;
 
-  &:hover {
-    background-color: #0056b3;
-  }
+    &:hover {
+        background-color: #0056b3;
+    }
 `;
 
 const RemoveGuestButton = styled(Button)`
-  background-color: #dc3545;
-  padding: 8px 15px;
-  font-size: 14px;
+    background-color: #dc3545;
+    padding: 8px 15px;
+    font-size: 14px;
 
-  &:hover {
-    background-color: #c82333;
-  }
+    &:hover {
+        background-color: #c82333;
+    }
 `;
 
 const DatePickerWrapper = styled.div`
-  display: flex;
-  gap: 20px;
-  margin-bottom: 20px;
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
 `;
 
 const SummarySection = styled.div`
-  background: #f0f8ff;
-  padding: 20px;
-  border-radius: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+    background: #f0f8ff;
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 `;
 
 const SummaryItem = styled.div`
-  text-align: center;
+    text-align: center;
 
-  label {
-    font-weight: 600;
-    color: #555;
-    font-size: 14px;
-    display: block;
-    margin-bottom: 5px;
-  }
+    label {
+        font-weight: 600;
+        color: #555;
+        font-size: 14px;
+        display: block;
+        margin-bottom: 5px;
+    }
 
-  p {
-    font-size: 18px;
-    font-weight: 700;
-    color: #333;
-    margin: 0;
-  }
+    p {
+        font-size: 18px;
+        font-weight: 700;
+        color: #333;
+        margin: 0;
+    }
 `;

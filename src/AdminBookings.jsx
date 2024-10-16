@@ -5,8 +5,41 @@ import socket from "./utils/socket";
 
 const AdminBookings = () => {
     const [orders, setOrders] = useState([]);
+    const [filteredOrders, setFilteredOrders] = useState([]);
     const [order, setOrder] = useState({});
     const [modal, setModal] = useState(false);
+
+    const popup = () => {
+        setIsOpen((prev) => !prev);
+    };
+
+    const submitHandler = (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const isBan = formData.get("isBan");
+        const isAdmin = formData.get("isAdmin");
+        const isSeller = formData.get("isSeller");
+
+        filteredOrders(users);
+        if (!isAdmin && !isSeller && !isBan) {
+            filteredOrders(users);
+        }
+        setFilteredUsers((prev) =>
+            prev.filter(
+                (user) =>
+                    (!isBan || user.isban === (isBan === "true")) &&
+                    (!isAdmin || user.isAdmin === (isAdmin === "true")) &&
+                    (!isSeller || user.isCreator === (isSeller === "true"))
+            )
+        );
+    };
+
+    const reset = () => {
+        document.querySelectorAll('input[type="radio"]').forEach((radio) => {
+            radio.checked = false;
+        });
+        setFilteredUsers(users);
+    };
 
     const getAllOrders = async () => {
         try {
@@ -111,8 +144,8 @@ const AdminBookings = () => {
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{getDate(order.checkin)}</td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{getDate(order.checkout)}</td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{order.rooms}</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">₹ {order.amount}</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">₹ {order.amount * 0.05}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">₹ {typeof order.amount === 'number' ? order.amount.toLocaleString('en-IN') : "N/A"}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">₹ {typeof order.amount === 'number' ? (order.amount * 0.05).toLocaleString('en-IN') : "N/A"}</td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                     <button
                                         onClick={() => {

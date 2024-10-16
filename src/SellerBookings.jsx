@@ -155,7 +155,7 @@ const SellerBookings = () => {
                                     {order.rooms}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    ₹ {order.amount - order.amount * 0.05}
+                                    ₹ {typeof order.amount === 'number' ? (order.amount - order.amount * 0.05).toLocaleString('en-IN') : "N/A"}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                     <button
