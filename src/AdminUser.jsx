@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "./utils/axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import socket from "./utils/socket";
 
 const AdminUser = () => {
@@ -40,7 +40,7 @@ const AdminUser = () => {
             )
         );
 
-        setIsOpen(prev => !prev)
+        setIsOpen((prev) => !prev);
     };
 
     const reset = () => {
@@ -48,9 +48,9 @@ const AdminUser = () => {
             radio.checked = false;
         });
         setFilteredUsers(users);
-        setIsAdmin(null)
-        setIsBan(null)
-        setIsSeller(null)
+        setIsAdmin(null);
+        setIsBan(null);
+        setIsSeller(null);
     };
 
     const makeAdmin = async (id) => {
@@ -63,6 +63,11 @@ const AdminUser = () => {
                 }
             );
             setUsers((prevUsers) =>
+                prevUsers.map((user) =>
+                    user._id === id ? { ...user, isAdmin: true } : user
+                )
+            );
+            setFilteredUsers((prevUsers) =>
                 prevUsers.map((user) =>
                     user._id === id ? { ...user, isAdmin: true } : user
                 )
@@ -86,6 +91,11 @@ const AdminUser = () => {
                     user._id === id ? { ...user, isAdmin: false } : user
                 )
             );
+            setFilteredUsers((prevUsers) =>
+                prevUsers.map((user) =>
+                    user._id === id ? { ...user, isAdmin: false } : user
+                )
+            );
         } catch (error) {
             console.log(error);
         }
@@ -93,7 +103,7 @@ const AdminUser = () => {
 
     const makeCreator = async (id) => {
         try {
-            const response = await axios.post(
+            await axios.post(
                 "/admin/make-creator",
                 { id },
                 {
@@ -101,6 +111,11 @@ const AdminUser = () => {
                 }
             );
             setUsers((prevUsers) =>
+                prevUsers.map((user) =>
+                    user._id === id ? { ...user, isCreator: true } : user
+                )
+            );
+            setFilteredUsers((prevUsers) =>
                 prevUsers.map((user) =>
                     user._id === id ? { ...user, isCreator: true } : user
                 )
@@ -120,6 +135,11 @@ const AdminUser = () => {
                 }
             );
             setUsers((prevUsers) =>
+                prevUsers.map((user) =>
+                    user._id === id ? { ...user, isCreator: false } : user
+                )
+            );
+            setFilteredUsers((prevUsers) =>
                 prevUsers.map((user) =>
                     user._id === id ? { ...user, isCreator: false } : user
                 )
@@ -199,10 +219,17 @@ const AdminUser = () => {
 
         socket.on("user_is_created", (data) => {
             setUsers((prev) => [...prev, data.user]);
+            setFilteredUsers((prev) => [...prev, data.user]);
+        });
+
+        socket.on("removed_seller", (data) => {
+            setUsers((prev) => [...prev, data.user]);
+            setFilteredUsers((prev) => [...prev, data.user]);
         });
 
         return () => {
             socket.off("new-hotel");
+            socket.off("removed_seller");
         };
     }, []);
     return (
@@ -378,7 +405,9 @@ const AdminUser = () => {
                                             name="isAdmin"
                                             value="false"
                                             checked={isAdmin === "false"}
-                                            onChange={(e) => setIsAdmin(e.target.value)}
+                                            onChange={(e) =>
+                                                setIsAdmin(e.target.value)
+                                            }
                                             className="form-radio text-emerald-600"
                                         />
                                         <span className="ml-2">Not Admin</span>
@@ -389,7 +418,9 @@ const AdminUser = () => {
                                             name="isAdmin"
                                             value="true"
                                             checked={isAdmin === "true"}
-                                            onChange={(e) => setIsAdmin(e.target.value)}
+                                            onChange={(e) =>
+                                                setIsAdmin(e.target.value)
+                                            }
                                             className="form-radio text-emerald-600"
                                         />
                                         <span className="ml-2">Is Admin</span>
@@ -407,7 +438,9 @@ const AdminUser = () => {
                                             name="isSeller"
                                             value="false"
                                             checked={isSeller === "false"}
-                                            onChange={(e) => setIsSeller(e.target.value)}
+                                            onChange={(e) =>
+                                                setIsSeller(e.target.value)
+                                            }
                                             className="form-radio text-emerald-600"
                                         />
                                         <span className="ml-2">Not Seller</span>
@@ -418,7 +451,9 @@ const AdminUser = () => {
                                             name="isSeller"
                                             value="true"
                                             checked={isSeller === "true"}
-                                            onChange={(e) => setIsSeller(e.target.value)}
+                                            onChange={(e) =>
+                                                setIsSeller(e.target.value)
+                                            }
                                             className="form-radio text-emerald-600"
                                         />
                                         <span className="ml-2">Is Seller</span>
@@ -436,7 +471,9 @@ const AdminUser = () => {
                                             name="isBan"
                                             value="false"
                                             checked={isBan === "false"}
-                                            onChange={(e) => setIsBan(e.target.value)}
+                                            onChange={(e) =>
+                                                setIsBan(e.target.value)
+                                            }
                                             className="form-radio text-emerald-600"
                                         />
                                         <span className="ml-2">Not Banned</span>
@@ -447,7 +484,9 @@ const AdminUser = () => {
                                             name="isBan"
                                             value="true"
                                             checked={isBan === "true"}
-                                            onChange={(e) => setIsBan(e.target.value)}
+                                            onChange={(e) =>
+                                                setIsBan(e.target.value)
+                                            }
                                             className="form-radio text-emerald-600"
                                         />
                                         <span className="ml-2">Banned</span>
@@ -488,6 +527,9 @@ const AdminUser = () => {
                             <th className="text-center">Created Hotels</th>
                             <th className="text-center">Orders</th>
                             <th className="text-center">Ban</th>
+                            <th className="text-center">Address</th>
+                            <th className="text-center">Aadhaar Card</th>
+                            <th className="text-center">Pan Card</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -685,6 +727,37 @@ const AdminUser = () => {
                                             <option value="yes">Yes</option>
                                             <option value="no">No</option>
                                         </select>
+                                    </td>
+                                    <td className="text-center mt-2">
+                                        {user.address ? user.address : "N/A"}
+                                    </td>
+                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                        {user.aadhaar ? (
+                                            <Link
+                                                target="_blank"
+                                                to={`${user.aadhaar}`}
+                                            >
+                                                <button className="px-3 py-1 bg-zinc-200 rounded-md hover:bg-zinc-300 transition-colors">
+                                                    Document
+                                                </button>
+                                            </Link>
+                                        ) : (
+                                            "N/A"
+                                        )}
+                                    </td>
+                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                        {user.pan ? (
+                                            <Link
+                                                target="_blank"
+                                                to={`${user.pan}`}
+                                            >
+                                                <button className="px-3 py-1 bg-zinc-200 rounded-md hover:bg-zinc-300 transition-colors">
+                                                    Document
+                                                </button>
+                                            </Link>
+                                        ) : (
+                                            "N/A"
+                                        )}
                                     </td>
                                 </tr>
                             ))}

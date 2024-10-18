@@ -32,6 +32,8 @@ import CreateHotel from "./CreateHotel.jsx";
 import SellerHotels from "./SellerHotels.jsx";
 import SellerRequests from "./SellerRequests.jsx";
 import SellerBookings from "./SellerBookings.jsx";
+import AdminHotelDeleteRequests from "./AdminHotelDeleteRequests.jsx";
+import BecomeSellerRequests from "./BecomeSellerRequests.jsx";
 
 const router = createBrowserRouter([
     {
@@ -83,7 +85,7 @@ const router = createBrowserRouter([
                         element: <AdminDashboard />,
                     },
                     {
-                        path: "requests",
+                        path: "hotel-requests",
                         element: <AdminRequests />,
                     },
                     {
@@ -91,8 +93,16 @@ const router = createBrowserRouter([
                         element: <AdminHotels />,
                     },
                     {
+                        path: "hotels-delete-request",
+                        element: <AdminHotelDeleteRequests />
+                    },
+                    {
                         path: "users",
                         element: <AdminUser />,
+                    },
+                    {
+                        path: "become-seller",
+                        element: <BecomeSellerRequests />
                     },
                     {
                         path: "bookings",

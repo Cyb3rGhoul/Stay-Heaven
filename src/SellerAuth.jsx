@@ -1,175 +1,209 @@
-import React from "react";
-import styled from "styled-components";
+import React, { useEffect, useRef, useState } from "react";
+import axios from "./utils/axios";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import socket from "./utils/socket";
 
 const SellerFormPage = () => {
-  return (
-    <Container>
-      <FormWrapper>
-        <Title>Become a Seller</Title>
-        <Form>
-          <InputField>
-            <Input type="text" required />
-            <Label>First Name</Label>
-          </InputField>
-          <InputField>
-            <Input type="text" required />
-            <Label>Last Name</Label>
-          </InputField>
-          <InputField>
-            <Input type="text" required />
-            <Label>Mobile Number</Label>
-          </InputField>
-          <InputField>
-            <Input type="text" required />
-            <Label>Address</Label>
-          </InputField>
-          <div className="mb-1">
-            <label className="block text-gray-700">Upload Aadhar Card (Image/PDF)</label>
-            <input
-              type="file"
-              accept=".jpg, .jpeg, .png, .pdf"
-              className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
-            />
-          </div>
-          <div className="mb-1">
-            <label className="block text-gray-700">Pan Card (Image/PDF)</label>
-            <input
-              type="file"
-              accept=".jpg, .jpeg, .png, .pdf"
-              className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
-            />
-          </div>
-          <div className="mb-1">
-            <label className="block text-gray-700">Upload Property Paper (Images)</label>
-            <input
-              type="file"
-              accept=".jpg, .jpeg, .png"
-              className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
-              multiple
-            />
-          </div>
-          <SubmitButton>Verify</SubmitButton>
-        </Form>
-      </FormWrapper>
-    </Container>
-  );
+    const navigate = useNavigate();
+    const aadharInputRef = useRef();
+    const panInputRef = useRef();
+    const [user, setUser] = useState(
+        useSelector((state) => state.user.userData)
+    );
+    const [aadharFile, setAadharFile] = useState(null);
+    const [panFile, setPanFile] = useState(null);
+    const [error, setError] = useState(null);
+
+    const uploadFile = async (file) => {
+        if (!file) return null;
+
+        try {
+            const formData = new FormData();
+            formData.append("file", file);
+            formData.append(
+                "upload_preset",
+                import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
+            );
+            formData.append(
+                "cloud_name",
+                import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+            );
+            const response = await axios.post(
+                `https://api.cloudinary.com/v1_1/${
+                    import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+                }/raw/upload`,
+                formData
+            );
+            return response.data.secure_url;
+        } catch (error) {
+            console.error("Error while uploading the PDF", error);
+            return null;
+        }
+    };
+
+    const submitHandler = async (e) => {
+        e.preventDefault();
+        setError(null);
+        const formData = new FormData(e.target);
+        const address = formData.get("address");
+        if (!aadharFile || !panFile) {
+            setError("Both Aadhar and Pan PDF files are required.");
+            return;
+        }
+
+        try {
+            const aadharUrl = await uploadFile(aadharFile);
+            const panUrl = await uploadFile(panFile);
+
+            if (!aadharUrl || !panUrl) {
+                setError("Error while uploading files. Please try again.");
+                return;
+            }
+
+            // backend req
+            await axios.post(
+                "/user/get-seller-data",
+                {
+                    address,
+                    aadhaar: aadharUrl,
+                    pan: panUrl,
+                },
+                {
+                    withCredentials: true,
+                }
+            );
+        } catch (error) {
+            console.error("Error submitting the form", error);
+            setError("Failed to submit the form. Please try again.");
+        }
+    };
+
+    const handleFileAttach = (e, setFile) => {
+        const file = e.target.files[0];
+        if (file && file.type === "application/pdf") {
+            if (file.size <= 5 * 1024 * 1024) {
+                setFile(file);
+                setError(null);
+            } else {
+                setError("The PDF file must be smaller than 5MB.");
+                setFile(null);
+            }
+        } else {
+            setError("Please upload a valid PDF file.");
+            setFile(null);
+        }
+    };
+
+    useEffect(() => {
+        socket.on("rejected_seller", (data) => {
+            setUser((prev) => ({ ...prev, ...data.seller }));
+        });
+
+        socket.on("seller_request_made", (data) => {
+            console.log(data);
+            // setUsers((prev) =>
+            //     prev.map((user) =>
+            //         user._id === data.seller._id ? data.seller : user
+            //     )
+            // );
+            setUser((prev) => {
+                const updatedUser = { ...prev, ...data.seller };
+                console.log("Previous state:", prev);
+                console.log("Updated state:", updatedUser);
+                return updatedUser;
+            });
+            console.log(user);
+        });
+
+        socket.on("seller_made", (data) => {
+            navigate("/");
+        });
+
+        return () => {
+            socket.off("rejected_seller");
+            socket.off("seller_request_made");
+            socket.off("seller_made");
+        };
+    }, []);
+
+    return (
+        <div className="flex items-center justify-center min-h-screen bg-blue-50 py-10">
+            <div className="bg-white shadow-lg rounded-lg w-full max-w-md p-8">
+                {user.sellerRequestMade ? (
+                    <>
+                        <h1 className="text-2xl font-bold text-center text-green-700 mb-6">
+                            Your Seller Request Has Been Made and is under
+                            Review <br />
+                            Please wait for the Seller to approve your request
+                        </h1>
+                    </>
+                ) : (
+                    <>
+                        <h1 className="text-2xl font-bold text-center text-green-700 mb-6">
+                            Become a Seller
+                        </h1>
+                        <form onSubmit={submitHandler} className="space-y-6">
+                            {error && <p className="text-red-500">{error}</p>}
+                            <div className="relative">
+                                <input
+                                    name="address"
+                                    placeholder="Residential Address"
+                                    type="text"
+                                    required
+                                    className="w-full p-3 border-2 rounded-lg focus:outline-none focus:border-green-500"
+                                />
+                            </div>
+
+                            <div className="mb-4">
+                                <label className="block text-gray-700 mb-1">
+                                    Upload Aadhar Card (PDF)
+                                </label>
+                                <input
+                                    required
+                                    type="file"
+                                    accept=".pdf"
+                                    onChange={(e) =>
+                                        handleFileAttach(e, setAadharFile)
+                                    }
+                                    className="block w-full text-sm text-gray-500 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
+                                />
+                            </div>
+
+                            <div className="mb-4">
+                                <label className="block text-gray-700 mb-1">
+                                    Upload Pan Card (PDF)
+                                </label>
+                                <input
+                                    required
+                                    type="file"
+                                    accept=".pdf"
+                                    onChange={(e) =>
+                                        handleFileAttach(e, setPanFile)
+                                    }
+                                    className="block w-full text-sm text-gray-500 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
+                                />
+                            </div>
+
+                            <button
+                                type="submit"
+                                className="w-full py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition"
+                            >
+                                Verify
+                            </button>
+
+                            <p className="text-xs text-red-400">
+                                Note: If you are seeing this form, it means you
+                                need to apply to become a seller. If you have
+                                previously applied and your application was
+                                rejected, please apply again.
+                            </p>
+                        </form>
+                    </>
+                )}
+            </div>
+        </div>
+    );
 };
 
 export default SellerFormPage;
-
-const Container = styled.div`
-  margin-top: 40px;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #f0f8ff;
-  padding: 20px;
-`;
-
-const FormWrapper = styled.div`
-  background-color: white;
-  padding: 40px;
-  border-radius: 10px;
-  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
-  width: 100%;
-  max-width: 500px;
-  box-sizing: border-box;
-
-  @media (max-width: 600px) {
-    padding: 20px;
-  }
-`;
-
-const Title = styled.h1`
-  font-size: 24px;
-  font-weight: bold;
-  color: #027148;
-  text-align: center;
-  margin-top: -10px;
-  margin-bottom: 20px;
-`;
-
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-`;
-
-const InputField = styled.div`
-  position: relative;
-`;
-
-const Input = styled.input`
-  width: 100%;
-  height: 50px;
-  padding: 0 15px;
-  font-size: 16px;
-  border: 2px solid #ccc;
-  border-radius: 6px;
-  outline: none;
-  background: transparent;
-  color: #333;
-  transition: border 0.3s;
-
-  &:focus {
-    border-color: #05ed98;
-  }
-
-  &:focus ~ label,
-  &:valid ~ label {
-    top: 0;
-    left: 15px;
-    font-size: 14px;
-    background: #fff;
-    padding: 0 5px;
-    color: #05ed98;
-  }
-`;
-
-const Label = styled.label`
-  position: absolute;
-  top: 50%;
-  left: 15px;
-  transform: translateY(-50%);
-  font-size: 16px;
-  color: #aaa;
-  pointer-events: none;
-  transition: 0.3s;
-`;
-
-const FileUpload = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-`;
-
-const FileLabel = styled.label`
-  font-size: 16px;
-  color: #333;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-`;
-
-const FileInput = styled.input`
-  border: 1px solid #ccc;
-  padding: 8px;
-  border-radius: 5px;
-  cursor: pointer;
-`;
-
-const SubmitButton = styled.button`
-  padding: 12px 20px;
-  background-color: #4caf50;
-  color: white;
-  font-size: 16px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-
-  &:hover {
-    background-color: #45a049;
-  }
-`;

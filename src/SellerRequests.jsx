@@ -15,9 +15,12 @@ const SellerRequests = () => {
     );
     const dispatch = useDispatch();
     const [orders, setOrders] = useState(
-        user.receivedOrders.filter(
-            (order) => order.approvalStatus == "in-progress"
-        )
+        () => {
+            const order = user.receivedOrders.filter(
+                (order) => order.approvalStatus == "in-progress"
+            )
+            return order;
+        }
     );
 
     const getDate = (date) => {

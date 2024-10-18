@@ -33,8 +33,15 @@ const Landing = () => {
             setHotels((prev) => [...prev, data.hotel]);
         });
 
+        socket.on("hotel_deleted", (id) => {
+            setHotels((prev) => {
+                return prev.filter((hotel) => hotel._id !== id);
+            });
+        });
+
         return () => {
             socket.off('new-hotel');
+            socket.off("hotel_deleted");
         };
     }, []);
 

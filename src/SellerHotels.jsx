@@ -16,10 +16,8 @@ const SellerHotels = () => {
     const [isEditOpen, setIsEditOpen] = useState(false);
     const [sort, setSort] = useState(null);
     const [approvalStatus, setApprovalStatus] = useState(null);
-    
-    const deleteRequest = async () => {
-
-    }
+    const [isOpen2, setisOpen2] = useState(false);
+    const [selectedHotel1, setSelectedHotel1] = useState(null);
 
     const popup = () => {
         setIsOpen((prev) => !prev);
@@ -59,19 +57,15 @@ const SellerHotels = () => {
 
         if (approvalStatus == "approved") {
             setFilteredHotels((prev) =>
-                prev.filter(
-                    (hotel) => hotel.approvalStatus === "approved"
-                )
+                prev.filter((hotel) => hotel.approvalStatus === "approved")
             );
         } else if (approvalStatus == "rejected") {
             setFilteredHotels((prev) =>
-                prev.filter(
-                    (hotel) => hotel.approvalStatus === "rejected"
-                )
+                prev.filter((hotel) => hotel.approvalStatus === "rejected")
             );
         }
 
-        setIsOpen(prev => !prev)
+        setIsOpen((prev) => !prev);
     };
 
     const reset = () => {
@@ -79,8 +73,8 @@ const SellerHotels = () => {
             radio.checked = false;
         });
         setFilteredHotels((prev) => hotels);
-        setSort(null)
-        setApprovalStatus(null)
+        setSort(null);
+        setApprovalStatus(null);
     };
 
     const getAllSellerHotels = async () => {
@@ -113,6 +107,30 @@ const SellerHotels = () => {
         setIsEditOpen((prev) => !prev);
     };
 
+    const deleteSubmitHandler = async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const reason = formData.get("reason");
+        await axios.post(
+            "/hotel/delete-request",
+            { id: selectedHotel1, reason },
+            { withCredentials: true }
+        );
+
+        setisOpen2((prev) => !prev);
+    };
+
+    const onUndoHandler = async (id) => {
+        try {
+            await axios.post(
+                "/hotel/undo-delete-request",
+                { id },
+                { withCredentials: true }
+            );
+        } catch (error) {
+            console.log(error);
+        }
+    };
     useEffect(() => {
         getAllSellerHotels();
 
@@ -122,10 +140,53 @@ const SellerHotels = () => {
                     hotel._id === data.hotel._id ? data.hotel : hotel
                 )
             );
+            setFilteredHotels((prev) =>
+                prev.map((hotel) =>
+                    hotel._id === data.hotel._id ? data.hotel : hotel
+                )
+            );
+        });
+
+        socket.on("hotel_delete_req_sent", (data) => {
+            setHotels((prev) => {
+                return prev.map((hotel) =>
+                    hotel._id === data.hotel._id ? data.hotel : hotel
+                );
+            });
+            setFilteredHotels((prev) => {
+                return prev.map((hotel) =>
+                    hotel._id === data.hotel._id ? data.hotel : hotel
+                );
+            });
+        });
+
+        socket.on("delete_request_undone", (data) => {
+            setHotels((prev) => {
+                return prev.map((hotel) =>
+                    hotel._id === data.hotel._id ? data.hotel : hotel
+                );
+            });
+            setFilteredHotels((prev) => {
+                return prev.map((hotel) =>
+                    hotel._id === data.hotel._id ? data.hotel : hotel
+                );
+            });
+        });
+
+        socket.on("hotel_deleted", (id) => {
+            setHotels((prev) => {
+                return prev.filter((hotel) => hotel._id !== id);
+            });
+            setFilteredHotels((prev) => {
+                return prev.filter((hotel) => hotel._id !== id);
+            });
         });
 
         return () => {
-            socket.off("new-hotel");
+            socket.off("hotel_is_approved");
+            socket.off("hotel_delete_req_sent");
+            socket.off("delete_request_undone");
+            socket.off("hotel_deleted");
         };
     }, []);
     return (
@@ -187,7 +248,9 @@ const SellerHotels = () => {
                                             name="sort"
                                             value="p-lowToHigh"
                                             checked={sort === "p-lowToHigh"}
-                                            onChange={(e) => setSort(e.target.value)}
+                                            onChange={(e) =>
+                                                setSort(e.target.value)
+                                            }
                                             className="form-radio text-emerald-600"
                                         />
                                         <span className="ml-2">
@@ -200,7 +263,9 @@ const SellerHotels = () => {
                                             name="sort"
                                             value="p-highToLow"
                                             checked={sort === "p-highToLow"}
-                                            onChange={(e) => setSort(e.target.value)}
+                                            onChange={(e) =>
+                                                setSort(e.target.value)
+                                            }
                                             className="form-radio text-emerald-600"
                                         />
                                         <span className="ml-2">
@@ -217,7 +282,9 @@ const SellerHotels = () => {
                                             name="sort"
                                             value="r-lowToHigh"
                                             checked={sort === "r-lowToHigh"}
-                                            onChange={(e) => setSort(e.target.value)}
+                                            onChange={(e) =>
+                                                setSort(e.target.value)
+                                            }
                                             className="form-radio text-emerald-600"
                                         />
                                         <span className="ml-2">
@@ -230,7 +297,9 @@ const SellerHotels = () => {
                                             name="sort"
                                             value="r-highToLow"
                                             checked={sort === "r-highToLow"}
-                                            onChange={(e) => setSort(e.target.value)}
+                                            onChange={(e) =>
+                                                setSort(e.target.value)
+                                            }
                                             className="form-radio text-emerald-600"
                                         />
                                         <span className="ml-2">
@@ -249,8 +318,14 @@ const SellerHotels = () => {
                                             type="radio"
                                             name="ApprovalStatus"
                                             value="approved"
-                                            checked={approvalStatus === "approved"}
-                                            onChange={(e) => setApprovalStatus(e.target.value)}
+                                            checked={
+                                                approvalStatus === "approved"
+                                            }
+                                            onChange={(e) =>
+                                                setApprovalStatus(
+                                                    e.target.value
+                                                )
+                                            }
                                             className="form-radio text-emerald-600"
                                         />
                                         <span className="ml-2">Approved</span>
@@ -260,8 +335,14 @@ const SellerHotels = () => {
                                             type="radio"
                                             name="ApprovalStatus"
                                             value="rejected"
-                                            checked={approvalStatus === "rejected"}
-                                            onChange={(e) => setApprovalStatus(e.target.value)}
+                                            checked={
+                                                approvalStatus === "rejected"
+                                            }
+                                            onChange={(e) =>
+                                                setApprovalStatus(
+                                                    e.target.value
+                                                )
+                                            }
                                             className="form-radio text-emerald-600"
                                         />
                                         <span className="ml-2">Rejected</span>
@@ -283,6 +364,47 @@ const SellerHotels = () => {
                                     Reset
                                 </button>
                             </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {isOpen2 && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 transition-opacity duration-300 ease-in-out">
+                    <div className="bg-white rounded-lg shadow-xl p-6 m-4 max-w-xl w-full max-h-[90vh] overflow-y-auto">
+                        <div className="flex justify-between items-center mb-4">
+                            <h2 className="text-2xl font-semibold text-emerald-700">
+                                Delete Hotel
+                            </h2>
+                            <button
+                                className="text-gray-500 hover:text-gray-700"
+                                onClick={() => setisOpen2(false)}
+                            >
+                                ✕
+                            </button>
+                        </div>
+                        <form
+                            onSubmit={(e) => deleteSubmitHandler(e)}
+                            className="space-y-6"
+                        >
+                            <div className="space-y-4">
+                                <div className="space-y-2">
+                                    <textarea
+                                        required
+                                        rows={5}
+                                        className="border-2 outline-none resize-none border-green-500 rounded-md w-full p-2 placeholder:text-green-500/50"
+                                        placeholder="Write the reason here..."
+                                        name="reason"
+                                        id="reason"
+                                    ></textarea>
+                                </div>
+                            </div>
+                            <button
+                                type="submit"
+                                className="btn bg-green-500 outline-none text-white hover:bg-white hover:border-green-500 hover:border-2 hover:text-black transition-all duration-500"
+                            >
+                                Submit
+                            </button>
                         </form>
                     </div>
                 </div>
@@ -389,9 +511,34 @@ const SellerHotels = () => {
                                             )}
                                         </td>
                                         <td>
-                                            <button onClick={() => deleteRequest(hotel._id)} className="btn bg-red-500 text-white">
-                                                Request Delete
-                                            </button>
+                                            {hotel.deleted ? (
+                                                <button
+                                                    onClick={() => {
+                                                        onUndoHandler(
+                                                            hotel._id
+                                                        );
+                                                    }}
+                                                    className="btn bg-yellow-500 text-white"
+                                                >
+                                                    Undo Delete Request
+                                                </button>
+                                            ) : (
+                                                <button
+                                                    onClick={() => {
+                                                        setSelectedHotel1(
+                                                            (prev) => {
+                                                                return hotel._id;
+                                                            }
+                                                        );
+                                                        setisOpen2(
+                                                            (prev) => !prev
+                                                        );
+                                                    }}
+                                                    className="btn bg-red-500 text-white"
+                                                >
+                                                    Delete Hotel
+                                                </button>
+                                            )}
                                         </td>
                                     </tr>
                                 );

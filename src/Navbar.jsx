@@ -5,6 +5,7 @@ import logo from "./assets/logo.png";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "./utils/axios";
 import { setUser, toggleLogin } from "./app/reducers/userSlice";
+import socket from "./utils/socket";
 
 const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -18,9 +19,6 @@ const Navbar = () => {
     );
     const [isAdmin, setIsAdmin] = useState(
         useSelector((state) => state.user.userData.isAdmin)
-    );
-    const [isCreator, setIsCreator] = useState(
-        useSelector((state) => state.user.userData.isCreator)
     );
     const [isBan, setIsBan] = useState(
         useSelector((state) => state.user.userData.isban)
@@ -52,7 +50,7 @@ const Navbar = () => {
                 setIsLoggedIn(true);
                 setprofileImage(user.data.data.avatar);
                 setIsAdmin(user.data.data.isAdmin);
-                setIsCreator(user.data.data.isCreator);
+                setIsSeller(user.data.data.isCreator);
                 setIsBan(user.data.data.isban);
             } else {
                 dispatch(toggleLogin(false));
@@ -74,10 +72,24 @@ const Navbar = () => {
             }
         };
 
+        socket.on("seller_made", (data) => {
+            dispatch(setUser(data.seller))
+            setIsSeller(data.seller.isCreator);
+            console.log(data.seller.isCreator)
+        });
+       
+        socket.on("remove_creator", (data) => {
+            dispatch(setUser(data.seller))
+            setIsSeller(data.seller.isCreator);
+            console.log(data.seller.isCreator)
+        });
+
         window.addEventListener('scroll', handleScroll);
 
         return () => {
             window.removeEventListener('scroll', handleScroll);
+            socket.off("seller_made");
+            socket.off("remove_creator");
         };
     }, []);
     const logouthandler = async () => {
@@ -85,7 +97,7 @@ const Navbar = () => {
             "/user/logout",
             {},
             {
-                withCredentials: true, // Important: This sends cookies with the request
+                withCredentials: true, 
             }
         );
         dispatch(toggleLogin(false));
@@ -139,7 +151,7 @@ const Navbar = () => {
                                     <div>Seller Dashboard</div>
                                 </Link>
                             )}
-                            {isSeller && !isBan && (
+                            {!isSeller && !isBan && (
                                 <Link to="/sellerForm">
                                     <div>Become a Seller</div>
                                 </Link>

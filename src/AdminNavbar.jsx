@@ -8,9 +8,11 @@ import users from './assets/adminnav/users.png';
 
 const navItems = [
   { path: '/admin/dashboard', label: 'Dashboard', icon: dashboard },
-  { path: '/admin/requests', label: 'Requests', icon: requests },
+  { path: '/admin/hotel-requests', label: 'Hotel Requests', icon: requests },
   { path: '/admin/hotels', label: 'Hotels', icon: hotels },
+  { path: '/admin/hotels-delete-request', label: 'Hotel Delete Request', icon: hotels },
   { path: '/admin/users', label: 'Users', icon: users },
+  { path: '/admin/become-seller', label: 'Seller Requests', icon: users },
   { path: '/admin/Bookings', label: 'Bookings', icon: users },
 ];
 
