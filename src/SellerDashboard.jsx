@@ -24,7 +24,6 @@ const SellerDashboard = () => {
                 }
             );
             let data = response.data.data;
-            console.log(data);
 
             setRevenue(data.totalRevenue);
             setHotels(data.totalCreatedPlaces);

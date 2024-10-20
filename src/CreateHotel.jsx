@@ -169,7 +169,7 @@ const CreateHotel = () => {
             const response = await axios.post(
                 `https://api.cloudinary.com/v1_1/${
                     import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
-                }/raw/upload`,
+                }/image/upload`,
                 formData
             );
             return response.data.secure_url;

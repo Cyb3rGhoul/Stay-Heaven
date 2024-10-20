@@ -32,7 +32,7 @@ const SellerFormPage = () => {
             const response = await axios.post(
                 `https://api.cloudinary.com/v1_1/${
                     import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
-                }/raw/upload`,
+                }/image/upload`,
                 formData
             );
             return response.data.secure_url;
@@ -101,16 +101,8 @@ const SellerFormPage = () => {
         });
 
         socket.on("seller_request_made", (data) => {
-            console.log(data);
-            // setUsers((prev) =>
-            //     prev.map((user) =>
-            //         user._id === data.seller._id ? data.seller : user
-            //     )
-            // );
             setUser((prev) => {
                 const updatedUser = { ...prev, ...data.seller };
-                console.log("Previous state:", prev);
-                console.log("Updated state:", updatedUser);
                 return updatedUser;
             });
             console.log(user);
