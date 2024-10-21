@@ -34,6 +34,7 @@ import SellerRequests from "./SellerRequests.jsx";
 import SellerBookings from "./SellerBookings.jsx";
 import AdminHotelDeleteRequests from "./AdminHotelDeleteRequests.jsx";
 import BecomeSellerRequests from "./BecomeSellerRequests.jsx";
+import { Toaster } from "react-hot-toast";
 
 const router = createBrowserRouter([
     {
@@ -181,5 +182,29 @@ function Base() {
 ReactDOM.createRoot(document.getElementById("root")).render(
     <Provider store={store}>
         <Base />
+        <Toaster
+                toastOptions={{
+                    success: {
+                        style: {
+                            color: "green",
+                            background: "white",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                        },
+                    },
+                    error: {
+                        style: {
+                            color: "red",
+                            background: "white",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                        },
+                    },
+                }}
+                position="top-center"
+                reverseOrder={false}
+            />
     </Provider>
 );
