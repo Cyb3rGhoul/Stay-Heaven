@@ -4,8 +4,9 @@ import total from "./assets/total.png";
 import profiticon from "./assets/profit.png";
 import users from "./assets/users.png";
 import PieActiveArc from "./PieActiveArc";
-import ChartsOverview from "./ChartsOverview";
 import axios from "./utils/axios";
+import useHandleErr from "./utils/useHandleErr.js";
+
 
 const AdminDashboard = () => {
     const [data, setData] = useState([
@@ -39,6 +40,7 @@ const AdminDashboard = () => {
     const [successOrders, setSuccessOrders] = useState();
     const [cancelledOrders, setCancelledOrders] = useState();
     const [duration, setDuration] = useState("overall");
+    const handleError = useHandleErr(); 
 
     const getAdminDashboardData = async (duration) => {
         try {
@@ -80,7 +82,9 @@ const AdminDashboard = () => {
                 ).length
             );
         } catch (error) {
-            console.log(error);
+          console.log("mai aya hu ");
+          
+          handleError(error);
         }
     };
 
