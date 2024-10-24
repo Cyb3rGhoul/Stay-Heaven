@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import axios from "./utils/axios";
 import total from "./assets/total.png";
 import bookingsicon from "./assets/bookings.png";
+import useHandleErr from "./utils/useHandleErr";
+
 const SellerDashboard = () => {
     const [duration, setDuration] = useState("overall");
     const [hotels, setHotels] = useState(null);
@@ -11,7 +13,7 @@ const SellerDashboard = () => {
     const [confirmedBookings, setConfirmedBookings] = useState(null);
     const [inprogressBookings, setInprogressBookings] = useState(null);
     const [revenue, setRevenue] = useState(0);
-
+    const handleError = useHandleErr()
     const getSellerData = async (duration) => {
         try {
             const response = await axios.post(
@@ -39,7 +41,7 @@ const SellerDashboard = () => {
             );
             setBookings(data.receivedOrders.length);
         } catch (error) {
-            console.log(error);
+            handleError(error);
         }
     };
 

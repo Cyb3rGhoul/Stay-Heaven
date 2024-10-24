@@ -3,11 +3,12 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Navbar from "./Navbar";
 import axios from "./utils/axios.jsx";
+import useHandleErr from "./utils/useHandleErr";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
-
+  const handleError = useHandleErr()
   const handleEmailPhoneSubmit = async (e) => {
     e.preventDefault();
     if(!username) {
@@ -15,10 +16,14 @@ const ForgotPassword = () => {
       return;
     } 
 
-    const response = await axios.post("/user/forgot-password", {username}, {withCredentials: true});
+    try {
+      const response = await axios.post("/user/forgot-password", {username}, {withCredentials: true});
     if(response.data.status === 200) {
       alert("Password reset link sent to your email");
       navigate("/login");
+    }
+    } catch (error) {
+      handleError(error)
     }
 
   };

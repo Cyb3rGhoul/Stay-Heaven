@@ -5,9 +5,11 @@ import axios from "./utils/axios";
 import { Link } from "react-router-dom";
 import socket from "./utils/socket";
 import { useSelector } from "react-redux";
+import useHandleErr from "./utils/useHandleErr";
 
 const BecomeSellerRequests = () => {
     const [users, setUsers] = useState([]);
+    const handleError = useHandleErr()
     const getUsers = async () => {
         try {
             const response = await axios.post(
@@ -23,7 +25,7 @@ const BecomeSellerRequests = () => {
                 )
             );
         } catch (error) {
-            console.log(error);
+            handleError(error);
         }
     };
 
@@ -36,7 +38,7 @@ const BecomeSellerRequests = () => {
             );
             setUsers((prev) => prev.filter((user) => user._id !== id));
         } catch (error) {
-            console.log(error);
+            handleError(error);
         }
     };
 
@@ -49,7 +51,7 @@ const BecomeSellerRequests = () => {
             );
             setUsers((prev) => prev.filter((user) => user._id !== id));
         } catch (error) {
-            console.log(error);
+            handleError(error);
         }
     };
     useEffect(() => {

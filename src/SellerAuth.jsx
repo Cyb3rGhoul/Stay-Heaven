@@ -3,6 +3,7 @@ import axios from "./utils/axios";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import socket from "./utils/socket";
+import useHandleErr from "./utils/useHandleErr";
 
 const SellerFormPage = () => {
     const navigate = useNavigate();
@@ -14,7 +15,7 @@ const SellerFormPage = () => {
     const [aadharFile, setAadharFile] = useState(null);
     const [panFile, setPanFile] = useState(null);
     const [error, setError] = useState(null);
-
+    const handleError = useHandleErr()
     const uploadFile = async (file) => {
         if (!file) return null;
 
@@ -37,7 +38,7 @@ const SellerFormPage = () => {
             );
             return response.data.secure_url;
         } catch (error) {
-            console.error("Error while uploading the PDF", error);
+            handleError( error);
             return null;
         }
     };
@@ -74,7 +75,7 @@ const SellerFormPage = () => {
                 }
             );
         } catch (error) {
-            console.error("Error submitting the form", error);
+            handleError(error)
             setError("Failed to submit the form. Please try again.");
         }
     };

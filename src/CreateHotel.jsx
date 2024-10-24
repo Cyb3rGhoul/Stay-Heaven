@@ -14,6 +14,7 @@ import { CgGym } from "react-icons/cg";
 import { IoMdClose } from "react-icons/io";
 import randomImage from "./assets/random.jpg";
 import axios from "./utils/axios";
+import useHandleErr from "./utils/useHandleErr";
 
 const CreateHotel = () => {
     const [selectedBooking, setSelectedBooking] = useState(null);
@@ -26,6 +27,7 @@ const CreateHotel = () => {
     const [pdfError, setPdfError] = useState(null);
     const submitButton = useRef();
     const closeButton = useRef();
+    const handleError = useHandleErr()
 
     const handleClosePopup = () => {
         setSelectedBooking(null);
@@ -147,7 +149,7 @@ const CreateHotel = () => {
             }
             return urls;
         } catch (error) {
-            console.error("Error while uploading the images", error);
+            handleError("Error while uploading the images", error);
             return;
         }
     };
@@ -174,7 +176,7 @@ const CreateHotel = () => {
             );
             return response.data.secure_url;
         } catch (error) {
-            console.error("Error while uploading the PDF", error);
+            handleError("Error while uploading the PDF", error);
             return null;
         }
     };
@@ -184,9 +186,8 @@ const CreateHotel = () => {
             const response = await axios.post("/hotel/create", hotel, {
                 withCredentials: true,
             });
-            console.log(response);
         } catch (error) {
-            console.error("Error while creating the hotel", error);
+            handleError("Error while creating the hotel", error);
             return;
         }
     };

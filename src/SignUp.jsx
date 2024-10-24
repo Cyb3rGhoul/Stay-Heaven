@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import styled from "styled-components";
 import Navbar from "./Navbar";
 import axios from "./utils/axios";
-
+import useHandleErr from "./utils/useHandleErr";
 const SignUp = () => {
     const navigate = useNavigate();
     const [username, setUsername] = useState("");
@@ -14,7 +14,7 @@ const SignUp = () => {
     const [phone, setPhone] = useState("");
     const [isFileSelected, setIsFileSelected] = useState(false);
     const avatarRef = useRef(null);
-
+    const handleError = useHandleErr()
     const handleSignUp = async (e) => {
         e.preventDefault();
 
@@ -60,7 +60,7 @@ const SignUp = () => {
 
             url = response.data.secure_url;
         } catch (error) {
-            console.error("error while uploading the image");
+            handleError(error);
             return;
         }
 
@@ -75,7 +75,7 @@ const SignUp = () => {
             });
             navigate("/login");
         } catch (error) {
-            console.error(error);
+            handleError(error);
         }
     };
 

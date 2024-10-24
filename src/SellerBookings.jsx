@@ -1,7 +1,7 @@
 import axios from "./utils/axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
+import useHandleErr from "./utils/useHandleErr";
 const SellerBookings = () => {
     const [orders, setOrders] = useState([]);
     const [filteredOrders, setFilteredOrders] = useState([]);
@@ -11,7 +11,7 @@ const SellerBookings = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [sort, setSort] = useState(null);
     const [approvalStatus, setApprovalStatus] = useState(null);
-
+    const handleError = useHandleErr()
     const popup = () => {
         setIsOpen((prev) => !prev);
     };
@@ -69,7 +69,7 @@ const SellerBookings = () => {
             setOrders(response.data.data.orders);
             setFilteredOrders(response.data.data.orders);
         } catch (error) {
-            console.log(error);
+            handleError(error);
         }
     };
 

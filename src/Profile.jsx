@@ -5,7 +5,7 @@ import axios from './utils/axios';
 import { useNavigate } from "react-router-dom";
 import { setUser } from "./app/reducers/userSlice";
 import "./Profile.css";
-
+import useHandleErr from "./utils/useHandleErr";
 const Profile = () => {
   const [userdetail, setUserdetail] = useState(useSelector((state) => state.user.userData));
   const [selectedImage, setSelectedImage] = useState(userdetail.avatar);
@@ -16,7 +16,7 @@ const Profile = () => {
   const [file,setfile] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const handleError = useHandleErr()
   const handleUpdateProfile = async () => {
     if (!username || !email || !selectedImage || !name || !phone){
       alert("All fields are required");
@@ -42,7 +42,7 @@ const Profile = () => {
         url = response.data.secure_url;
 
       } catch (error) {
-        console.error("error while uploading the image");
+        handleError(error);
         return ;
       }
     }
@@ -61,7 +61,7 @@ const Profile = () => {
       dispatch(setUser(response.data.data));
       navigate("/profile");
     } catch (error) {
-      console.error(error);
+      handleError(error);
     }
 
   };

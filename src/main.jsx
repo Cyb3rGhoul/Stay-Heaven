@@ -35,6 +35,7 @@ import SellerBookings from "./SellerBookings.jsx";
 import AdminHotelDeleteRequests from "./AdminHotelDeleteRequests.jsx";
 import BecomeSellerRequests from "./BecomeSellerRequests.jsx";
 import { Toaster } from "react-hot-toast";
+import useHandleErr from "./utils/useHandleErr";
 
 const router = createBrowserRouter([
     {
@@ -159,17 +160,20 @@ const router = createBrowserRouter([
 
 function Base() {
     const dispatch = useDispatch();
-
     const getUser = async () => {
-        const user = await axios.get("/user/current-user", {
-            withCredentials: true,
-        });
-        if (user) {
-            dispatch(toggleLogin(true));
-            dispatch(setUser(user.data.data));
-        } else {
-            dispatch(toggleLogin(false));
-            dispatch(setUser({}));
+        try {
+            const user = await axios.get("/user/current-user", {
+                withCredentials: true,
+            });
+            if (user) {
+                dispatch(toggleLogin(true));
+                dispatch(setUser(user.data.data));
+            } else {
+                dispatch(toggleLogin(false));
+                dispatch(setUser({}));
+            }
+        } catch (error) {
+           console.log("")
         }
     };
 

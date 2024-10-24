@@ -84,8 +84,6 @@ const AdminDashboard = () => {
                 ).length
             );
         } catch (error) {
-            console.log("mai aya hu ");
-
             handleError(error);
         }
     };

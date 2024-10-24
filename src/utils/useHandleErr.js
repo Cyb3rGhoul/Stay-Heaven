@@ -9,66 +9,48 @@ export default function useHandleErr() {
         const err = error?.response?.data?.message;
         if (err === "jwt expired") {
             navigate("/login");
-            // toast.error("Hello World")
         } else if(err === "Hotel not found"){
-            // in approve hotel admin controller
-            // also delete comment controller
-            // checkout payment controller
-            // edit hotel controller
-            // get hotel details controller
-            // delete request controller (hotel)
-            // undo delete request controller (hotel)
-        } else if(err === "User not found"){
-            // in admin controller
-            // login controller
-            // forgot password
-            // reset password
-        } else if(err === "Unauthorized request") {
-            //create comment controller
-            //create hotel controller
-            // my previous booking controller
-            // my created places controller
-            // get current user controller
-            // get seller data
-        } else if(err === "All fields are required") {
-            //create comment controller
-            //create hotel controller
-            //edit hotel controller
-            //register user controller
-            // update account details controller
-            // get seller data
-        } else if(err === "Owner not found") {
-            //payment verification route
-        } else if(err === "You cannot create a hotel") {
-            //create hotel controller
+           toast.error("Error Occured, Try Again!")
+           //edit hotel
+        } else if(err === "User not found" || err === "Order not found"){
+            toast.error("Error Occurred. Try Again!")
+        }else if(err === "User not found - Username not found") {
+            toast.error("Username not found");
+        } 
+        else if(err === "User not found - Username / Email not found") {
+            toast.error("Username / Email not found");
+        } 
+        else if(err === "Unauthorized request") {
+            navigate("/login")
+        }else if(err === "Owner not found") {
+           toast.error("Error in payment, Try Again!")
         } else if(err === "Something went wrong while creating hotel") {
-            //create hotel controller
-        } else if(err === "Something went wrong while generating access and refresh token") {
-            // generate access and refresh token controller
-        } else if(err === "Phone number must be 10 digits") {
-            //register user controller
-        } else if(err === "User with email or username or phone number already exists") {
-            //register user controller
+            toast.error("Something went wrong while creating hotel, Try Again!")
+        } else if(err === "Something went wrong while generating access token") {
+            toast.error("Error Logging in, Try Again!")
         } else if(err === "Something went wrong while registering user") {
-            //register user controller
-        } else if(err === "Username or Email is required") {
-            //login user controller
-        } else if(err === "Invalid password") {
-            //login user controller
-        } else if(err === "Passwords do not match") {
-            // change password controller
-        } else if(err === "Invalid old password") {
-            // change password controller
-        } else if(err === "Username is required") {
-            // forgot password controller
-        } else if(err === "error sending mail") {
-            // forgot password controller
-        } else if(err === "password is required") {
-            // reset password controller
-        } else if(err === "Invalid token") {
-            // reset password controller
-        } else if(err === "Order not found") {
-            // approve order controller
+           toast.error("Something went wrong while registering user, Try Again!.")
+        }   else if(err === "Invalid old password" 
+            || err === "Passwords do not match" 
+            || err === "Username is required" 
+            || err === "Password must be at least 8 characters"
+            || err === "All fields are required"
+            || err === "Invalid password"
+            || err === "Username or Email is required"
+            || err === "User with this username already exists"
+            || err === "User with this email already exists"
+            || err === "User with this phone number already exists"
+            || err === "Phone number must be 10 digits"
+        ) {
+           toast.error(err)
+        }  else if(err === "error sending mail") {
+            toast.error("Could not send email. Please Try Again!")
+        } 
+        else if(err === "password is required") {
+            toast.error("Password is required")
+        } 
+        else if(err === "Invalid token") {
+            toast.error("Reset Password Link Expired")
         }
     };
 

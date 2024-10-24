@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "./utils/axios";
 import { setUser, toggleLogin } from "./app/reducers/userSlice";
 import socket from "./utils/socket";
+import useHandleErr from "./utils/useHandleErr";
 
 const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -31,6 +32,7 @@ const Navbar = () => {
     const currentPath = location.pathname.split("/")[1];
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const handleError = useHandleErr()
 
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
@@ -94,16 +96,20 @@ const Navbar = () => {
         };
     }, []);
     const logouthandler = async () => {
-        await axios.post(
-            "/user/logout",
-            {},
-            {
-                withCredentials: true, 
-            }
-        );
-        dispatch(toggleLogin(false));
-        dispatch(setUser({}));
-        navigate("/");
+        try {
+            await axios.post(
+                "/user/logout",
+                {},
+                {
+                    withCredentials: true, 
+                }
+            );
+            dispatch(toggleLogin(false));
+            dispatch(setUser({}));
+            navigate("/");
+        } catch (error) {
+            handleError(error)
+        }
     };
 
     return (

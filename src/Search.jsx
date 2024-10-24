@@ -14,6 +14,7 @@ import {
 import { CgGym } from "react-icons/cg";
 import axios from "./utils/axios";
 import { useSelector } from "react-redux";
+import useHandleErr from "./utils/useHandleErr";
 
 const Search = () => {
     const navigate = useNavigate();
@@ -22,7 +23,7 @@ const Search = () => {
     const [sortOption, setSortOption] = useState(null);
     const [search, setSearch] = useState(useSelector(state => state.user.searchTerm));
     const [hotels, setHotels] = useState([]);
-
+    const handleError = useHandleErr()
     const toggleFilter = () => {
         setFilterOpen(!filterOpen);
     };
@@ -60,10 +61,14 @@ const Search = () => {
         searchParam += `&min_price=${priceRange[0]}&max_price=${priceRange[1]}`;
 
         
-        const response = await axios.post(
-            `/hotel/search?${queryParams}${searchParam}`
-        );
-        setHotels(response.data.data.hotels);
+       try {
+         const response = await axios.post(
+             `/hotel/search?${queryParams}${searchParam}`
+         );
+         setHotels(response.data.data.hotels);
+       } catch (error) {
+        handleError(error)
+       }
     };
     const ResetHandler = () => {
         setFeatures({

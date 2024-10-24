@@ -14,6 +14,7 @@ import { CgGym } from "react-icons/cg";
 import { IoMdClose } from "react-icons/io";
 import randomImage from "./assets/random.jpg";
 import axios from "./utils/axios";
+import useHandleErr from "./utils/useHandleErr";
 
 const Edit = ({ selectedHotel, EditPopup }) => {
     const [selectedBooking, setSelectedBooking] = useState(selectedHotel);
@@ -27,6 +28,7 @@ const Edit = ({ selectedHotel, EditPopup }) => {
         setPreviews([]);
         setIsCreateBookingOpen(false);
     };
+    const handleError = useHandleErr()
 
     const handleDetailChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -123,7 +125,7 @@ const Edit = ({ selectedHotel, EditPopup }) => {
             }
             return urls;
         } catch (error) {
-            console.error("Error while uploading the images", error);
+            handleError("Error while uploading the images", error);
             return;
         }
     };
@@ -135,7 +137,7 @@ const Edit = ({ selectedHotel, EditPopup }) => {
             });
             console.log(response);
         } catch (error) {
-            console.error("Error while creating the hotel", error);
+            handleError("Error while creating the hotel", error);
             return;
         }
     };

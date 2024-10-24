@@ -3,13 +3,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import Navbar from "./Navbar";
 import axios from "./utils/axios.jsx";
-
+import useHandleErr from "./utils/useHandleErr";
 const ResetPassword = () => {
   const navigate = useNavigate();
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const { id, token } = useParams();
-
+  const handleError = useHandleErr()
   const handleEmailPhoneSubmit = async (e) => {
     e.preventDefault();
     if(!newPassword || !confirmPassword || newPassword !== confirmPassword) {
@@ -25,16 +25,7 @@ const ResetPassword = () => {
           navigate("/login");
         }
     } catch (error) {
-        if (error.response) {
-            if (error.response.status === 400 && error.response.data.statusCode === 404) {
-              alert("User not found");
-            }else if (error.response.status === 400 && error.response.data.statusCode === 401) {
-              alert("Link expired");
-              navigate("/login");
-            } else {
-              alert("An unexpected error occurred. Please try again later.");
-            }
-          } 
+      handleError(error)
     }
   };
 

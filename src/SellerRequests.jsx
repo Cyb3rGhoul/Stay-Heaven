@@ -6,6 +6,7 @@ import cross from "./assets/cross.png";
 import { Link } from "react-router-dom";
 import axios from "./utils/axios";
 import socket from "./utils/socket";
+import useHandleErr from "./utils/useHandleErr";
 
 const SellerRequests = () => {
     const [user, setUser] = useState(
@@ -13,6 +14,7 @@ const SellerRequests = () => {
             return state.user.userData;
         })
     );
+    const handleError = useHandleErr()
     const dispatch = useDispatch();
     const [orders, setOrders] = useState(
         () => {
@@ -55,7 +57,7 @@ const SellerRequests = () => {
             });
             
         } catch (error) {
-            console.log(error);
+            handleError(error);
         }
     };
 

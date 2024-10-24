@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "./utils/axios";
 import { Link, useNavigate } from "react-router-dom";
 import socket from "./utils/socket";
+import useHandleErr from "./utils/useHandleErr";
 
 const AdminUser = () => {
     const [users, setUsers] = useState([]);
@@ -15,7 +16,7 @@ const AdminUser = () => {
     const [isSeller, setIsSeller] = useState(null);
     const [isBan, setIsBan] = useState(null);
     const navigate = useNavigate();
-
+    const handleError = useHandleErr()
     const popup = () => {
         setIsOpen((prev) => !prev);
     };
@@ -73,7 +74,7 @@ const AdminUser = () => {
                 )
             );
         } catch (error) {
-            console.log(error);
+            handleError(error);
         }
     };
 
@@ -97,7 +98,7 @@ const AdminUser = () => {
                 )
             );
         } catch (error) {
-            console.log(error);
+            handleError(error);
         }
     };
 
@@ -121,7 +122,7 @@ const AdminUser = () => {
                 )
             );
         } catch (error) {
-            console.log(error);
+            handleError(error);
         }
     };
 
@@ -145,7 +146,7 @@ const AdminUser = () => {
                 )
             );
         } catch (error) {
-            console.log(error);
+            handleError(error);
         }
     };
 
@@ -164,7 +165,7 @@ const AdminUser = () => {
                 )
             );
         } catch (error) {
-            console.log(error);
+            handleError(error);
         }
     };
 
@@ -183,7 +184,7 @@ const AdminUser = () => {
                 )
             );
         } catch (error) {
-            console.log(error);
+            handleError(error);
         }
     };
 
@@ -199,7 +200,7 @@ const AdminUser = () => {
             setUsers(response.data.data.users);
             setFilteredUsers(response.data.data.users);
         } catch (error) {
-            console.log(error);
+            handleError(error);
         }
     };
 

@@ -18,6 +18,8 @@ import axios from "./utils/axios";
 import Rating from "@mui/material/Rating";
 import { useSelector } from "react-redux";
 import "./HotelDetails.css";
+import useHandleErr from "./utils/useHandleErr";
+import toast from "react-hot-toast";
 
 const HotelDetails = () => {
     const { id } = useParams();
@@ -25,6 +27,7 @@ const HotelDetails = () => {
     const [user, setUser] = useState(
         useSelector((state) => state.user.userData)
     );
+    const handleError = useHandleErr()
     const [features, setFeatures] = useState({
         wifi: false,
         ac: false,
@@ -97,7 +100,7 @@ const HotelDetails = () => {
                     reviews.filter((review) => review._id !== id)
                 );
             } catch (error) {
-                console.log(error);
+                handleError(error);
             }
         };
     };
@@ -111,7 +114,7 @@ const HotelDetails = () => {
             setReviews((reviews) => [...reviews, response.data.data]);
             setComment({ message: "", rating: 0 });
         } catch (error) {
-            console.log(error);
+            handleError(error);
         }
     };
     const getHotelDetails = async () => {
@@ -130,7 +133,7 @@ const HotelDetails = () => {
             setHotel(response.data.data.hotel);
             setReviews(response.data.data.hotel.comments);
         } catch (error) {
-            console.log(error);
+            handleError(error);
         }
     };
 
@@ -181,19 +184,19 @@ const HotelDetails = () => {
     };
 
     const handleBookClick = () => {
-        if(hotel.owner === user._id) alert("You can't book your own hotel");
+        if(hotel.owner === user._id) toast.error("You can't book your own hotel");
         else setShowPopup(true);
     };
 
     const handlePay = async () => {
         if (checkInDate === null || checkOutDate === null) {
-            alert("Please fill all the required fields");
+            toast.error("Please fill all the required fields");
             return;
         }
 
         for (let i = 0; i < guestNames.length; i++) {
             if (Object.keys(guestNames[i]).length !== 3) {
-                alert("Please fill all the required fields");
+                toast.error("Please fill all the required fields");
                 return;
             }
         }
@@ -246,7 +249,7 @@ const HotelDetails = () => {
             const rzp1 = new window.Razorpay(options);
             rzp1.open();
         } catch (e) {
-            console.log(e);
+            handleError(e);
         }
     };
     const formatPrice = (price) => {

@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Edit from "./Edit";
 import socket from "./utils/socket";
 import { Link } from "react-router-dom";
-
+import useHandleErr from "./utils/useHandleErr";
 const SellerHotels = () => {
     const [hotels, setHotels] = useState([]);
     const [filteredHotels, setFilteredHotels] = useState([]);
@@ -18,7 +18,7 @@ const SellerHotels = () => {
     const [approvalStatus, setApprovalStatus] = useState(null);
     const [isOpen2, setisOpen2] = useState(false);
     const [selectedHotel1, setSelectedHotel1] = useState(null);
-
+    const handleError = useHandleErr()
     const popup = () => {
         setIsOpen((prev) => !prev);
     };
@@ -98,7 +98,7 @@ const SellerHotels = () => {
             setFilteredHotels(allHotels);
             setOrders(allOrders);
         } catch (error) {
-            console.log(error);
+            handleError(error);
         }
     };
 
@@ -109,15 +109,19 @@ const SellerHotels = () => {
 
     const deleteSubmitHandler = async (e) => {
         e.preventDefault();
-        const formData = new FormData(e.target);
-        const reason = formData.get("reason");
-        await axios.post(
-            "/hotel/delete-request",
-            { id: selectedHotel1, reason },
-            { withCredentials: true }
-        );
-
-        setisOpen2((prev) => !prev);
+        try {
+            const formData = new FormData(e.target);
+            const reason = formData.get("reason");
+            await axios.post(
+                "/hotel/delete-request",
+                { id: selectedHotel1, reason },
+                { withCredentials: true }
+            );
+    
+            setisOpen2((prev) => !prev);
+        } catch (error) {
+            handleError(error);
+        }
     };
 
     const onUndoHandler = async (id) => {
@@ -128,7 +132,7 @@ const SellerHotels = () => {
                 { withCredentials: true }
             );
         } catch (error) {
-            console.log(error);
+            handleError(error);
         }
     };
     useEffect(() => {

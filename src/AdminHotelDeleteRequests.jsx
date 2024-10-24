@@ -4,12 +4,13 @@ import cross from "./assets/cross.png";
 import axios from "./utils/axios";
 import { Link } from "react-router-dom";
 import socket from "./utils/socket";
+import useHandleErr from "./utils/useHandleErr";
 
 const AdminHotelDeleteRequests = () => {
     const [hotels, setHotels] = useState([]);
     const [modal, setModal] = useState(false);
     const [reason, setReason] = useState("");
-
+    const handleError = useHandleErr();
     const getAllPendingHotels = async () => {
         try {
             const response = await axios.post(
@@ -23,7 +24,7 @@ const AdminHotelDeleteRequests = () => {
                 response.data.data.hotels.filter((hotel) => hotel.deleteReason)
             );
         } catch (error) {
-            console.log(error);
+            handleError(error)
         }
     };
 
@@ -37,7 +38,7 @@ const AdminHotelDeleteRequests = () => {
                 }
             );
         } catch (error) {
-            console.log(error);
+            handleError(error)
         }
     };
 
@@ -49,7 +50,7 @@ const AdminHotelDeleteRequests = () => {
                 { withCredentials: true }
             );
         } catch (error) {
-            console.log(error);
+            handleError(error)
         }
     };
 

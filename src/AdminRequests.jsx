@@ -4,10 +4,11 @@ import cross from "./assets/cross.png";
 import axios from "./utils/axios";
 import { Link } from "react-router-dom";
 import socket from "./utils/socket";
+import useHandleErr from "./utils/useHandleErr";
 
 const AdminRequests = () => {
     const [hotels, setHotels] = useState([]);
-
+    const handleError = useHandleErr()
     const getAllPendingHotels = async () => {
         try {
             const response = await axios.post(
@@ -19,7 +20,7 @@ const AdminRequests = () => {
             );
             setHotels(response.data.data.hotels);
         } catch (error) {
-            console.log(error);
+            handleError(error);
         }
     };
 
@@ -34,7 +35,7 @@ const AdminRequests = () => {
             );
             getAllPendingHotels();
         } catch (error) {
-            console.log(error);
+            handleError(error);
         }
     };
 

@@ -5,13 +5,14 @@ import axios from "./utils/axios";
 import { useDispatch } from 'react-redux';
 import { setSearch } from "./app/reducers/userSlice";
 import socket from "./utils/socket";
+import useHandleErr from "./utils/useHandleErr";
 
 const Landing = () => {
     const navigate = useNavigate();
     const [showAllCities, setShowAllCities] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const dispatch = useDispatch();
-
+    const handleError = useHandleErr()
     const toggleShowAllCities = () => {
         setShowAllCities(!showAllCities);
     };
@@ -21,7 +22,7 @@ const Landing = () => {
             const response = await axios("/hotel/hotels");
             setHotels(response.data.data.hotels);
         } catch (error) {
-            console.log(error);
+            handleError(error);
         }
     };
 
