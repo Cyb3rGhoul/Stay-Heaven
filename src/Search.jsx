@@ -116,9 +116,6 @@ const Search = () => {
                                         <p>₹ {typeof hotel.price === 'number' ? hotel.price.toLocaleString('en-IN') : "N/A"}</p>
                                         <button
                                             className="result-card-button"
-                                            // onClick={() =>
-                                            //   alert(`Navigating to properties ${properties.id}`)
-                                            // }
                                             onClick={() => navigate(`/hotel/${hotel._id}`)}
                                         >
                                             View Details

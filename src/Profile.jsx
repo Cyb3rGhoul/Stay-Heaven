@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { setUser } from "./app/reducers/userSlice";
 import "./Profile.css";
 import useHandleErr from "./utils/useHandleErr";
+import toast from "react-hot-toast";
 const Profile = () => {
   const [userdetail, setUserdetail] = useState(useSelector((state) => state.user.userData));
   const [selectedImage, setSelectedImage] = useState(userdetail.avatar);
@@ -19,12 +20,12 @@ const Profile = () => {
   const handleError = useHandleErr()
   const handleUpdateProfile = async () => {
     if (!username || !email || !selectedImage || !name || !phone){
-      alert("All fields are required");
+      toast.error("All fields are required");
       return;
     }
 
     if(phone.length != 10){
-      alert("Invalid phone number");
+      toast.error("Invalid phone number");
       return;
     }
     let url;

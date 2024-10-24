@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Navbar from "./Navbar";
 import axios from "./utils/axios.jsx";
 import useHandleErr from "./utils/useHandleErr";
+import toast from "react-hot-toast";
 const ResetPassword = () => {
   const navigate = useNavigate();
   const [newPassword, setNewPassword] = useState("");
@@ -13,7 +14,7 @@ const ResetPassword = () => {
   const handleEmailPhoneSubmit = async (e) => {
     e.preventDefault();
     if(!newPassword || !confirmPassword || newPassword !== confirmPassword) {
-      alert("Please enter new password and confirm password");
+      toast.error("Please enter new password and confirm password");
       return;
     } 
     let password = newPassword;
@@ -21,7 +22,7 @@ const ResetPassword = () => {
     try {
         response = await axios.post(`/user/reset-password/${id}/${token}`, {password}, {withCredentials: true});
         if(response.data.statusCode === 200) {
-          alert("Password reset successfully");
+          toast.success("Password reset successfully");
           navigate("/login");
         }
     } catch (error) {

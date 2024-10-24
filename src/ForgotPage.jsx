@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Navbar from "./Navbar";
 import axios from "./utils/axios.jsx";
 import useHandleErr from "./utils/useHandleErr";
+import toast from "react-hot-toast";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
@@ -12,14 +13,14 @@ const ForgotPassword = () => {
   const handleEmailPhoneSubmit = async (e) => {
     e.preventDefault();
     if(!username) {
-      alert("Please enter username");
+      toast.error("Please enter username");
       return;
     } 
 
     try {
       const response = await axios.post("/user/forgot-password", {username}, {withCredentials: true});
     if(response.data.status === 200) {
-      alert("Password reset link sent to your email");
+      toast.success("Password reset link sent to your email");
       navigate("/login");
     }
     } catch (error) {

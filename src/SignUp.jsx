@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Navbar from "./Navbar";
 import axios from "./utils/axios";
 import useHandleErr from "./utils/useHandleErr";
+import toast from "react-hot-toast";
 const SignUp = () => {
     const navigate = useNavigate();
     const [username, setUsername] = useState("");
@@ -26,17 +27,17 @@ const SignUp = () => {
             !fullname ||
             !phone
         ) {
-            alert("All fields are required");
+            toast.error("All fields are required");
             return;
         }
 
         if (/\s/.test(username) || /\s/.test(password)) {
-            alert("Username and password should not contain spaces.");
+            toast.error("Username and password should not contain spaces.");
             return;
         }
 
         if (phone.length != 10) {
-            alert("Invalid phone number");
+            toast.error("Invalid phone number");
             return;
         }
         let url;

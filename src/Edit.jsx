@@ -15,6 +15,7 @@ import { IoMdClose } from "react-icons/io";
 import randomImage from "./assets/random.jpg";
 import axios from "./utils/axios";
 import useHandleErr from "./utils/useHandleErr";
+import toast from "react-hot-toast";
 
 const Edit = ({ selectedHotel, EditPopup }) => {
     const [selectedBooking, setSelectedBooking] = useState(selectedHotel);
@@ -86,7 +87,7 @@ const Edit = ({ selectedHotel, EditPopup }) => {
     const attachHandler = async (e) => {
         const selectedFiles = Array.from(e.target.files);
         if (selectedFiles.length + files.length > 5) {
-            alert("You can only upload a maximum of 5 files.");
+            toast.error("You can only upload a maximum of 5 files.");
             return;
         }
 
@@ -145,7 +146,7 @@ const Edit = ({ selectedHotel, EditPopup }) => {
         const urls = await uploadImages();
         const hotel = { ...selectedBooking, images: urls };
         editHotel(hotel);
-        alert("Hotel Created Successfully");
+        toast.success("Hotel Created Successfully");
         setFiles([]);
         setPreviews([]);
         setSelectedBooking(null);
