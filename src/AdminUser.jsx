@@ -21,6 +21,23 @@ const AdminUser = () => {
         setIsOpen((prev) => !prev);
     };
 
+    const headers = [
+        "S.No.",
+        "Username",
+        "Email",
+        "Full Name",
+        "Phone Number",
+        "Past Bookings",
+        "Admin",
+        "Seller",
+        "Created Hotels",
+        "Orders",
+        "Ban",
+        "Address",
+        "Aadhaar Card",
+        "Pan Card"
+    ];
+
     const submitHandler = (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
@@ -355,7 +372,7 @@ const AdminUser = () => {
             <div className="mb-6 flex justify-between">
                 <button
                     onClick={popup}
-                    className="btn text-white bg-emerald-600 hover:bg-emerald-700 transition-colors duration-300 shadow-md"
+                    className="btn text-white bg-emerald-600 hover:bg-emerald-700 transition-colors duration-300 shadow-md mr-2 ml-2"
                 >
                     Apply Filters
                 </button>
@@ -513,108 +530,79 @@ const AdminUser = () => {
                     </div>
                 </div>
             )}
-            <div className="overflow-x-auto">
-                <table className="table min-w-full">
-                    <thead>
-                        <tr className="font-bold text-lg">
-                            <th>S.No.</th>
-                            <th className="text-center">Username</th>
-                            <th className="text-center">Email</th>
-                            <th className="text-center">Full Name</th>
-                            <th className="text-center">Phone Number</th>
-                            <th className="text-center">Past Bookings</th>
-                            <th className="text-center">Admin</th>
-                            <th className="text-center">Seller</th>
-                            <th className="text-center">Created Hotels</th>
-                            <th className="text-center">Orders</th>
-                            <th className="text-center">Ban</th>
-                            <th className="text-center">Address</th>
-                            <th className="text-center">Aadhaar Card</th>
-                            <th className="text-center">Pan Card</th>
+            <div className="overflow-x-auto mr-2 ml-2 ">
+                <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-emerald-500">
+                        <tr>
+                            {headers.map((header) => (
+                                <th
+                                    key={header}
+                                    scope="col"
+                                    className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"
+                                >
+                                    {header}
+                                </th>
+                            ))}
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody className="bg-white divide-y divide-gray-200">
                         {filteredUsers
                             .filter((item) => {
                                 return searchTerm.toLowerCase() === ""
                                     ? item
-                                    : item.username
-                                          .toLowerCase()
-                                          .includes(searchTerm.toLowerCase()) ||
-                                          item.email
-                                              .toLowerCase()
-                                              .includes(
-                                                  searchTerm.toLowerCase()
-                                              ) ||
-                                          item.fullName
-                                              .toLowerCase()
-                                              .includes(
-                                                  searchTerm.toLowerCase()
-                                              );
+                                    : item.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                    item.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                    item.fullName.toLowerCase().includes(searchTerm.toLowerCase());
                             })
                             .map((user, index) => (
-                                <tr key={index}>
-                                    <th className="text-center">{index + 1}</th>
-                                    <td className="flex items-center gap-3 text-center">
-                                        <div className="avatar">
-                                            <div className="mask mask-squircle h-12 w-12">
-                                                <img
-                                                    src={user.avatar}
-                                                    alt="Avatar"
-                                                />
+                                <tr key={index} className="hover:bg-gray-50">
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {index + 1}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        <div className="flex items-center">
+                                            <div className="h-10 w-10 flex-shrink-0">
+                                                <img className="h-10 w-10 rounded-full" src={user.avatar} alt="" />
+                                            </div>
+                                            <div className="ml-4">
+                                                <div className="text-sm font-medium text-gray-900">{user.username}</div>
                                             </div>
                                         </div>
-                                        <div className="font-bold">
-                                            {user.username}
-                                        </div>
                                     </td>
-                                    <td className="text-center">
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                         {user.email}
                                     </td>
-                                    <td className="text-center">
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                         {user.fullName}
                                     </td>
-                                    <td className="text-center">
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                         +91 {user.phoneNumber}
                                     </td>
-                                    <td className="text-center">
+                                    <td className="px-6 py-4 whitespace-nowrap">
                                         <select
-                                            className="select bg-zinc-200 select-ghost select-sm"
+                                            className="text-sm text-gray-500 bg-amber-50 border border-amber-200 rounded-md px-3 py-1 focus:outline-none focus:ring-2 focus:ring-amber-200"
                                             value=""
                                             onChange={(e) => {
-                                                const selectedOrderId =
-                                                    e.target.value;
-                                                const selectedOrder =
-                                                    user.previousBookings.find(
-                                                        (order) =>
-                                                            order._id ===
-                                                            selectedOrderId
-                                                    );
+                                                const selectedOrderId = e.target.value;
+                                                const selectedOrder = user.previousBookings.find(
+                                                    (order) => order._id === selectedOrderId
+                                                );
                                                 if (selectedOrder) {
-                                                    setPastbookings(
-                                                        selectedOrder
-                                                    );
+                                                    setPastbookings(selectedOrder);
                                                 }
                                             }}
                                         >
-                                            <option value="" disabled selected>
-                                                Order ID
-                                            </option>
-                                            {user.previousBookings.map(
-                                                (order) => (
-                                                    <option
-                                                        key={order._id}
-                                                        value={order._id}
-                                                    >
-                                                        {order._id}
-                                                    </option>
-                                                )
-                                            )}
+                                            <option value="" disabled>Order ID</option>
+                                            {user.previousBookings.map((order) => (
+                                                <option key={order._id} value={order._id}>
+                                                    {order._id}
+                                                </option>
+                                            ))}
                                         </select>
                                     </td>
-                                    <td className="text-center mt-2">
+                                    <td className="px-6 py-4 whitespace-nowrap">
                                         <select
-                                            className="select bg-zinc-200 select-ghost select-sm w-full md:w-auto"
+                                            className="text-sm text-gray-500 bg-amber-50 border border-amber-200 rounded-md px-3 py-1 focus:outline-none focus:ring-2 focus:ring-amber-200"
                                             value={user.isAdmin ? "yes" : "no"}
                                             onChange={(e) => {
                                                 if (e.target.value === "yes") {
@@ -628,12 +616,10 @@ const AdminUser = () => {
                                             <option value="no">No</option>
                                         </select>
                                     </td>
-                                    <td className="text-center mt-2">
+                                    <td className="px-6 py-4 whitespace-nowrap">
                                         <select
-                                            className="select bg-zinc-200 select-ghost select-sm w-full md:w-auto"
-                                            value={
-                                                user.isCreator ? "yes" : "no"
-                                            }
+                                            className="text-sm text-gray-500 bg-amber-50 border border-amber-200 rounded-md px-3 py-1 focus:outline-none focus:ring-2 focus:ring-amber-200"
+                                            value={user.isCreator ? "yes" : "no"}
                                             onChange={(e) => {
                                                 if (e.target.value === "yes") {
                                                     makeCreator(user._id);
@@ -646,76 +632,53 @@ const AdminUser = () => {
                                             <option value="no">No</option>
                                         </select>
                                     </td>
-                                    <td className="text-center mt-2">
+                                    <td className="px-6 py-4 whitespace-nowrap">
                                         <select
                                             disabled={!user.isCreator}
-                                            className="select bg-zinc-200 select-ghost select-sm w-full md:w-auto"
+                                            className="text-sm text-gray-500 bg-amber-50 border border-amber-200 rounded-md px-3 py-1 focus:outline-none focus:ring-2 focus:ring-amber-200 disabled:opacity-50"
                                             value=""
                                             onChange={(e) => {
-                                                const hoteltitle =
-                                                    e.target.value;
-                                                const selectedHotel =
-                                                    user.myCreatedPlaces.find(
-                                                        (hotel) =>
-                                                            hotel.title ===
-                                                            hoteltitle
-                                                    );
+                                                const hoteltitle = e.target.value;
+                                                const selectedHotel = user.myCreatedPlaces.find(
+                                                    (hotel) => hotel.title === hoteltitle
+                                                );
                                                 if (selectedHotel) {
-                                                    setCreatedHotel(
-                                                        selectedHotel
-                                                    );
+                                                    setCreatedHotel(selectedHotel);
                                                 }
                                             }}
                                         >
-                                            <option value="" disabled selected>
-                                                Hotels
-                                            </option>
-                                            {user.myCreatedPlaces.map(
-                                                (hotel) => (
-                                                    <option key={hotel.title}>
-                                                        {hotel.title}
-                                                    </option>
-                                                )
-                                            )}
+                                            <option value="" disabled>Hotels</option>
+                                            {user.myCreatedPlaces.map((hotel) => (
+                                                <option key={hotel.title}>{hotel.title}</option>
+                                            ))}
                                         </select>
                                     </td>
-                                    <td className="text-center mt-2">
+                                    <td className="px-6 py-4 whitespace-nowrap">
                                         <select
                                             disabled={!user.isCreator}
-                                            className="select bg-zinc-200 select-ghost select-sm w-full md:w-auto"
+                                            className="text-sm text-gray-500 bg-amber-50 border border-amber-200 rounded-md px-3 py-1 focus:outline-none focus:ring-2 focus:ring-amber-200 disabled:opacity-50"
                                             value=""
                                             onChange={(e) => {
-                                                const receivedbooking =
-                                                    e.target.value;
-                                                const selectedbooking =
-                                                    user.receivedOrders.find(
-                                                        (order) =>
-                                                            order._id ===
-                                                            receivedbooking
-                                                    );
+                                                const receivedbooking = e.target.value;
+                                                const selectedbooking = user.receivedOrders.find(
+                                                    (order) => order._id === receivedbooking
+                                                );
                                                 if (selectedbooking) {
                                                     setOrder(selectedbooking);
                                                 }
                                             }}
                                         >
-                                            <option value="" disabled selected>
-                                                Received Order ID
-                                            </option>
-                                            {user.receivedOrders.map(
-                                                (order) => (
-                                                    <option
-                                                        key={order._id}
-                                                        value={order._id}
-                                                    >
-                                                        {order._id}
-                                                    </option>
-                                                )
-                                            )}
+                                            <option value="" disabled>Received Order ID</option>
+                                            {user.receivedOrders.map((order) => (
+                                                <option key={order._id} value={order._id}>
+                                                    {order._id}
+                                                </option>
+                                            ))}
                                         </select>
                                     </td>
-                                    <td className="text-center mt-2">
+                                    <td className="px-6 py-4 whitespace-nowrap">
                                         <select
-                                            className="select bg-zinc-200 select-ghost select-sm w-full md:w-auto"
+                                            className="text-sm text-gray-500 bg-amber-50 border border-amber-200 rounded-md px-3 py-1 focus:outline-none focus:ring-2 focus:ring-amber-200"
                                             value={user.isban ? "yes" : "no"}
                                             onChange={(e) => {
                                                 if (e.target.value === "yes") {
@@ -729,16 +692,13 @@ const AdminUser = () => {
                                             <option value="no">No</option>
                                         </select>
                                     </td>
-                                    <td className="text-center mt-2">
-                                        {user.address ? user.address : "N/A"}
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {user.address || "N/A"}
                                     </td>
-                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm">
                                         {user.aadhaar ? (
-                                            <Link
-                                                target="_blank"
-                                                to={`${user.aadhaar}`}
-                                            >
-                                                <button className="px-3 py-1 bg-zinc-200 rounded-md hover:bg-zinc-300 transition-colors">
+                                            <Link target="_blank" to={`${user.aadhaar}`}>
+                                                <button className="px-3 py-1 text-emerald-600 hover:text-emerald-900 font-medium transition duration-300">
                                                     Document
                                                 </button>
                                             </Link>
@@ -746,13 +706,10 @@ const AdminUser = () => {
                                             "N/A"
                                         )}
                                     </td>
-                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm">
                                         {user.pan ? (
-                                            <Link
-                                                target="_blank"
-                                                to={`${user.pan}`}
-                                            >
-                                                <button className="px-3 py-1 bg-zinc-200 rounded-md hover:bg-zinc-300 transition-colors">
+                                            <Link target="_blank" to={`${user.pan}`}>
+                                                <button className="px-3 py-1 text-emerald-600 hover:text-emerald-900 font-medium transition duration-300">
                                                     Document
                                                 </button>
                                             </Link>

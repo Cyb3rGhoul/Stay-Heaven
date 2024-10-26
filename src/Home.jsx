@@ -179,32 +179,31 @@ const Landing = () => {
                 </div>
                 <div className="landing__grid-container">
                     <div className="landing__grid">
-                        {hotels.map((hotel) => {
-                            return (
-                                <div
-                                    key={hotel._id}
-                                    className="landing__grid-item"
-                                    onClick={() => navigate(`/hotel/${hotel._id}`)}
-                                >
-                                    <img
-                                        src={hotel.images[0]}
-                                        alt={hotel.title}
-                                        className="landing__grid-item-image"
-                                    />
-                                    <div className="landing__grid-item-content flex flex-col gap-1">
-                                        <div className="flex justify-between items-center">
-                                            <div className="text-lg font-bold">{hotel.title}</div>
-                                            <StarRating value={hotel.rating} />
-                                        </div>
-                                        <div className="text-left">
-                                            ₹ {typeof hotel.price === 'number' ? hotel.price.toLocaleString('en-IN') : "N/A"}
-                                        </div>
+                        {hotels.map((hotel) => (
+                            <div
+                                key={hotel._id}
+                                className="landing__grid-item animate-fadeIn"
+                                onClick={() => navigate(`/hotel/${hotel._id}`)}
+                            >
+                                <img
+                                    src={hotel.images[0]}
+                                    alt={hotel.title}
+                                    className="landing__grid-item-image"
+                                />
+                                <div className="landing__grid-item-content flex flex-col gap-1">
+                                    <div className="flex justify-between items-center">
+                                        <div className="text-lg font-bold">{hotel.title}</div>
+                                        <StarRating value={hotel.rating} />
+                                    </div>
+                                    <div className="text-left">
+                                        ₹ {typeof hotel.price === 'number' ? hotel.price.toLocaleString('en-IN') : "N/A"}
                                     </div>
                                 </div>
-                            );
-                        })}
+                            </div>
+                        ))}
                     </div>
                 </div>
+
             </div>
             {showAllCities && (
                 <div className="landing__modal">

@@ -1,20 +1,54 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import Navbar from './Navbar';
-import dashboard from './assets/adminnav/dashboard.png';
-import requests from './assets/adminnav/requests.png';
-import hotels from './assets/adminnav/hotel.png';
-import users from './assets/adminnav/users.png';
+import { 
+  LayoutDashboard, 
+  ClipboardCheck, 
+  Building2, 
+  Trash2,
+  Users,
+  UserPlus,
+  CalendarCheck
+} from 'lucide-react';
 
 const navItems = [
-  { path: '/admin/dashboard', label: 'Dashboard', icon: dashboard },
-  { path: '/admin/hotel-requests', label: 'Hotel Requests', icon: requests },
-  { path: '/admin/hotels', label: 'Hotels', icon: hotels },
-  { path: '/admin/hotels-delete-request', label: 'Hotel Delete Request', icon: hotels },
-  { path: '/admin/users', label: 'Users', icon: users },
-  { path: '/admin/become-seller', label: 'Seller Requests', icon: users },
-  { path: '/admin/Bookings', label: 'Bookings', icon: users },
+  { 
+    path: '/admin/dashboard', 
+    label: 'Dashboard', 
+    icon: <LayoutDashboard className="w-6 h-6" /> // Dashboard layout icon
+  },
+  { 
+    path: '/admin/hotel-requests', 
+    label: 'Hotel Requests', 
+    icon: <ClipboardCheck className="w-6 h-6" /> // Checklist icon for requests
+  },
+  { 
+    path: '/admin/hotels', 
+    label: 'Hotels', 
+    icon: <Building2 className="w-6 h-6" /> // Building icon for hotels
+  },
+  { 
+    path: '/admin/hotels-delete-request', 
+    label: 'Hotel Delete Request', 
+    icon: <Trash2 className="w-6 h-6" /> // Trash icon for deletion requests
+  },
+  { 
+    path: '/admin/users', 
+    label: 'Users', 
+    icon: <Users className="w-6 h-6" /> // Multiple users icon
+  },
+  { 
+    path: '/admin/become-seller', 
+    label: 'Seller Requests', 
+    icon: <UserPlus className="w-6 h-6" /> // Add user icon for seller requests
+  },
+  { 
+    path: '/admin/Bookings', 
+    label: 'Bookings', 
+    icon: <CalendarCheck className="w-6 h-6" /> // Calendar with check for bookings
+  },
 ];
+
 
 const AdminNavbar = () => {
   const [isMobile, setIsMobile] = useState(false);
@@ -49,7 +83,7 @@ const AdminNavbar = () => {
               title={item.label}
             >
               <div className={`${isMobile ? 'p-2' : 'p-3'} bg-green-600/20 rounded-lg backdrop-blur-lg shadow-lg`}>
-              <img className={`${isMobile ? 'h-4' : 'h-6'} w-6`} src={item.icon} alt={item.label} />
+              {item.icon}
               </div>
               {!isMobile && <h2 className="text-lg font-semibold">{item.label}</h2>}
             </NavLink>

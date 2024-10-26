@@ -114,7 +114,7 @@ const AdminHotels = () => {
 
     return (
         <div className="mt-10 max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
-            <div className="mb-6 flex justify-between border-2 overflow-hidden">
+            <div className="mb-6 flex justify-between overflow-hidden">
                 <button
                     onClick={popup}
                     className="btn text-white max-sm:scale-75 bg-emerald-600 hover:bg-emerald-700 transition-colors duration-300 shadow-md"

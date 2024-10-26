@@ -1,6 +1,6 @@
 // src/pages/SinglePage.js (entire file)
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import {
     FaShareAlt,
     FaWifi,
@@ -184,7 +184,7 @@ const HotelDetails = () => {
     };
 
     const handleBookClick = () => {
-        if(hotel.owner === user._id) toast.error("You can't book your own hotel");
+        if (hotel.owner === user._id) toast.error("You can't book your own hotel");
         else setShowPopup(true);
     };
 
@@ -439,8 +439,8 @@ const HotelDetails = () => {
                                             ₹{" "}
                                             {typeof hotel.price === "number"
                                                 ? hotel.price.toLocaleString(
-                                                      "en-IN"
-                                                  )
+                                                    "en-IN"
+                                                )
                                                 : "N/A"}
                                         </DiscountedPrice>{" "}
                                         per night
@@ -573,18 +573,18 @@ const HotelDetails = () => {
                                                                 </FormItem>
                                                                 {guestNames.length >
                                                                     1 && (
-                                                                    <RemoveGuestButton
-                                                                        type="button"
-                                                                        onClick={() =>
-                                                                            handleRemoveGuest(
-                                                                                index
-                                                                            )
-                                                                        }
-                                                                    >
-                                                                        Remove
-                                                                        Guest
-                                                                    </RemoveGuestButton>
-                                                                )}
+                                                                        <RemoveGuestButton
+                                                                            type="button"
+                                                                            onClick={() =>
+                                                                                handleRemoveGuest(
+                                                                                    index
+                                                                                )
+                                                                            }
+                                                                        >
+                                                                            Remove
+                                                                            Guest
+                                                                        </RemoveGuestButton>
+                                                                    )}
                                                             </GuestDetails>
                                                         )
                                                     )}
@@ -661,7 +661,7 @@ const HotelDetails = () => {
                                 </PriceSection>
                             </Right>
                         </Details>
-                        <div className="comment-section flex flex-col gap-6 mx-auto max-w-4xl p-6 bg-gray-50 rounded-lg shadow-lg">
+                        <div className="comment-section flex flex-col gap-6 mx-auto max-w-4xl p-6 rounded-lg shadow-lg" style={{backgroundColor:"rgba(218, 160, 109, .2)"}}>
                             <div className="comment-box flex flex-col md:flex-row gap-4 items-start">
                                 <div className="rating-component flex-shrink-0">
                                     <Rating
@@ -727,7 +727,7 @@ const HotelDetails = () => {
                                             </p>
                                             {user &&
                                                 user._id ===
-                                                    review.user._id && (
+                                                review.user._id && (
                                                     <button
                                                         onClick={() =>
                                                             handleDeleteReview(
@@ -752,6 +752,16 @@ const HotelDetails = () => {
 };
 
 export default HotelDetails;
+
+
+const fadeIn = keyframes`
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+`;
 
 const Wrapper = styled.div`
     color: #333;
@@ -791,6 +801,7 @@ const ShareButton = styled.button`
 `;
 
 const GalleryContainer = styled.div`
+    animation: ${fadeIn} 2.5s ease forwards;
     display: grid;
     grid-template-columns: 2fr 1fr;
     gap: 10px;
@@ -803,7 +814,7 @@ const GalleryContainer = styled.div`
 const MainImage = styled.div`
     img {
         width: 100%;
-        height: 100%;
+        height: 500px;
         object-fit: cover;
         border-radius: 10px;
     }
@@ -834,6 +845,7 @@ const Details = styled.div`
 `;
 
 const Left = styled.div`
+    animation: ${fadeIn} 0.5s ease forwards;
     flex: 2;
     margin-right: 20px;
 
@@ -858,7 +870,7 @@ const GuestReviews = styled.div`
 const GuestFavourite = styled.div`
     font-size: 16px;
     font-weight: bold;
-    color: #333;
+    color: #CD7F32;
 
     @media (max-width: 768px) {
         font-size: 14px;
@@ -876,6 +888,7 @@ const RatingWrapper = styled.div`
 `;
 
 const RatingValue = styled.div`
+    margin-top: 4px;
     font-size: 18px;
     color: #333;
 
@@ -1016,6 +1029,7 @@ const PinCode = styled.div`
 `;
 
 const Right = styled.div`
+    animation: ${fadeIn} 0.5s ease forwards;
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -1134,6 +1148,8 @@ const ReviewDate = styled.span`
     right: 10px;
 `;
 
+
+
 const PopupOverlay = styled.div`
     position: fixed;
     z-index: 1000;
@@ -1145,6 +1161,7 @@ const PopupOverlay = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    animation: ${fadeIn} 0.5s ease forwards;
 `;
 
 const PopupContent = styled.div`
@@ -1290,7 +1307,7 @@ const DatePickerWrapper = styled.div`
 `;
 
 const SummarySection = styled.div`
-    background: #f0f8ff;
+    background: #CD7F32;
     padding: 20px;
     border-radius: 10px;
     display: flex;
@@ -1302,17 +1319,18 @@ const SummaryItem = styled.div`
     text-align: center;
 
     label {
-        font-weight: 600;
-        color: #555;
-        font-size: 14px;
-        display: block;
-        margin-bottom: 5px;
-    }
+    font-weight: 600;
+    color: #eee; /* Light gray for better contrast */
+    font-size: 14px;
+    display: block;
+    margin-bottom: 5px;
+}
 
-    p {
-        font-size: 18px;
-        font-weight: 700;
-        color: #333;
-        margin: 0;
-    }
+p {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff; /* White for strong contrast */
+    margin: 0;
+}
+
 `;

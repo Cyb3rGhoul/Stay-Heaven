@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import Navbar from './Navbar';
-import dashboard from './assets/adminnav/dashboard.png';
-import requests from './assets/adminnav/requests.png';
-import hotels from './assets/adminnav/hotel.png';
-import users from './assets/adminnav/users.png';
+import { FaTachometerAlt, FaPlusSquare, FaClipboardList, FaHotel, FaCalendarCheck } from 'react-icons/fa';
 
 const navItems = [
-  { path: '/seller/dashboard', label: 'Dashboard', icon: dashboard },
-  { path: '/seller/requests', label: 'Create Hotel', icon: requests },
-  { path: '/seller/order-requests', label: 'Pending Order Requests', icon: requests },
-  { path: '/seller/hotels', label: 'Hotels', icon: hotels },
-  { path: '/seller/Bookings', label: 'Bookings', icon: users },
+  { path: '/seller/dashboard', label: 'Dashboard', icon: <FaTachometerAlt /> },
+  { path: '/seller/requests', label: 'Create Hotel', icon: <FaPlusSquare /> },
+  { path: '/seller/order-requests', label: 'Pending Order Requests', icon: <FaClipboardList /> },
+  { path: '/seller/hotels', label: 'Hotels', icon: <FaHotel /> },
+  { path: '/seller/bookings', label: 'Bookings', icon: <FaCalendarCheck /> },
 ];
 
 const SellerNavbar = () => {
@@ -47,7 +44,7 @@ const SellerNavbar = () => {
               title={item.label}
             >
               <div className={`${isMobile ? 'p-2' : 'p-3'} bg-green-600/20 rounded-lg backdrop-blur-lg shadow-lg`}>
-                <img className={`${isMobile ? 'h-4' : 'h-6'} w-6`} src={item.icon} alt={item.label} />
+              {item.icon}
               </div>
               {!isMobile && <h2 className="text-lg font-semibold">{item.label}</h2>}
             </NavLink>

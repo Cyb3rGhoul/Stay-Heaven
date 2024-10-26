@@ -41,34 +41,34 @@ const Search = () => {
         setFeatures({ ...features, [e.target.name]: e.target.checked });
     };
 
-    
+
 
     const filterHandler = async () => {
 
         const queryParams = Object.keys(features)
-            .filter((key) => features[key]) 
-            .map((key) => `${encodeURIComponent(key)}=true`) 
+            .filter((key) => features[key])
+            .map((key) => `${encodeURIComponent(key)}=true`)
             .join("&");
 
-        
+
         let searchParam = `&searchterm=${encodeURIComponent(search)}`
-        
-        if(sortOption !== null){
-          const sort = sortOption[0] === "p" ? "sort=price" : "sort=rating";
-          const order= sortOption[2] === "H" ? "order=desc" : "order=asc";
-          searchParam += `&${sort}&${order}`;
+
+        if (sortOption !== null) {
+            const sort = sortOption[0] === "p" ? "sort=price" : "sort=rating";
+            const order = sortOption[2] === "H" ? "order=desc" : "order=asc";
+            searchParam += `&${sort}&${order}`;
         }
         searchParam += `&min_price=${priceRange[0]}&max_price=${priceRange[1]}`;
 
-        
-       try {
-         const response = await axios.post(
-             `/hotel/search?${queryParams}${searchParam}`
-         );
-         setHotels(response.data.data.hotels);
-       } catch (error) {
-        handleError(error)
-       }
+
+        try {
+            const response = await axios.post(
+                `/hotel/search?${queryParams}${searchParam}`
+            );
+            setHotels(response.data.data.hotels);
+        } catch (error) {
+            handleError(error)
+        }
     };
     const ResetHandler = () => {
         setFeatures({
@@ -96,7 +96,7 @@ const Search = () => {
                                 type="text"
                                 placeholder="Search Destination/Hotel"
                                 value={search}
-                                onChange={(e)=>setSearch(e.target.value)}
+                                onChange={(e) => setSearch(e.target.value)}
                             />
                             <button onClick={filterHandler}>Search</button>
                             <FilterButton onClick={toggleFilter}>
@@ -105,7 +105,7 @@ const Search = () => {
                         </SearchBar>
                         <ResultsGrid>
                             {hotels.map((hotel) => (
-                                <ResultCard key={hotel._id}>
+                                <ResultCard key={hotel._id} className="animate-fadeIn"> {/* Add the animation class here */}
                                     <img
                                         src={hotel.images[0]}
                                         alt={hotel.title}
@@ -124,6 +124,7 @@ const Search = () => {
                                 </ResultCard>
                             ))}
                         </ResultsGrid>
+
                     </SearchResults>
                 </Content>
                 {filterOpen && (
@@ -238,18 +239,18 @@ const Search = () => {
                                 </option>
                             </select>
                             <div className="flex gap-5 mt-4">
-                            <button
-                                onClick={filterHandler}
-                                className="bg-green-500 text-white p-2 rounded-md mt-2 mx-auto"
-                            >
-                                Apply Filter
-                            </button>
-                            <button
-                                onClick={ResetHandler}
-                                className="bg-white text-green-500 border-green-500 border-2 p-2 rounded-md mt-2 mx-auto"
-                            >
-                                Reset Filter
-                            </button>
+                                <button
+                                    onClick={filterHandler}
+                                    className="bg-green-500 text-white p-2 rounded-md mt-2 mx-auto"
+                                >
+                                    Apply Filter
+                                </button>
+                                <button
+                                    onClick={ResetHandler}
+                                    className="bg-white text-green-500 border-green-500 border-2 p-2 rounded-md mt-2 mx-auto"
+                                >
+                                    Reset Filter
+                                </button>
                             </div>
                         </FilterSection>
                     </FilterBox>
@@ -326,7 +327,7 @@ const SearchBar = styled.div`
 
 const FilterButton = styled.button`
     padding: 10px;
-    background-color: #4caf50;
+    background-color: #CD7F32 !important;
     border: none;
     border-radius: 5px;
     color: #fff;
