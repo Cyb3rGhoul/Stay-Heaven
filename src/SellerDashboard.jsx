@@ -116,9 +116,8 @@ const SellerDashboard = () => {
             </div>
 
             <div
-                className={`flex flex-col md:flex-row gap-5 ${
-                    isMobile ? "items-center" : ""
-                }`}
+                className={`flex flex-col md:flex-row gap-5 ${isMobile ? "items-center" : ""
+                    }`}
             >
                 {data.map((item, index) => (
                     <motion.div
@@ -126,9 +125,8 @@ const SellerDashboard = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: index * 0.1 }}
-                        className={`h-[20vh] ${
-                            isMobile ? "w-full" : "w-1/3"
-                        } relative transition-all duration-300 ease-in bg-gradient-to-r from-green-400 to-green-600 cursor-pointer hover:shadow-xl rounded-lg p-4 flex gap-5 items-center justify-center`}
+                        className={`h-[20vh] ${isMobile ? "w-full" : "w-1/3"
+                            } relative transition-all duration-300 ease-in bg-gradient-to-r from-green-400 to-green-600 cursor-pointer hover:shadow-xl rounded-lg p-4 flex gap-5 items-center justify-center`}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                     >
@@ -139,7 +137,7 @@ const SellerDashboard = () => {
                         />
                         <div className="flex flex-col gap-2 text-white">
                             <h2 className="text-3xl font-semibold">
-                            {index == 0 ? "₹" : ""}{index === 0
+                                {index == 0 ? "₹" : ""}{index === 0
                                     ? formatNumber(item.value)
                                     : item.value}
                             </h2>
@@ -158,9 +156,8 @@ const SellerDashboard = () => {
                 className="flex items-center justify-center mt-10"
             >
                 <div
-                    className={`${
-                        isMobile ? "w-full" : "w-full"
-                    } my-10 flex flex-col gap-5 rounded-lg bg-gradient-to-br from-green-100 to-green-200 h-fit pt-10 pb-10 shadow-lg`}
+                    className={`${isMobile ? "w-full" : "w-full"
+                        } my-10 flex flex-col gap-5 rounded-lg bg-gradient-to-br from-amber-100 to-amber-300 h-fit pt-10 pb-10 shadow-lg`}
                 >
                     <PieActiveArc
                         data={[
@@ -185,6 +182,7 @@ const SellerDashboard = () => {
                         ]}
                     />
                 </div>
+
             </motion.section>
         </div>
     );

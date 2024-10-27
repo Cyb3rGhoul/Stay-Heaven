@@ -50,25 +50,25 @@ const SellerRequests = () => {
                             : order
                     ),
                 };
-    
+
                 dispatch(setUserRedux(updatedUser));
-    
+
                 return updatedUser;
             });
-            
+
         } catch (error) {
             handleError(error);
         }
     };
 
-    useEffect(() => {}, []);
+    useEffect(() => { }, []);
     return (
         <div className="mt-10 px-4 sm:px-6 lg:px-8">
             <div className="overflow-x-auto">
                 <div className="inline-block min-w-full py-2 align-middle">
                     <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
-                        <table className="min-w-full divide-y divide-gray-300">
-                            <thead className="bg-emerald-500">
+                        <table className="min-w-full divide-y divide-emerald-200">
+                            <thead className="bg-emerald-600">
                                 <tr>
                                     {[
                                         "S.No.",
@@ -78,7 +78,7 @@ const SellerRequests = () => {
                                         "Check-out",
                                         "Rooms",
                                         "Amount",
-                                        "Approve/Reject",
+                                        "Approve/Reject"
                                     ].map((header) => (
                                         <th
                                             key={header}
@@ -90,54 +90,48 @@ const SellerRequests = () => {
                                     ))}
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-gray-200 bg-white">
+                            <tbody className="bg-white divide-y divide-emerald-100">
                                 {orders.map((order, index) => (
-                                    <tr key={order._id}>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <tr
+                                        key={order._id}
+                                        className="hover:bg-emerald-50 transition-colors duration-300"
+                                    >
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                                             {index + 1}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                            {order._id}
+                                            <span className="font-mono">{order._id}</span>
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-amber-800">
                                             {order.hotel.title}
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                                             {getDate(order.checkin)}
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                                             {getDate(order.checkout)}
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                                             {order.rooms}
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            ₹{" "}
-                                           {typeof order.amount === 'number' ? (order.amount - 0.05 * order.amount).toLocaleString('en-IN') : "N/A"}
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-emerald-700">
+                                            ₹ {typeof order.amount === 'number'
+                                                ? (order.amount - 0.05 * order.amount).toLocaleString('en-IN')
+                                                : "N/A"}
                                         </td>
-                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                            <div className="flex justify-center gap-2">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                            <div className="flex justify-center gap-3">
                                                 <img
                                                     src={tick}
                                                     alt="approve"
-                                                    className="w-6 h-6 cursor-pointer"
-                                                    onClick={() =>
-                                                        approveOrder(
-                                                            order._id,
-                                                            "confirmed"
-                                                        )
-                                                    }
+                                                    className="w-6 h-6 cursor-pointer hover:scale-110 transition-transform duration-300"
+                                                    onClick={() => approveOrder(order._id, "confirmed")}
                                                 />
                                                 <img
                                                     src={cross}
                                                     alt="reject"
-                                                    className="w-6 h-6 cursor-pointer"
-                                                    onClick={() =>
-                                                        approveOrder(
-                                                            order._id,
-                                                            "cancelled"
-                                                        )
-                                                    }
+                                                    className="w-6 h-6 cursor-pointer hover:scale-110 transition-transform duration-300"
+                                                    onClick={() => approveOrder(order._id, "cancelled")}
                                                 />
                                             </div>
                                         </td>

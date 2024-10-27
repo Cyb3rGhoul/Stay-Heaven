@@ -120,144 +120,96 @@ const AdminHotelDeleteRequests = () => {
             <div className="overflow-x-auto">
                 <div className="inline-block min-w-full py-2 align-middle">
                     <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
-                        <table className="min-w-full divide-y divide-gray-300">
-                            <thead className="bg-gray-50">
+                        <table className="min-w-full divide-y divide-emerald-200">
+                            <thead className="bg-emerald-600">
                                 <tr>
-                                    <th
-                                        scope="col"
-                                        className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-                                    >
-                                        S.No.
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                                    >
-                                        Hotel Name
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                                    >
-                                        Owner
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                                    >
-                                        Price
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                                    >
-                                        Reason
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                                    >
-                                        City
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                                    >
-                                        State
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                                    >
-                                        Delete Option
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                                    >
-                                        Document
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                                    >
-                                        Details
-                                    </th>
+                                    {[
+                                        "S.No.",
+                                        "Hotel Name",
+                                        "Owner",
+                                        "Price",
+                                        "Reason",
+                                        "City",
+                                        "State",
+                                        "Delete Option",
+                                        "Document",
+                                        "Details"
+                                    ].map((header) => (
+                                        <th
+                                            key={header}
+                                            scope="col"
+                                            className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"
+                                        >
+                                            {header}
+                                        </th>
+                                    ))}
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-gray-200 bg-white">
+                            <tbody className="bg-white divide-y divide-emerald-100">
                                 {hotels.map((hotel, index) => (
-                                    <tr key={hotel._id}>
-                                        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                                    <tr
+                                        key={hotel._id}
+                                        className="hover:bg-emerald-50 transition-colors duration-300"
+                                    >
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 sm:pl-6">
                                             {index + 1}
                                         </td>
-                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                                             {hotel.title}
                                         </td>
-                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                                             {hotel.owner.username}
                                         </td>
-                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                            ₹{" "}
-                                            {typeof hotel.price === "number"
-                                                ? hotel.price.toLocaleString(
-                                                      "en-IN"
-                                                  )
-                                                : "N/A"}
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                            ₹ {typeof hotel.price === 'number' ? hotel.price.toLocaleString('en-IN') : "N/A"}
                                         </td>
-                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                                             <button
                                                 onClick={() => {
-                                                    setReason(
-                                                        (prev) =>
-                                                            hotel.deleteReason
-                                                    );
+                                                    setReason((prev) => hotel.deleteReason);
                                                     setModal(true);
                                                 }}
-                                                className="px-3 py-1 bg-zinc-200 rounded-md hover:bg-zinc-300 transition-colors"
+                                                className="px-4 py-2 bg-amber-100 text-amber-800 rounded-md hover:bg-amber-200 transition-colors duration-300"
                                             >
                                                 More
                                             </button>
                                         </td>
-                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                                             {hotel.city}
                                         </td>
-                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                                             {hotel.state}
                                         </td>
-                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                            <div className="flex justify-center gap-2">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                            <div className="flex justify-center gap-3">
                                                 <img
                                                     src={tick}
                                                     alt="approve"
-                                                    className="w-6 h-6 cursor-pointer"
-                                                    onClick={() =>
-                                                      approveDelete(hotel._id)
-                                                    }
+                                                    className="w-6 h-6 cursor-pointer hover:scale-110 transition-transform"
+                                                    onClick={() => approveDelete(hotel._id)}
                                                 />
                                                 <img
                                                     src={cross}
                                                     alt="reject"
-                                                    className="w-6 h-6 cursor-pointer"
-                                                    onClick={() =>
-                                                        rejectDelete(hotel._id)
-                                                    }
+                                                    className="w-6 h-6 cursor-pointer hover:scale-110 transition-transform"
+                                                    onClick={() => rejectDelete(hotel._id)}
                                                 />
                                             </div>
                                         </td>
-                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                                             <Link
                                                 target="_blank"
                                                 to={`${hotel.pdf}`}
+                                                className="inline-block"
                                             >
-                                                <button className="px-3 py-1 bg-zinc-200 rounded-md hover:bg-zinc-300 transition-colors">
+                                                <button className="px-4 py-2 bg-amber-100 text-amber-800 rounded-md hover:bg-amber-200 transition-colors duration-300">
                                                     Document
                                                 </button>
                                             </Link>
                                         </td>
-                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <Link to={`/hotel/${hotel._id}`}>
-                                                <button className="px-3 py-1 bg-zinc-200 rounded-md hover:bg-zinc-300 transition-colors">
+                                                <button className="px-4 py-2 bg-emerald-100 text-emerald-700 rounded-md hover:bg-emerald-200 transition-colors duration-300">
                                                     More
                                                 </button>
                                             </Link>
