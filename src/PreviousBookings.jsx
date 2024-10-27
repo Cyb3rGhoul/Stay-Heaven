@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import randomImage from "./assets/random.jpg";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -44,8 +44,8 @@ const PreviousBookings = () => {
     };
 
     return (
-        <Container style={{marginTop: "5em"}}>
-            <Title>Previous Bookings</Title>
+        <Container >
+            <Title style={{marginTop: "3em"}}>Previous Bookings</Title>
             <ScrollableContainer>
                 {previousBookings.map((booking) => (
                     <BookingCard
@@ -103,7 +103,17 @@ const PreviousBookings = () => {
 
 export default PreviousBookings;
 
+const fadeIn = keyframes`
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+`;
+
 const Container = styled.div`
+    height: 100vh;
     padding: 20px;
     background-color: #f0f0f0;
     color: #333;
@@ -124,6 +134,7 @@ const ScrollableContainer = styled.div`
 `;
 
 const BookingCard = styled.div`
+    animation: ${fadeIn} 2.5s ease forwards;
     display: flex;
     flex-direction: row;
     padding: 20px;

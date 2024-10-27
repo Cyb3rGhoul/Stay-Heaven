@@ -82,12 +82,12 @@ const BecomeSellerRequests = () => {
     }, []);
     return (
         <div className="mt-10 px-4 sm:px-6 lg:px-8">
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto  max-md:ml-[-.6rem]">
                 <div className="inline-block min-w-full py-2 align-middle">
-                    <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+                    <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg max-md:rounded-lg">
                         <table className="min-w-full divide-y divide-gray-300">
-                            <thead className="bg-emerald-500">
-                                <tr>
+                            <thead className="bg-emerald-500 ml-5">
+                                <tr className="max-md:py-2">
                                     <th
                                         scope="col"
                                         className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white uppercase tracking-wider sm:pl-6"

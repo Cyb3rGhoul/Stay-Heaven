@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import Navbar from './Navbar';
-import { FaTachometerAlt, FaPlusSquare, FaClipboardList, FaHotel, FaCalendarCheck } from 'react-icons/fa';
+import { FiGrid, FiPlusCircle, FiClipboard, FiHome, FiCalendar } from 'react-icons/fi';
 
 const navItems = [
-  { path: '/seller/dashboard', label: 'Dashboard', icon: <FaTachometerAlt /> },
-  { path: '/seller/requests', label: 'Create Hotel', icon: <FaPlusSquare /> },
-  { path: '/seller/order-requests', label: 'Pending Order Requests', icon: <FaClipboardList /> },
-  { path: '/seller/hotels', label: 'Hotels', icon: <FaHotel /> },
-  { path: '/seller/bookings', label: 'Bookings', icon: <FaCalendarCheck /> },
+  { path: '/seller/dashboard', label: 'Dashboard', icon: <FiGrid /> },
+  { path: '/seller/requests', label: 'Create Hotel', icon: <FiPlusCircle /> },
+  { path: '/seller/order-requests', label: 'Pending Order Requests', icon: <FiClipboard /> },
+  { path: '/seller/hotels', label: 'Hotels', icon: <FiHome /> },
+  { path: '/seller/bookings', label: 'Bookings', icon: <FiCalendar /> },
 ];
 
 const SellerNavbar = () => {

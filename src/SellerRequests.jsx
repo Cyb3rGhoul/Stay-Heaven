@@ -64,11 +64,11 @@ const SellerRequests = () => {
     useEffect(() => { }, []);
     return (
         <div className="mt-10 px-4 sm:px-6 lg:px-8">
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto max-md:ml-[-0.7rem]">
                 <div className="inline-block min-w-full py-2 align-middle">
-                    <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+                    <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 max-md:rounded-lg md:rounded-lg ">
                         <table className="min-w-full divide-y divide-emerald-200">
-                            <thead className="bg-emerald-600">
+                            <thead className="bg-emerald-500">
                                 <tr>
                                     {[
                                         "S.No.",
@@ -83,7 +83,7 @@ const SellerRequests = () => {
                                         <th
                                             key={header}
                                             scope="col"
-                                            className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"
+                                            className="px-4 py-5 text-left text-xs font-medium text-white uppercase tracking-wider  "
                                         >
                                             {header}
                                         </th>

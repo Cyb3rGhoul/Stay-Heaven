@@ -147,11 +147,11 @@ const SellerBookings = () => {
             <div className="mb-6 flex justify-between">
                 <button
                     onClick={popup}
-                    className="btn text-white bg-emerald-600 hover:bg-emerald-700 transition-colors duration-300 shadow-md"
+                    className="btn text-white max-sm:scale-75 bg-emerald-600 hover:bg-emerald-700 transition-colors duration-300 shadow-md max-md:ml-[-1.5rem]"
                 >
                     Apply Filters
                 </button>
-                <label className="input input-bordered flex items-center gap-2 mr-6">
+                <label className="input input-bordered flex items-center max-sm:scale-75 gap-2 mr-6">
                     <input
                         onChange={(e) => setSearchTerm(e.target.value)}
                         type="text"
@@ -283,8 +283,8 @@ const SellerBookings = () => {
                 </div>
             )}
 
-            <div className="overflow-x-auto shadow-md rounded-lg">
-                <table className="min-w-full divide-y divide-gray-200">
+            <div className="overflow-x-auto shadow-md rounded-lg max-md:ml-[-0.7rem]">
+                <table className="min-w-full divide-y divide-brown-300 border border-brown-200 rounded-lg overflow-hidden">
                     <thead className="bg-emerald-500">
                         <tr>
                             {[
@@ -301,7 +301,7 @@ const SellerBookings = () => {
                                 <th
                                     key={header}
                                     scope="col"
-                                    className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"
+                                    className="px-4 py-5 text-left text-xs font-medium text-white uppercase tracking-wider"
                                 >
                                     {header}
                                 </th>

@@ -369,14 +369,14 @@ const AdminUser = () => {
                     )}
                 </div>
             )}
-            <div className="mb-6 flex justify-between">
+            <div className="ml-6 mb-6 flex justify-between">
                 <button
                     onClick={popup}
-                    className="btn text-white bg-emerald-600 hover:bg-emerald-700 transition-colors duration-300 shadow-md mr-2 ml-2"
+                    className="btn text-white max-sm:scale-75 bg-emerald-600 hover:bg-emerald-700 transition-colors duration-300 shadow-md max-md:ml-[-2rem]"
                 >
                     Apply Filters
                 </button>
-                <label className="input input-bordered flex items-center gap-2 mr-6">
+                <label className="input input-bordered flex items-center max-sm:scale-75 gap-2 mr-6">
                     <input
                         onChange={(e) => setSearchTerm(e.target.value)}
                         type="text"
@@ -530,7 +530,7 @@ const AdminUser = () => {
                     </div>
                 </div>
             )}
-            <div className="overflow-x-auto mr-2 ml-2 rounded-lg">
+            <div className="overflow-x-auto mr-6 ml-6 rounded-lg max-md:ml-2">
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-emerald-500">
                         <tr>

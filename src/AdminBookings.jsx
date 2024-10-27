@@ -176,11 +176,11 @@ const AdminBookings = () => {
             <div className="mb-6 flex justify-between">
                 <button
                     onClick={popup}
-                    className="btn text-white bg-emerald-600 hover:bg-emerald-700 transition-colors duration-300 shadow-md"
+                    className="btn text-white max-sm:scale-75 bg-emerald-600 hover:bg-emerald-700 transition-colors duration-300 shadow-md max-md:ml-[-1.5rem]"
                 >
                     Apply Filters
                 </button>
-                <label className="input input-bordered flex items-center gap-2 mr-6">
+                <label className="input input-bordered flex items-center max-sm:scale-75 gap-2 mr-6">
                     <input
                         onChange={(e) => setSearchTerm(e.target.value)}
                         type="text"
@@ -334,7 +334,7 @@ const AdminBookings = () => {
                 </div>
             )}
 
-            <div className="overflow-x-auto shadow-md rounded-lg">
+            <div className="overflow-x-auto shadow-md rounded-lg  max-md:ml-[-.5rem]">
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-emerald-500">
                         <tr>

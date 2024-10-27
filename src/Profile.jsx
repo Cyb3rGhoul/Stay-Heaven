@@ -89,7 +89,7 @@ const Profile = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-xl overflow-hidden mt-32">
-        <div className="relative h-32 bg-gradient-to-r from-teal-500 to-teal-600">
+        <div className="relative h-32 bg-gradient-to-r from-emerald-500 to-emerald-600">
           <div className="absolute -bottom-16 left-1/2 transform -translate-x-1/2">
             <div className="relative group">
               <img
@@ -118,7 +118,7 @@ const Profile = () => {
             {!editMode ? (
               <button
                 onClick={() => setEditMode(true)}
-                className="flex items-center gap-2 px-4 py-2 bg-teal-500 text-white rounded-md hover:bg-teal-600 transition-colors duration-200"
+                className="flex items-center gap-2 px-4 py-2 bg-emerald-500 text-white rounded-md hover:bg-emerald-600 transition-colors duration-200"
               >
                 <Pencil className="w-4 h-4" /> Edit Profile
               </button>

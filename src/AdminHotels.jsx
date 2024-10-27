@@ -114,10 +114,11 @@ const AdminHotels = () => {
 
     return (
         <div className="mt-10 w-full mx-auto px-2 sm:px-6 lg:px-8">
-            <div className="mb-6 flex justify-between max-sm:justify-center border-2 overflow-x-scroll w-">
+            <div className="max-sm:ml-7 mb-6 flex justify-between max-sm:justify-center">
                 <button
                     onClick={popup}
                     className="btn text-white max-sm:scale-75 bg-emerald-600 hover:bg-emerald-700 transition-colors duration-300 shadow-md"
+
                 >
                     Apply Filters
                 </button>
@@ -273,7 +274,7 @@ const AdminHotels = () => {
 
             <div className="overflow-x-auto shadow-lg rounded-lg bg-white">
                 <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-emerald-600">
+                    <thead className="bg-emerald-500">
                         <tr>
                             {[
                                 "S.No.",
@@ -290,7 +291,7 @@ const AdminHotels = () => {
                                 <th
                                     key={header}
                                     scope="col"
-                                    className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"
+                                    className="px-4 py-5 text-left text-xs font-medium text-white uppercase tracking-wider"
                                 >
                                     {header}
                                 </th>
