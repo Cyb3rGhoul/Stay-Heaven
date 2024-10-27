@@ -117,7 +117,7 @@ const SellerHotels = () => {
                 { id: selectedHotel1, reason },
                 { withCredentials: true }
             );
-    
+
             setisOpen2((prev) => !prev);
         } catch (error) {
             handleError(error);
@@ -414,141 +414,121 @@ const SellerHotels = () => {
                 </div>
             )}
             <div className="overflow-x-auto">
-                <table className="table">
-                    <thead>
-                        <tr className="font-bold text-lg">
-                            <th>S.No.</th>
-                            <th className="text-center">Hotel Name</th>
-                            <th className="text-center">Price</th>
-                            <th className="text-center">City</th>
-                            <th className="text-center">State</th>
-                            <th className="text-center">Revenue</th>
-                            <th className="text-center">Details</th>
-                            <th className="text-center">Document</th>
-                            <th className="text-center">Status</th>
-                            <th className="text-center">Delete</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredHotels
-                            .filter((item) => {
-                                return searchTerm.toLowerCase() === ""
-                                    ? item
-                                    : item.title
-                                          .toLowerCase()
-                                          .includes(searchTerm.toLowerCase()) ||
-                                          item.city
-                                              .toLowerCase()
-                                              .includes(
-                                                  searchTerm.toLowerCase()
-                                              ) ||
-                                          item.state
-                                              .toLowerCase()
-                                              .includes(
-                                                  searchTerm.toLowerCase()
-                                              );
-                            })
-                            .map((hotel, index) => {
-                                return (
-                                    <tr key={hotel._id}>
-                                        <th>{index + 1}</th>
-                                        <td className="text-center">
-                                            {hotel.title}
-                                        </td>
-                                        <td className="text-center">
-                                            ₹{" "}
-                                            {typeof hotel.price === "number"
-                                                ? hotel.price.toLocaleString(
-                                                      "en-IN"
-                                                  )
-                                                : "N/A"}
-                                        </td>
-                                        <td className="text-center">
-                                            {hotel.city}
-                                        </td>
-                                        <td className="text-center">
-                                            {hotel.state}
-                                        </td>
-                                        <td className="text-center">
-                                            {typeof hotel.revenue === "number"
-                                                ? hotel.revenue.toLocaleString(
-                                                      "en-IN"
-                                                  )
-                                                : "N/A"}
-                                        </td>
-                                        <td className="text-center flex justify-center ">
-                                            <button
-                                                onClick={() => {
-                                                    setSelectedHotel(hotel);
-                                                    setIsEditOpen();
-                                                }}
-                                                className="btn bg-zinc-200"
-                                            >
-                                                Edit
-                                            </button>
-                                        </td>
-                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                            <Link
-                                                target="_blank"
-                                                to={`${hotel.pdf}`}
-                                            >
-                                                <button className="px-3 py-1 bg-zinc-200 rounded-md hover:bg-zinc-300 transition-colors">
-                                                    Document
-                                                </button>
-                                            </Link>
-                                        </td>
-                                        <td className="text-center">
-                                            {hotel.approvalStatus ===
-                                            "approved" ? (
-                                                <button className="btn bg-green-500 text-white hover:bg-white hover:border-green-500 hover:border-2 hover:text-black transition-all duration-500">
-                                                    Approved
-                                                </button>
-                                            ) : hotel.approvalStatus ===
-                                              "pending" ? (
-                                                <button className="btn bg-yellow-500 text-white">
-                                                    Pending
-                                                </button>
-                                            ) : (
-                                                <button className="btn bg-red-500 text-white">
-                                                    Rejected
-                                                </button>
-                                            )}
-                                        </td>
-                                        <td>
-                                            {hotel.deleted ? (
-                                                <button
-                                                    onClick={() => {
-                                                        onUndoHandler(
-                                                            hotel._id
-                                                        );
-                                                    }}
-                                                    className="btn bg-yellow-500 text-white"
-                                                >
-                                                    Undo Delete Request
-                                                </button>
-                                            ) : (
-                                                <button
-                                                    onClick={() => {
-                                                        setSelectedHotel1(
-                                                            (prev) => {
-                                                                return hotel._id;
-                                                            }
-                                                        );
-                                                        setisOpen2(
-                                                            (prev) => !prev
-                                                        );
-                                                    }}
-                                                    className="btn bg-red-500 text-white"
-                                                >
-                                                    Delete Hotel
-                                                </button>
-                                            )}
-                                        </td>
-                                    </tr>
-                                );
-                            })}
-                    </tbody>
-                </table>
+            <table className="min-w-full divide-y divide-brown-300 border border-brown-200 rounded-lg overflow-hidden">
+  <thead className="bg-emerald-500 text-white">
+    <tr>
+      <th scope="col" className="py-4 pl-4 pr-3 text-left text-sm font-semibold text-white">
+        S.No.
+      </th>
+      <th className="py-4 px-4 text-center text-sm font-semibold text-white">
+        Hotel Name
+      </th>
+      <th className="py-4 px-4 text-center text-sm font-semibold ">
+        Price
+      </th>
+      <th className="py-4 px-4 text-center text-sm font-semibold ">
+        City
+      </th>
+      <th className="py-4 px-4 text-center text-sm font-semibold ">
+        State
+      </th>
+      <th className="py-4 px-4 text-center text-sm font-semibold ">
+        Revenue
+      </th>
+      <th className="py-4 px-4 text-center text-sm font-semibold ">
+        Details
+      </th>
+      <th className="py-4 px-4 text-center text-sm font-semibold ">
+        Document
+      </th>
+      <th className="py-4 px-4 text-center text-sm font-semibold ">
+        Status
+      </th>
+      <th className="py-4 px-4 text-center text-sm font-semibold ">
+        Delete
+      </th>
+    </tr>
+  </thead>
+  <tbody className="divide-y divide-emerald-200 bg-emerald-50">
+    {filteredHotels
+      .filter((item) => {
+        return searchTerm.toLowerCase() === ""
+          ? item
+          : item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            item.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            item.state.toLowerCase().includes(searchTerm.toLowerCase());
+      })
+      .map((hotel, index) => (
+        <tr key={hotel._id} className="hover:bg-emerald-200 transition duration-300 ease-in-out">
+          <td className="py-4 text-center font-medium ">{index + 1}</td>
+          <td className="py-4 text-center text-brown-700">{hotel.title}</td>
+          <td className="py-4 text-center text-brown-700">
+            ₹{typeof hotel.price === "number" ? hotel.price.toLocaleString("en-IN") : "N/A"}
+          </td>
+          <td className="py-4 text-center text-brown-700">{hotel.city}</td>
+          <td className="py-4 text-center text-brown-700">{hotel.state}</td>
+          <td className="py-4 text-center text-brown-700">
+            {typeof hotel.revenue === "number" ? hotel.revenue.toLocaleString("en-IN") : "N/A"}
+          </td>
+          <td className="py-4 text-center">
+            <button
+              onClick={() => {
+                setSelectedHotel(hotel);
+                setIsEditOpen();
+              }}
+              className="px-3 py-1 bg-emerald-300 rounded-md  font-medium hover:bg-emerald-400 hover:scale-105 transition transform duration-200"
+            >
+              Edit
+            </button>
+          </td>
+          <td className="py-4 text-center">
+            <Link target="_blank" to={`${hotel.pdf}`}>
+              <button className="px-3 py-1 bg-brown-200  rounded-md font-medium hover:bg-brown-300 hover:scale-105 transition transform duration-200">
+                Document
+              </button>
+            </Link>
+          </td>
+          <td className="py-4 text-center">
+            {hotel.approvalStatus === "approved" ? (
+              <button className="px-3 py-1 bg-emerald-500 text-white rounded-md font-medium hover:bg-emerald-600 hover:scale-105 transition transform duration-200">
+                Approved
+              </button>
+            ) : hotel.approvalStatus === "pending" ? (
+              <button className="px-3 py-1 bg-yellow-400  rounded-md font-medium hover:bg-yellow-500 hover:scale-105 transition transform duration-200">
+                Pending
+              </button>
+            ) : (
+              <button className="px-3 py-1 bg-red-400 text-white rounded-md font-medium hover:bg-red-500 hover:scale-105 transition transform duration-200">
+                Rejected
+              </button>
+            )}
+          </td>
+          <td className="py-4 text-center">
+            {hotel.deleted ? (
+              <button
+                onClick={() => onUndoHandler(hotel._id)}
+                className="px-3 py-1 bg-yellow-500  rounded-md font-medium hover:bg-yellow-600 hover:scale-105 transition transform duration-200"
+              >
+                Undo Delete Request
+              </button>
+            ) : (
+              <button
+                onClick={() => {
+                  setSelectedHotel1(hotel._id);
+                  setisOpen2(!isOpen2);
+                }}
+                className="px-3 py-1 bg-red-500 text-white rounded-md font-medium hover:bg-red-600 hover:scale-105 transition transform duration-200"
+              >
+                Delete Hotel
+              </button>
+            )}
+          </td>
+        </tr>
+      ))}
+  </tbody>
+</table>
+
+
             </div>
         </div>
     );

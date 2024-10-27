@@ -530,7 +530,7 @@ const AdminUser = () => {
                     </div>
                 </div>
             )}
-            <div className="overflow-x-auto mr-2 ml-2 ">
+            <div className="overflow-x-auto mr-2 ml-2 rounded-lg">
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-emerald-500">
                         <tr>
