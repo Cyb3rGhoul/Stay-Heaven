@@ -9,6 +9,7 @@ export default function useHandleErr() {
         const err = error?.response?.data?.message;
         if (err === "jwt expired") {
             navigate("/login");
+            toast.error("Session Expired. Please Login Again!");
         } else if(err === "Hotel not found"){
            toast.error("Error Occured, Try Again!")
            //edit hotel
@@ -22,6 +23,7 @@ export default function useHandleErr() {
         } 
         else if(err === "Unauthorized request") {
             navigate("/login")
+            toast.error("Session Expired. Please Login Again!");
         }else if(err === "Owner not found") {
            toast.error("Error in payment, Try Again!")
         } else if(err === "Something went wrong while creating hotel") {
