@@ -11,7 +11,6 @@ const PreviousBookings = () => {
     const [previousBookings, setpreviousBookings] = useState(
         useSelector((state) => state.user.userData.previousBookings)
     );
-    console.log(previousBookings);
     const handleCardClick = (booking) => {
         setSelectedBooking(booking);
     };

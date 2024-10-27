@@ -113,15 +113,16 @@ const AdminHotels = () => {
     }, []);
 
     return (
-        <div className="mt-10 max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
-            <div className="mb-6 flex justify-between overflow-hidden">
+        <div className="mt-10 w-full mx-auto px-2 sm:px-6 lg:px-8">
+            <div className="mb-6 flex justify-between max-sm:justify-center border-2 overflow-x-scroll w-">
                 <button
                     onClick={popup}
                     className="btn text-white max-sm:scale-75 bg-emerald-600 hover:bg-emerald-700 transition-colors duration-300 shadow-md"
                 >
                     Apply Filters
                 </button>
-                <label className="input input-bordered flex items-center max-sm:scale-50 gap-2 mr-6">
+               <div className="">
+               <label className="input input-bordered flex items-center max-sm:scale-75 gap-2 mr-6">
                     <input
                         onChange={(e) => setSearchTerm(e.target.value)}
                         type="text"
@@ -141,6 +142,7 @@ const AdminHotels = () => {
                         />
                     </svg>
                 </label>
+               </div>
             </div>
             {isOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 transition-opacity duration-300 ease-in-out">
