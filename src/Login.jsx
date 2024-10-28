@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import googlebutt from "./assets/googlesignup.png";
-import Navbar from "./Navbar";
+import styled, { keyframes } from "styled-components";
+import { Mail, Lock, ArrowRight, Eye, EyeOff } from "lucide-react";
 import axios from "./utils/axios";
 import useHandleErr from "./utils/useHandleErr";
 
@@ -10,9 +9,12 @@ const Login = () => {
     const navigate = useNavigate();
     const [emailOrUsername, setEmailOrUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
     const handleError = useHandleErr();
+
     const handleLogin = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
         try {
             await axios.post(
                 "/user/login",
@@ -21,252 +23,309 @@ const Login = () => {
                     password,
                 },
                 {
-                    withCredentials: true, // Important: This sends cookies with the request
+                    withCredentials: true,
                 }
             );
             navigate("/");
             window.location.reload();
         } catch (error) {
             handleError(error);
+        } finally {
+            setIsLoading(false);
         }
     };
 
+    const [showPassword, setShowPassword] = useState(false);
+
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
+
     return (
-        <>
-            <Navbar />
-            <Wrapper
-                style={{
-                    marginTop: "65px",
-                }}
-            >
-                <Card>
-                    <Form onSubmit={handleLogin}>
-                        <Input
-                            type="text"
-                            placeholder="email or username"
-                            value={emailOrUsername}
-                            onChange={(e) => setEmailOrUsername(e.target.value)}
-                        />
-                        <Input
-                            type="password"
-                            placeholder="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                        <LoginButton type="submit">
-                            <span className="span-mother">
-                                <span>L</span>
-                                <span>o</span>
-                                <span>g</span>
-                                <span>i</span>
-                                <span>n</span>
-                            </span>
-                            <span className="span-mother2">
-                                <span>L</span>
-                                <span>o</span>
-                                <span>g</span>
-                                <span>i</span>
-                                <span>n</span>
-                            </span>
-                        </LoginButton>
-                        <ForgotPasswordButton
-                            onClick={() => navigate("/forgotPassword")}
-                        >
+        <PageWrapper>
+            <LoginCard>
+                <CardHeader>
+                    <Title>Welcome Back</Title>
+                    <Subtitle>Sign in to your account</Subtitle>
+                </CardHeader>
+                <Form onSubmit={handleLogin}>
+                    <InputGroup>
+                        <InputWrapper>
+                            <IconWrapper>
+                                <Mail size={20} color="#666" />
+                            </IconWrapper>
+                            <Input
+                                type="text"
+                                placeholder="Email or Username"
+                                value={emailOrUsername}
+                                onChange={(e) => setEmailOrUsername(e.target.value)}
+                            />
+                        </InputWrapper>
+                    </InputGroup>
+
+                    <InputGroup>
+                        <InputWrapper>
+                            <IconWrapper>
+                                <Lock size={20} color="#666" />
+                            </IconWrapper>
+                            <Input
+                                type={showPassword ? "text" : "password"}
+                                placeholder="Password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
+                            <EyeButton
+                                type="button"
+                                onClick={togglePasswordVisibility}
+                                aria-label={showPassword ? "Hide password" : "Show password"}
+                            >
+                                {showPassword ? (
+                                    <Eye size={20} color="#666" />
+                                ) : (
+                                    <EyeOff size={20} color="#666" />
+                                )}
+                            </EyeButton>
+                        </InputWrapper>
+                    </InputGroup>
+
+                    <LoginButton type="submit" disabled={isLoading}>
+                        <span>Sign In</span>
+                        <ArrowIconWrapper>
+                            <ArrowRight size={20} />
+                        </ArrowIconWrapper>
+                    </LoginButton>
+
+                    <LinksContainer>
+                        <LinkButton onClick={() => navigate("/forgotPassword")}>
                             Forgot Password?
-                        </ForgotPasswordButton>
-                        <OrText>or</OrText>
-                        <button
-                            onClick={() => {
-                                navigate("/signup");
-                            }}
-                            className="text-black"
-                        >
-                            New User ? Sign Up
-                        </button>
-                    </Form>
-                </Card>
-            </Wrapper>
-        </>
+                        </LinkButton>
+                    </LinksContainer>
+
+                    <Divider>
+                        <DividerLine />
+                        <DividerText>or continue with</DividerText>
+                        <DividerLine />
+                    </Divider>
+
+                    <GoogleButton type="button" onClick={() => navigate("/signup")}>
+                        <span>Creating your new account</span>
+                    </GoogleButton>
+                </Form>
+            </LoginCard>
+        </PageWrapper>
     );
 };
 
 export default Login;
 
-const Wrapper = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 92vh;
+// Animations
+const bounceX = keyframes`
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(3px); }
 `;
 
-const Card = styled.div`
-    background-color: #d4f3c2;
-    padding: 40px;
-    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
-        rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
-        rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
-    border-radius: 10px;
-    text-align: center;
-    max-width: 400px;
-    width: 90%;
-    margin: 20px;
+const scaleUp = keyframes`
+  0% { transform: scale(1); }
+  100% { transform: scale(1.02); }
+`;
 
-    @media (max-width: 768px) {
-        padding: 20px;
-    }
+// Styled Components
+const PageWrapper = styled.div`
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: linear-gradient(135deg, #f0fff4 0%, #dcfce7 100%);
+`;
+
+const LoginCard = styled.div`
+  width: 100%;
+  max-width: 28rem;
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  padding: 2rem;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    animation: ${scaleUp} 0.3s ease forwards;
+  }
+`;
+
+const CardHeader = styled.div`
+  text-align: center;
+  margin-bottom: 2rem;
+`;
+
+const Title = styled.h2`
+  color: #166534;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+`;
+
+const Subtitle = styled.p`
+  color: #666;
+  font-size: 0.875rem;
 `;
 
 const Form = styled.form`
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+`;
+
+const InputGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+`;
+
+const InputWrapper = styled.div`
+  position: relative;
+  width: 100%;
+`;
+
+const IconWrapper = styled.div`
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
 `;
 
 const Input = styled.input`
-    padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #fff;
-    color: #333;
-    font-size: 16px;
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 3rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  background: rgba(255, 255, 255, 0.9);
+  padding-right: 3rem;
 
-    &::placeholder {
-        color: #999;
-    }
+  &:focus {
+    outline: none;
+    border-color: #22c55e;
+    box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
+    background: white;
+  }
 
-    @media (max-width: 768px) {
-        padding: 8px;
-        font-size: 14px;
-    }
+  &:hover {
+    background: white;
+  }
+`;
+
+const EyeButton = styled.button`
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  &:focus {
+    outline: none;
+  }
 `;
 
 const LoginButton = styled.button`
-    padding: 10px;
-    background-color: #90ee90;
-    border: solid 0.5px green;
-    border-radius: 5px;
-    color: #333;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    overflow: hidden;
-    width: 100%;
-    height: 42.66px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: #22c55e;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
 
-    &:hover {
-        background-color: #057807;
-        color: #fff;
-    }
+  &:hover {
+    background: #16a34a;
+  }
 
-    @media (max-width: 768px) {
-        padding: 8px;
-        font-size: 14px;
-    }
+  &:active {
+    transform: scale(0.98);
+  }
 
-    .span-mother,
-    .span-mother2 {
-        display: flex;
-        position: absolute;
-    }
-
-    .span-mother {
-        overflow: hidden;
-    }
-
-    &:hover .span-mother {
-        position: absolute;
-    }
-
-    &:hover .span-mother span {
-        transform: translateY(1.2em);
-    }
-
-    .span-mother span:nth-child(1) {
-        transition: 0.2s;
-    }
-
-    .span-mother span:nth-child(2) {
-        transition: 0.3s;
-    }
-
-    .span-mother span:nth-child(3) {
-        transition: 0.4s;
-    }
-
-    .span-mother span:nth-child(4) {
-        transition: 0.5s;
-    }
-
-    .span-mother span:nth-child(5) {
-        transition: 0.6s;
-    }
-
-    .span-mother span:nth-child(6) {
-        transition: 0.7s;
-    }
-
-    .span-mother2 {
-        overflow: hidden;
-    }
-
-    .span-mother2 span {
-        transform: translateY(-2em); /* Increased value */
-    }
-
-    &:hover .span-mother2 span {
-        transform: translateY(0);
-    }
-
-    .span-mother2 span {
-        transition: 0.2s;
-    }
-
-    .span-mother2 span:nth-child(2) {
-        transition: 0.3s;
-    }
-
-    .span-mother2 span:nth-child(3) {
-        transition: 0.4s;
-    }
-
-    .span-mother2 span:nth-child(4) {
-        transition: 0.5s;
-    }
-
-    .span-mother2 span:nth-child(5) {
-        transition: 0.6s;
-    }
-
-    .span-mother2 span:nth-child(6) {
-        transition: 0.7s;
-    }
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 `;
 
-const ForgotPasswordButton = styled.button`
-    padding: 10px;
-    border-radius: 5px;
-    color: #333;
-    font-size: 16px;
-    cursor: pointer;
-    margin-top: 10px;
-    transition: background-color 0.3s;
-
-    @media (max-width: 768px) {
-        padding: 8px;
-        font-size: 14px;
-    }
+const ArrowIconWrapper = styled.span`
+  animation: ${bounceX} 1s infinite;
 `;
 
-const OrText = styled.div`
-    margin: 10px 0;
-    color: #333;
-    font-size: 16px;
+const LinksContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
 
-    @media (max-width: 768px) {
-        font-size: 14px;
-    }
+const LinkButton = styled.button`
+  color: #16a34a;
+  font-size: 0.875rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #166534;
+  }
+`;
+
+const Divider = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1.5rem 0;
+`;
+
+const DividerLine = styled.div`
+  flex: 1;
+  height: 1px;
+  background: #e5e7eb;
+`;
+
+const DividerText = styled.span`
+  color: #666;
+  font-size: 0.875rem;
+`;
+
+const GoogleButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #f9fafb;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
 `;

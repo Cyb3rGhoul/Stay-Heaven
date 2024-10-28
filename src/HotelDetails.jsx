@@ -661,89 +661,101 @@ const HotelDetails = () => {
                                 </PriceSection>
                             </Right>
                         </Details>
-                        <div className="comment-section flex flex-col gap-6 mx-auto max-w-4xl p-6 rounded-lg shadow-lg" style={{backgroundColor:"rgba(218, 160, 109, .2)"}}>
-                            <div className="comment-box flex flex-col md:flex-row gap-4 items-start">
-                                <div className="rating-component flex-shrink-0">
-                                    <Rating
-                                        name="half-rating"
-                                        defaultValue={0}
-                                        precision={0.5}
-                                        onChange={(e) =>
-                                            setComment({
+                        <div className="max-w-[100vw] mx-auto p-8 rounded-xl bg-white shadow-lg" id="comment-section">
+                            {/* Comment Input Area */}
+                            <div className="mb-8 space-y-6">
+                                <h2 className="text-2xl font-semibold text-green-800">Share Your Thoughts</h2>
+
+                                <div className="flex flex-col md:flex-row gap-6 items-start">
+                                    <div className="flex-shrink-0 relative">
+                                        <Rating
+                                            name="half-rating"
+                                            defaultValue={0}
+                                            precision={0.5}
+                                            onChange={(e) => setComment({
                                                 ...comment,
                                                 rating: e.target.value,
-                                            })
-                                        }
-                                        value={comment.rating}
-                                        size="large"
-                                    />
-                                </div>
-                                <input
-                                    className="comment-input w-full md:flex-grow border-2 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all text-gray-700"
-                                    type="text"
-                                    onChange={(e) =>
-                                        setComment({
-                                            ...comment,
-                                            message: e.target.value,
-                                        })
-                                    }
-                                    value={comment.message}
-                                    placeholder="Share your thoughts..."
-                                />
-                                <button
-                                    onClick={commentHandler}
-                                    className="add-comment-btn text-white bg-green-500 px-6 py-3 rounded-md hover:bg-green-600 transition-all font-semibold shadow-md hover:shadow-lg"
-                                >
-                                    Post
-                                </button>
-                            </div>
-                            <div className="reviews-container space-y-4">
-                                {reviews?.map((review, index) => (
-                                    <div
-                                        key={index}
-                                        className="review-box flex items-start gap-4 p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-all"
-                                    >
-                                        <Avatar
-                                            src={review.user.avatar}
-                                            className="w-20 h-20 rounded-full"
+                                            })}
+                                            value={comment.rating}
+                                            size="large"
+                                            className="text-green-500 absolute z-0"
                                         />
-                                        <div className="flex-grow">
-                                            <div className="flex justify-between items-center mb-2">
-                                                <strong className="text-lg text-gray-800">
-                                                    {review.user.username}
-                                                </strong>
-                                                <Rating
-                                                    name="half-rating-read"
-                                                    className="read-only-rating"
-                                                    defaultValue={0}
-                                                    precision={0.5}
-                                                    value={review.rating}
-                                                    readOnly
-                                                    size="small"
+                                    </div>
+
+                                    <div className="flex-grow w-full space-y-4">
+                                        <textarea
+                                            className="w-full px-4 py-3 h-24 text-gray-700 border border-gray-300 rounded-lg 
+          focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none 
+          transition-all duration-200"
+                                            onChange={(e) => setComment({
+                                                ...comment,
+                                                message: e.target.value,
+                                            })}
+                                            value={comment.message}
+                                            placeholder="Write your review here..."
+                                        />
+
+                                        <button
+                                            onClick={commentHandler}
+                                            className="w-full md:w-auto px-6 py-3 bg-green-600 text-white font-semibold 
+          rounded-lg hover:bg-green-700 transform transition-all duration-200 
+          hover:shadow-md active:scale-95 relative"
+                                        >
+                                            Post Review
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Reviews List */}
+                            <div className="space-y-6">
+                                <h3 className="text-xl font-semibold text-green-800 mb-4">Reviews</h3>
+
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                                    {reviews?.map((review, index) => (
+                                        <div
+                                            key={index}
+                                            className="group flex flex-col gap-4 p-6 bg-green-50 rounded-lg hover:bg-green-100 
+          transition-all duration-200 shadow-lg"
+                                        >
+                                            <div className="flex items-center gap-4">
+                                                <Avatar
+                                                    src={review.user.avatar}
+                                                    className="w-16 h-[1rem] rounded-full ring-2 ring-green-200"
                                                 />
+                                                <div className="space-y-1">
+                                                    <h4 className="font-medium text-gray-900">{review.user.username}</h4>
+                                                    <Rating
+                                                        name="half-rating-read"
+                                                        defaultValue={0}
+                                                        precision={0.5}
+                                                        value={review.rating}
+                                                        readOnly
+                                                        size="small"
+                                                        className="text-yellow-400"
+                                                    />
+                                                </div>
                                             </div>
-                                            <p className="comment-text text-gray-600 mb-2">
+
+                                            <p className="text-gray-700 leading-relaxed">
                                                 {review.message}
                                             </p>
-                                            {user &&
-                                                user._id ===
-                                                review.user._id && (
-                                                    <button
-                                                        onClick={() =>
-                                                            handleDeleteReview(
-                                                                review._id
-                                                            )()
-                                                        }
-                                                        className="text-red-500 hover:text-red-700 transition-colors focus:outline-none"
-                                                    >
-                                                        <MdDelete size={20} />
-                                                    </button>
-                                                )}
+
+                                            {user && user._id === review.user._id && (
+                                                <button
+                                                    onClick={() => handleDeleteReview(review._id)}
+                                                    className="self-end p-2 text-gray-400 hover:text-brown-500 opacity-0 
+              group-hover:opacity-100 transition-all duration-200"
+                                                >
+                                                    <MdDelete size={20} />
+                                                </button>
+                                            )}
                                         </div>
-                                    </div>
-                                ))}
+                                    ))}
+                                </div>
                             </div>
                         </div>
+
                     </div>
                 </Wrapper>
             </div>
@@ -1037,6 +1049,7 @@ const Right = styled.div`
 `;
 
 const PriceSection = styled.div`
+    
     background-color: #f9f9f9;
     padding: 30px;
     border-radius: 10px;
@@ -1152,7 +1165,7 @@ const ReviewDate = styled.span`
 
 const PopupOverlay = styled.div`
     position: fixed;
-    z-index: 1000;
+    z-index: 10 !important;
     top: 0;
     left: 0;
     right: 0;
@@ -1165,6 +1178,7 @@ const PopupOverlay = styled.div`
 `;
 
 const PopupContent = styled.div`
+    z-index: 10 !important;
     background: white;
     padding: 30px;
     border-radius: 15px;
