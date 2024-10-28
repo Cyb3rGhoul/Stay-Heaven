@@ -9,3 +9,14 @@
 #comment-section{
   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 }
+
+/* Add these CSS rules to your comment section styles */
+.comment-section-rating {
+  position: relative;
+  z-index: 1;
+}
+
+.comment-section-button {
+  position: relative;
+  z-index: 1;
+}

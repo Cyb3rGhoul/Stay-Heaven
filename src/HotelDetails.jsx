@@ -454,12 +454,13 @@ const HotelDetails = () => {
                                     </button>
                                     {showPopup && (
                                         <PopupOverlay
-                                            onClick={handlePopupClose}
+                                        onClick={handlePopupClose}
                                         >
                                             <PopupContent
                                                 onClick={(e) =>
                                                     e.stopPropagation()
                                                 }
+                                                style={{ zIndex: "100" }}
                                             >
                                                 <PopupHeader>
                                                     <h2>Booking Details</h2>
@@ -661,70 +662,86 @@ const HotelDetails = () => {
                                 </PriceSection>
                             </Right>
                         </Details>
-                        <div className="max-w-[100vw] mx-auto p-8 rounded-xl bg-white shadow-lg" id="comment-section">
+                        <div className="max-w-full mx-auto p-6 md:p-10 bg-slate-50 rounded-2xl shadow-md" id="comment-section">
                             {/* Comment Input Area */}
-                            <div className="mb-8 space-y-6">
-                                <h2 className="text-2xl font-semibold text-green-800">Share Your Thoughts</h2>
+                            <div className="mb-10">
+                                <h2 className="text-2xl font-bold text-slate-800 mb-8">Write a Review</h2>
 
-                                <div className="flex flex-col md:flex-row gap-6 items-start">
-                                    <div className="flex-shrink-0 relative">
-                                        <Rating
-                                            name="half-rating"
-                                            defaultValue={0}
-                                            precision={0.5}
-                                            onChange={(e) => setComment({
-                                                ...comment,
-                                                rating: e.target.value,
-                                            })}
-                                            value={comment.rating}
-                                            size="large"
-                                            className="text-green-500 absolute z-0"
-                                        />
-                                    </div>
+                                <div className="bg-white p-6 rounded-xl shadow-sm space-y-6">
+                                    <div className="flex flex-col md:flex-row gap-8">
+                                        <div className="flex-shrink-0">
+                                            <p className="text-sm text-slate-600 mb-2 z-[-10]">Your Rating</p>
+                                            <Rating
+                                                name="half-rating"
+                                                defaultValue={0}
+                                                precision={0.5}
+                                                onChange={(e) => setComment({
+                                                    ...comment,
+                                                    rating: e.target.value,
+                                                })}
+                                                value={comment.rating}
+                                                size="large"
+                                                className="text-green-600 relative z-0"
+                                            />
+                                        </div>
 
-                                    <div className="flex-grow w-full space-y-4">
-                                        <textarea
-                                            className="w-full px-4 py-3 h-24 text-gray-700 border border-gray-300 rounded-lg 
-          focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none 
-          transition-all duration-200"
-                                            onChange={(e) => setComment({
-                                                ...comment,
-                                                message: e.target.value,
-                                            })}
-                                            value={comment.message}
-                                            placeholder="Write your review here..."
-                                        />
+                                        <div className="flex-grow w-full space-y-4">
+                                            <textarea
+                                                className="w-full px-4 py-3 h-32 text-slate-700 bg-slate-50 border border-slate-200 
+                        rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none 
+                        transition-all duration-200 placeholder-slate-400"
+                                                onChange={(e) => setComment({
+                                                    ...comment,
+                                                    message: e.target.value,
+                                                })}
+                                                value={comment.message}
+                                                placeholder="Share your experience with this product..."
+                                            />
 
-                                        <button
-                                            onClick={commentHandler}
-                                            className="w-full md:w-auto px-6 py-3 bg-green-600 text-white font-semibold 
-          rounded-lg hover:bg-green-700 transform transition-all duration-200 
-          hover:shadow-md active:scale-95 relative" style={{zIndex:"0"}}
-                                        >
-                                            Post Review
-                                        </button>
+                                            <button
+                                                onClick={commentHandler}
+                                                className="px-6 py-2.5 bg-green-600 text-white font-medium text-sm
+                        rounded-lg hover:bg-green-700 transition-all duration-200 
+                        hover:shadow-md active:scale-95 z-0"
+                                            >
+                                                Submit Review
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
                             {/* Reviews List */}
-                            <div className="space-y-6">
-                                <h3 className="text-xl font-semibold text-green-800 mb-4">Reviews</h3>
+                            <div>
+                                <div className="flex items-center justify-between mb-6">
+                                    <h3 className="text-xl font-bold text-slate-800">Customer Reviews</h3>
+                                </div>
 
-                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                                     {reviews?.map((review, index) => (
                                         <div
                                             key={index}
-                                            className="group flex flex-col gap-4 p-6 bg-green-50 rounded-lg hover:bg-green-100 
-          transition-all duration-200 shadow-lg"
+                                            className="group bg-white rounded-xl p-6 shadow-sm hover:shadow-md 
+                    transition-all duration-200"
                                         >
-                                            <div className="flex items-center gap-4">
+                                            <div className="flex items-start gap-4 mb-4">
                                                 <Avatar
                                                     src={review.user.avatar}
-                                                    className="w-16 h-[1rem] rounded-full ring-2 ring-green-200"
+                                                    className="w-12 h-12 rounded-full ring-2 ring-slate-100"
                                                 />
-                                                <div className="space-y-1">
-                                                    <h4 className="font-medium text-gray-900">{review.user.username}</h4>
+                                                <div className="flex-1">
+                                                    <div className="flex items-center justify-between">
+                                                        <h4 className="font-semibold text-slate-900">{review.user.username}</h4>
+                                                        {user && user._id === review.user._id && (
+                                                            <button
+                                                                onClick={() => handleDeleteReview(review._id)}
+                                                                className="p-1.5 text-slate-400 hover:text-red-500 
+                                        opacity-0 group-hover:opacity-100 transition-all duration-200 z-0"
+                                                            >
+                                                                <MdDelete size={18} />
+                                                            </button>
+                                                        )}
+                                                    </div>
                                                     <Rating
                                                         name="half-rating-read"
                                                         defaultValue={0}
@@ -732,24 +749,14 @@ const HotelDetails = () => {
                                                         value={review.rating}
                                                         readOnly
                                                         size="small"
-                                                        className="text-yellow-400"
+                                                        className="text-green-600 z-0"
                                                     />
                                                 </div>
                                             </div>
 
-                                            <p className="text-gray-700 leading-relaxed">
+                                            <p className="text-slate-600 text-sm leading-relaxed">
                                                 {review.message}
                                             </p>
-
-                                            {user && user._id === review.user._id && (
-                                                <button
-                                                    onClick={() => handleDeleteReview(review._id)}
-                                                    className="self-end p-2 text-gray-400 hover:text-brown-500 opacity-0 
-              group-hover:opacity-100 transition-all duration-200"
-                                                >
-                                                    <MdDelete size={20} />
-                                                </button>
-                                            )}
                                         </div>
                                     ))}
                                 </div>
@@ -1092,46 +1099,6 @@ const DiscountedPrice = styled.span`
     color: #e57373;
 `;
 
-const ReviewsContainer = styled.div`
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    margin-top: 20px;
-`;
-
-const Reviews = styled.div`
-    width: 100%;
-    max-width: 1200px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-    padding: 20px;
-
-    @media (max-width: 768px) {
-        flex-direction: column;
-        padding: 10px;
-    }
-`;
-
-const Review = styled.div`
-    display: flex;
-    width: calc(50% - 20px);
-    background-color: #fff;
-    padding: 10px;
-    border-radius: 10px;
-    border: 1px solid #ddd;
-    transition: background-color 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
-    &:hover {
-        background-color: #f1f1f1;
-    }
-
-    @media (max-width: 768px) {
-        width: 100%;
-    }
-`;
 
 const Avatar = styled.img`
     border-radius: 50%;
@@ -1139,45 +1106,24 @@ const Avatar = styled.img`
     margin-right: 10px;
 `;
 
-const Comment = styled.div`
-    p {
-        margin: 0;
-        color: #333;
-    }
-`;
-
-const ReviewHeader = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-`;
-
-const ReviewDate = styled.span`
-    font-size: 12px;
-    color: #999;
-    position: absolute;
-    top: 10px;
-    right: 10px;
-`;
-
-
 
 const PopupOverlay = styled.div`
     position: fixed;
-    z-index: 10 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 1000 !important;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, .5);
     display: flex;
     justify-content: center;
     align-items: center;
-    animation: ${fadeIn} 0.5s ease forwards;
 `;
 
 const PopupContent = styled.div`
-    z-index: 10 !important;
+    z-index: 100 !important;
     background: white;
     padding: 30px;
     border-radius: 15px;
