@@ -317,6 +317,7 @@ const GoogleButton = styled.button`
   gap: 0.5rem;
   width: 100%;
   padding: 0.75rem 1rem;
+  color: green;
   background: white;
   border: 1px solid #e5e7eb;
   border-radius: 0.5rem;

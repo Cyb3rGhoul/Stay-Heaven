@@ -1,403 +1,451 @@
-import React, { useRef, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import styled from "styled-components";
-import Navbar from "./Navbar";
+import React, { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import styled, { keyframes } from "styled-components";
+import { Mail, Lock, User, Phone, ArrowRight, Eye, EyeOff, Camera } from "lucide-react";
 import axios from "./utils/axios";
 import useHandleErr from "./utils/useHandleErr";
-import toast from "react-hot-toast";
+
 const SignUp = () => {
     const navigate = useNavigate();
-    const [username, setUsername] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [avatar, setAvatar] = useState("");
-    const [fullname, setFullname] = useState("");
-    const [phone, setPhone] = useState("");
+    const [formData, setFormData] = useState({
+        username: "",
+        email: "",
+        password: "",
+        fullname: "",
+        phone: "",
+    });
+    const [avatar, setAvatar] = useState(null);
+    const [showAvatar, setShowAvatar] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
     const [isFileSelected, setIsFileSelected] = useState(false);
     const avatarRef = useRef(null);
-    const handleError = useHandleErr()
-    const handleSignUp = async (e) => {
-        e.preventDefault();
+    const handleError = useHandleErr();
 
-        if (
-            !username ||
-            !email ||
-            !password ||
-            !avatar ||
-            !fullname ||
-            !phone
-        ) {
-            toast.error("All fields are required");
-            return;
-        }
+    const handleInputChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
 
-        if (/\s/.test(username) || /\s/.test(password)) {
-            toast.error("Username and password should not contain spaces.");
-            return;
-        }
-
-        if (phone.length != 10) {
-            toast.error("Invalid phone number");
-            return;
-        }
-        let url;
-        try {
-            const formdata = new FormData();
-            formdata.append("file", avatar);
-            formdata.append(
-                "upload_preset",
-                import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
-            );
-            formdata.append(
-                "cloud_name",
-                import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
-            );
-            const response = await axios.post(
-                `https://api.cloudinary.com/v1_1/${
-                    import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
-                }/image/upload`,
-                formdata
-            );
-
-            url = response.data.secure_url;
-        } catch (error) {
-            handleError(error);
-            return;
-        }
-
-        try {
-            const response = await axios.post("/user/register", {
-                username,
-                email,
-                password,
-                avatar: url,
-                fullName: fullname,
-                phoneNumber: phone,
-            });
-            navigate("/login");
-        } catch (error) {
-            handleError(error);
+    const handleAvatarChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setAvatar(file);
+            setShowAvatar(URL.createObjectURL(file));
+            setIsFileSelected(true);
         }
     };
 
-    const [showAvatar, setShowAvatar] = useState(null);
-    const showAvatarhandler = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            setShowAvatar(URL.createObjectURL(file));
-            setIsFileSelected(true);
-        } else {
-            setIsFileSelected(false);
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
+
+    const handleSignUp = async (e) => {
+        e.preventDefault();
+        setIsLoading(true);
+
+        if (!avatar || !formData.username || !formData.email || !formData.password || !formData.fullname || !formData.phone) {
+            handleError(new Error("All fields are required"));
+            setIsLoading(false);
+            return;
+        }
+
+        try {
+            const formdata = new FormData();
+            formdata.append("file", avatar);
+            formdata.append("upload_preset", import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET);
+            formdata.append("cloud_name", import.meta.env.VITE_CLOUDINARY_CLOUD_NAME);
+            
+            const response = await axios.post(
+                `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/image/upload`,
+                formdata
+            );
+
+            const avatarUrl = response.data.secure_url;
+
+            await axios.post("/user/register", {
+                username: formData.username,
+                email: formData.email,
+                password: formData.password,
+                avatar: avatarUrl,
+                fullName: formData.fullname,
+                phoneNumber: formData.phone,
+            });
+
+            navigate("/login");
+        } catch (error) {
+            handleError(error);
+        } finally {
+            setIsLoading(false);
         }
     };
 
     return (
-        <>
-            <Navbar />
-            <Wrapper
-                style={{
-                    marginTop: "65px",
-                }}
-            >
-                <Card>
-                    <Avatar
-                        onClick={() => {
-                            avatarRef.current.click();
-                        }}
-                    >
-                        {avatar ? (
-                            <img
-                                src={showAvatar}
-                                alt="Avatar"
-                                style={{
-                                    width: "100%",
-                                    height: "100%",
-                                    borderRadius: "50%",
-                                }}
+        <PageWrapper>
+            <SignUpCard>
+                <CardHeader>
+                    <Title>Create Account</Title>
+                </CardHeader>
+
+                <AvatarWrapper onClick={() => avatarRef.current.click()}>
+                    {showAvatar ? (
+                        <AvatarImage src={showAvatar} alt="Profile" />
+                    ) : (
+                        <AvatarPlaceholder>
+                            <Camera size={24} color="#666" />
+                        </AvatarPlaceholder>
+                    )}
+                    <AvatarOverlay>
+                        <span>Upload Photo</span>
+                    </AvatarOverlay>
+                    <HiddenInput
+                        ref={avatarRef}
+                        type="file"
+                        accept="image/*"
+                        onChange={handleAvatarChange}
+                    />
+                </AvatarWrapper>
+
+                <Form onSubmit={handleSignUp}>
+                    <InputGroup>
+                        <InputWrapper>
+                            <IconWrapper>
+                                <User size={20} color="#666" />
+                            </IconWrapper>
+                            <Input
+                                type="text"
+                                name="fullname"
+                                placeholder="Full Name"
+                                value={formData.fullname}
+                                onChange={handleInputChange}
                             />
-                        ) : (
-                            <AvatarPlaceholder />
-                        )}
-                        {!isFileSelected && (
-                            <UploadLabel className=" h-full w-full rounded-full  flex items-center justify-center " >
-                                Upload
-                            </UploadLabel>
-                        )}
-                        <UploadInput
-                            ref={avatarRef}
-                            id="avatarUpload"
-                            type="file"
-                            accept="image/*"
-                            onChange={(e) => {
-                                setAvatar(e.target.files[0]);
-                                showAvatarhandler(e);
-                            }}
-                        />
-                    </Avatar>
-                    <Form onSubmit={handleSignUp}>
-                        <Input
-                            type="text"
-                            placeholder="fullname"
-                            value={fullname}
-                            onChange={(e) => setFullname(e.target.value)}
-                        />
-                        <Input
-                            type="text"
-                            placeholder="username"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                        />
-                        <Input
-                            type="email"
-                            placeholder="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                        <Input
-                            type="tel"
-                            placeholder="phone number"
-                            value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
-                        />
-                        <Input
-                            type="password"
-                            placeholder="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                        <SignUpButton type="submit">
-                            <span className="span-mother">
-                                <span>S</span>
-                                <span>i</span>
-                                <span>g</span>
-                                <span>n</span>
-                                <span> </span>
-                                <span>U</span>
-                                <span>p</span>
-                            </span>
-                            <span className="span-mother2">
-                                <span>S</span>
-                                <span>i</span>
-                                <span>g</span>
-                                <span>n</span>
-                                <span> </span>
-                                <span>U</span>
-                                <span>p</span>
-                            </span>
-                        </SignUpButton>
-                        <LoginLink to="/login">
-                            Already have an account? Login
-                        </LoginLink>
-                    </Form>
-                </Card>
-            </Wrapper>
-        </>
+                        </InputWrapper>
+                    </InputGroup>
+
+                    <InputGroup>
+                        <InputWrapper>
+                            <IconWrapper>
+                                <User size={20} color="#666" />
+                            </IconWrapper>
+                            <Input
+                                type="text"
+                                name="username"
+                                placeholder="Username"
+                                value={formData.username}
+                                onChange={handleInputChange}
+                            />
+                        </InputWrapper>
+                    </InputGroup>
+
+                    <InputGroup>
+                        <InputWrapper>
+                            <IconWrapper>
+                                <Mail size={20} color="#666" />
+                            </IconWrapper>
+                            <Input
+                                type="email"
+                                name="email"
+                                placeholder="Email"
+                                value={formData.email}
+                                onChange={handleInputChange}
+                            />
+                        </InputWrapper>
+                    </InputGroup>
+
+                    <InputGroup>
+                        <InputWrapper>
+                            <IconWrapper>
+                                <Phone size={20} color="#666" />
+                            </IconWrapper>
+                            <Input
+                                type="tel"
+                                name="phone"
+                                placeholder="Phone Number"
+                                value={formData.phone}
+                                onChange={handleInputChange}
+                            />
+                        </InputWrapper>
+                    </InputGroup>
+
+                    <InputGroup>
+                        <InputWrapper>
+                            <IconWrapper>
+                                <Lock size={20} color="#666" />
+                            </IconWrapper>
+                            <Input
+                                type={showPassword ? "text" : "password"}
+                                name="password"
+                                placeholder="Password"
+                                value={formData.password}
+                                onChange={handleInputChange}
+                            />
+                            <EyeButton
+                                type="button"
+                                onClick={togglePasswordVisibility}
+                            >
+                                {showPassword ? (
+                                    <Eye size={20} color="#666" />
+                                ) : (
+                                    <EyeOff size={20} color="#666" />
+                                )}
+                            </EyeButton>
+                        </InputWrapper>
+                    </InputGroup>
+
+                    <SignUpButton type="submit" disabled={isLoading}>
+                        <span>Create Account</span>
+                        <ArrowIconWrapper>
+                            <ArrowRight size={20} />
+                        </ArrowIconWrapper>
+                    </SignUpButton>
+
+                    <Divider>
+                        <DividerLine />
+                        <DividerText>or</DividerText>
+                        <DividerLine />
+                    </Divider>
+
+                    <LoginLink type="button" onClick={() => navigate("/login")}>
+                        <span>Already have an account? Sign In</span>
+                    </LoginLink>
+                </Form>
+            </SignUpCard>
+        </PageWrapper>
     );
 };
 
 export default SignUp;
 
-const Wrapper = styled.div`
+// Animations
+const bounceX = keyframes`
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(3px); }
+`;
+
+const scaleUp = keyframes`
+    0% { transform: scale(1); }
+    100% { transform: scale(1.02); }
+`;
+
+// Styled Components
+const PageWrapper = styled.div`
+    min-height: 100vh;
     display: flex;
-    justify-content: center;
     align-items: center;
-    height: 92vh;
-`;
-
-const Card = styled.div`
-    background-color: #d4f3c2;
-    padding: 40px;
-    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
-        rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
-        rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
-    border-radius: 10px;
-    text-align: center;
-    max-width: 400px;
-    width: 90%;
-    margin: 20px;
-
-    @media (max-width: 768px) {
-        padding: 20px;
-    }
-`;
-
-const Form = styled.form`
-    display: flex;
-    flex-direction: column;
-`;
-
-const Input = styled.input`
-    padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #fff;
-    color: #333;
-    font-size: 16px;
-
-    &::placeholder {
-        color: #999;
-    }
-
-    @media (max-width: 768px) {
-        padding: 8px;
-        font-size: 14px;
-    }
-`;
-
-const SignUpButton = styled.button`
-    padding: 10px;
-    background-color: #90ee90;
-    border: solid 0.5px green;
-    border-radius: 5px;
-    color: #333;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    display: flex;
     justify-content: center;
-    align-items: center;
-    position: relative;
-    overflow: hidden;
+    padding: 1rem;
+    background: linear-gradient(135deg, #f0fff4 0%, #dcfce7 100%);
+`;
+
+const SignUpCard = styled.div`
     width: 100%;
-    height: 42.66px;
+    max-width: 28rem;
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    padding: 2rem;
+    transition: transform 0.3s ease;
 
-    &:hover {
-        background-color: #057807;
-        color: #fff;
-    }
-
-    @media (max-width: 768px) {
-        padding: 8px;
-        font-size: 14px;
-    }
-
-    .span-mother,
-    .span-mother2 {
-        display: flex;
-        position: absolute;
-    }
-
-    .span-mother {
-        overflow: hidden;
-    }
-
-    &:hover .span-mother {
-        position: absolute;
-    }
-
-    &:hover .span-mother span {
-        transform: translateY(1.2em);
-    }
-
-    .span-mother span:nth-child(1) {
-        transition: 0.2s;
-    }
-
-    .span-mother span:nth-child(2) {
-        transition: 0.3s;
-    }
-
-    .span-mother span:nth-child(3) {
-        transition: 0.4s;
-    }
-
-    .span-mother span:nth-child(4) {
-        transition: 0.5s;
-    }
-
-    .span-mother span:nth-child(5) {
-        transition: 0.6s;
-    }
-
-    .span-mother span:nth-child(6) {
-        transition: 0.7s;
-    }
-
-    .span-mother span:nth-child(7) {
-        transition: 0.8s;
-    }
-
-    .span-mother2 {
-        overflow: hidden;
-    }
-
-    .span-mother2 span {
-        transform: translateY(-2em); /* Adjusted value */
-    }
-
-    &:hover .span-mother2 span {
-        transform: translateY(0);
-    }
-
-    .span-mother2 span {
-        transition: 0.2s;
-    }
-
-    .span-mother2 span:nth-child(2) {
-        transition: 0.3s;
-    }
-
-    .span-mother2 span:nth-child(3) {
-        transition: 0.4s;
-    }
-
-    .span-mother2 span:nth-child(4) {
-        transition: 0.5s;
-    }
-
-    .span-mother2 span:nth-child(5) {
-        transition: 0.6s;
-    }
-
-    .span-mother2 span:nth-child(6) {
-        transition: 0.7s;
-    }
-    .span-mother2 span:nth-child(7) {
-        transition: 0.8s;
-    }
 `;
 
-const LoginLink = styled(Link)`
-    margin-top: 20px;
-    color: #333;
-    text-decoration: none;
-
-    &:hover {
-        text-decoration: underline;
-    }
+const CardHeader = styled.div`
+    text-align: center;
+    margin-bottom: 1rem;
 `;
 
-const Avatar = styled.div`
-    position: relative;
+const Title = styled.h2`
+    color: #166534;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+`;
+
+const AvatarWrapper = styled.div`
     width: 100px;
     height: 100px;
-    background-color: #555;
-    border-radius: 50%;
-    margin: 0 auto 20px auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    margin: 0 auto 2rem;
+    position: relative;
     cursor: pointer;
+    border-radius: 50%;
+    overflow: hidden;
+`;
+
+const AvatarImage = styled.img`
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 `;
 
 const AvatarPlaceholder = styled.div`
     width: 100%;
     height: 100%;
-    background-color: #ccc;
-    border-radius: 50%;
+    background: #f3f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `;
 
-const UploadLabel = styled.label`
+const AvatarOverlay = styled.div`
     position: absolute;
-    margin: 0 auto;
-    color: #000;
-    padding: 5px 10px;
-    cursor: pointer;
-    font-size: 12px;
-    transition: background-color 0.3s;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    color: white;
+    font-size: 0.875rem;
+
+    ${AvatarWrapper}:hover & {
+        opacity: 1;
+    }
 `;
 
-const UploadInput = styled.input`
+const HiddenInput = styled.input`
     display: none;
+`;
+
+const Form = styled.form`
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+`;
+
+const InputGroup = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+`;
+
+const InputWrapper = styled.div`
+    position: relative;
+    width: 100%;
+`;
+
+const IconWrapper = styled.div`
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+`;
+
+const Input = styled.input`
+    width: 100%;
+    padding: 0.75rem 1rem 0.75rem 3rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+    background: rgba(255, 255, 255, 0.9);
+    padding-right: ${props => props.type === "password" ? "3rem" : "1rem"};
+
+    &:focus {
+        outline: none;
+        border-color: #22c55e;
+        box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
+        background: white;
+    }
+
+    &:hover {
+        background: white;
+    }
+`;
+
+const EyeButton = styled.button`
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s ease;
+
+    &:hover {
+        opacity: 0.7;
+    }
+
+    &:focus {
+        outline: none;
+    }
+`;
+
+const SignUpButton = styled.button`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: #22c55e;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+        background: #16a34a;
+    }
+
+    &:active {
+        transform: scale(0.98);
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+`;
+
+const ArrowIconWrapper = styled.span`
+    animation: ${bounceX} 1s infinite;
+`;
+
+const Divider = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: .25rem 0;
+`;
+
+const DividerLine = styled.div`
+    flex: 1;
+    height: 1px;
+    background: #e5e7eb;
+`;
+
+const DividerText = styled.span`
+    color: #666;
+    font-size: 0.875rem;
+`;
+
+const LoginLink = styled.button`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #16a34a;
+
+    &:hover {
+        background: #f9fafb;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
 `;

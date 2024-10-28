@@ -699,7 +699,7 @@ const HotelDetails = () => {
                                             onClick={commentHandler}
                                             className="w-full md:w-auto px-6 py-3 bg-green-600 text-white font-semibold 
           rounded-lg hover:bg-green-700 transform transition-all duration-200 
-          hover:shadow-md active:scale-95 relative"
+          hover:shadow-md active:scale-95 relative" style={{zIndex:"0"}}
                                         >
                                             Post Review
                                         </button>
@@ -1049,7 +1049,6 @@ const Right = styled.div`
 `;
 
 const PriceSection = styled.div`
-    
     background-color: #f9f9f9;
     padding: 30px;
     border-radius: 10px;
