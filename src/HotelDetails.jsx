@@ -671,6 +671,7 @@ const HotelDetails = () => {
                                     <div className="flex flex-col md:flex-row gap-8">
                                         <div className="flex-shrink-0">
                                             <p className="text-sm text-slate-600 mb-2 z-[-10]">Your Rating</p>
+                                            <div style={{position:"relative", zIndex:"0"}}>
                                             <Rating
                                                 name="half-rating"
                                                 defaultValue={0}
@@ -681,8 +682,10 @@ const HotelDetails = () => {
                                                 })}
                                                 value={comment.rating}
                                                 size="large"
+                                                
                                                 className="text-green-600 relative z-0"
                                             />
+                                            </div>
                                         </div>
 
                                         <div className="flex-grow w-full space-y-4">
@@ -727,7 +730,7 @@ const HotelDetails = () => {
                                             <div className="flex items-start gap-4 mb-4">
                                                 <Avatar
                                                     src={review.user.avatar}
-                                                    className="w-12 h-12 rounded-full ring-2 ring-slate-100"
+                                                    className="w-20 h-10 rounded-full ring-2 ring-slate-100"
                                                 />
                                                 <div className="flex-1">
                                                     <div className="flex items-center justify-between">
@@ -1107,189 +1110,248 @@ const Avatar = styled.img`
 `;
 
 
+const slideIn = keyframes`
+  from { 
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
 const PopupOverlay = styled.div`
-    position: fixed;
-    width: 100vw !important;
-    height: 100vh !important;
-    z-index: 1000 !important;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, .5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  position: fixed;
+  width: 100vw !important;
+  height: 100vh !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: ${fadeIn} 0.3s ease-out;
 `;
 
 const PopupContent = styled.div`
-    z-index: 100 !important;
-    background: white;
-    padding: 30px;
-    border-radius: 15px;
-    max-width: 800px;
-    width: 90%;
-    max-height: 90vh;
-    overflow-y: auto;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+position: relative;
+z-index: 1000;
+  margin-top: 5rem;
+  background: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  max-width: 800px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+  animation: ${slideIn} 0.4s ease-out;
+  scrollbar-width: none;
 
-    &::-webkit-scrollbar {
-        display: none;
-        width: 0px;
-        background: transparent;
-    }
+  &::-webkit-scrollbar {
+    display: none;
+    width: 0px;
+    background: transparent;
+  }
 `;
 
 const PopupHeader = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    border-bottom: 2px solid #f0f0f0;
-    padding-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 1rem;
 
-    h2 {
-        font-size: 24px;
-        color: #333;
-        margin: 0;
-    }
+  h2 {
+    font-size: 1.75rem;
+    color: #2d3748;
+    margin: 0;
+    font-weight: 600;
+  }
 `;
 
 const CloseButton = styled.button`
-    background-colour: transparent;
-    border: none;
-    color: #666;
-    font-size: 28px;
-    cursor: pointer;
-    transition: color 0.3s;
+  background-color: transparent;
+  border: none;
+  color: #718096;
+  font-size: 1.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
 
-    &:hover {
-        color: #333;
-    }
+  &:hover {
+    background-color: #f7fafc;
+    color: #2d3748;
+    transform: rotate(90deg);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
+  }
 `;
 
 const Form = styled.form`
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 `;
 
 const GuestDetails = styled.div`
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-    background: #f9f9f9;
-    padding: 20px;
-    border-radius: 10px;
-    margin-bottom: 10px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.25rem;
+  background: #f8fafc;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  margin-bottom: 0.75rem;
+  border: 1px solid #e2e8f0;
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transform: translateY(-2px);
+  }
 `;
 
 const FormItem = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 
-    label {
-        font-weight: 600;
-        color: #555;
-        font-size: 14px;
-    }
-
-    input,
-    .react-datepicker-wrapper {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        font-size: 16px;
-        transition: border-color 0.3s;
-
-        &:focus {
-            outline: none;
-            border-color: #007bff;
-        }
-    }
-`;
-
-const Button = styled.button`
-    padding: 12px 20px;
-    font-size: 16px;
+  label {
     font-weight: 600;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.1s;
+    color: #4a5568;
+    font-size: 0.875rem;
+    letter-spacing: 0.025em;
+  }
+
+  input,
+  .react-datepicker-wrapper {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: #4299e1;
+      box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.25);
+    }
 
     &:hover {
-        transform: translateY(-2px);
+      border-color: #cbd5e0;
     }
-
-    &:active {
-        transform: translateY(0);
-    }
+  }
 `;
 
-const AddGuestButton = styled(Button)`
-    background-color: #28a745;
-    align-self: flex-start;
+const buttonBase = styled.button`
+  padding: 0.75rem 1.25rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.025em;
 
-    &:hover {
-        background-color: #218838;
-    }
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
+  }
 `;
 
-const PayButton = styled(Button)`
-    background-color: #007bff;
-    align-self: center;
-    width: 200px;
+const AddGuestButton = styled(buttonBase)`
+  background-color: #48bb78;
+  align-self: flex-start;
 
-    &:hover {
-        background-color: #0056b3;
-    }
+  &:hover {
+    background-color: #38a169;
+  }
 `;
 
-const RemoveGuestButton = styled(Button)`
-    background-color: #dc3545;
-    padding: 8px 15px;
-    font-size: 14px;
+const PayButton = styled(buttonBase)`
+  background-color: #4299e1;
+  align-self: center;
+  width: 200px;
 
-    &:hover {
-        background-color: #c82333;
-    }
+  &:hover {
+    background-color: #3182ce;
+  }
+`;
+
+const RemoveGuestButton = styled(buttonBase)`
+  background-color: #f56565;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+
+  &:hover {
+    background-color: #e53e3e;
+  }
 `;
 
 const DatePickerWrapper = styled.div`
-    display: flex;
-    gap: 20px;
-    margin-bottom: 20px;
+  display: flex;
+  gap: 1.25rem;
+  margin-bottom: 1.25rem;
+
+  @media (max-width: 640px) {
+    flex-direction: column;
+  }
 `;
 
 const SummarySection = styled.div`
-    background: #CD7F32;
-    padding: 20px;
-    border-radius: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  background: linear-gradient(135deg, #CD7F32, #DAA520);
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 `;
 
 const SummaryItem = styled.div`
-    text-align: center;
-
-    label {
+  text-align: center;
+  padding: 0.5rem 1rem;
+  
+  label {
     font-weight: 600;
-    color: #eee; /* Light gray for better contrast */
-    font-size: 14px;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.875rem;
     display: block;
-    margin-bottom: 5px;
-}
+    margin-bottom: 0.375rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
 
-p {
-    font-size: 18px;
+  p {
+    font-size: 1.25rem;
     font-weight: 700;
-    color: #fff; /* White for strong contrast */
+    color: white;
     margin: 0;
-}
-
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
 `;

@@ -5,6 +5,7 @@ import axios from "./utils/axios";
 import { Link } from "react-router-dom";
 import socket from "./utils/socket";
 import useHandleErr from "./utils/useHandleErr";
+import { Check, X } from "lucide-react"
 
 const AdminRequests = () => {
     const [hotels, setHotels] = useState([]);
@@ -100,16 +101,24 @@ const AdminRequests = () => {
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                                             {hotel.city}
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                                            <select
-                                                className="block w-fit py-2 px-3 border border-emerald-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"
-                                                onChange={(e) => approveHotel(hotel._id, e.target.value)}
-                                                defaultValue=""
-                                            >
-                                                <option value="" disabled>Select Status</option>
-                                                <option value="approved">Approved</option>
-                                                <option value="rejected">Rejected</option>
-                                            </select>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm">
+                                            <div className="flex gap-3">
+                                                <button
+                                                    onClick={() => onApprove(hotelId, "approved")}
+                                                    className="p-1.5 text-white bg-emerald-500 rounded-full hover:bg-emerald-600 transition-colors"
+                                                    aria-label="Approve"
+                                                >
+                                                    <Check className="w-4 h-4" />
+                                                </button>
+
+                                                <button
+                                                    onClick={() => onApprove(hotelId, "rejected")}
+                                                    className="p-1.5 text-white bg-red-500 rounded-full hover:bg-red-600 transition-colors"
+                                                    aria-label="Reject"
+                                                >
+                                                    <X className="w-4 h-4" />
+                                                </button>
+                                            </div>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                                             <Link

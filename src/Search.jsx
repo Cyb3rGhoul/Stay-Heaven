@@ -459,21 +459,26 @@ const MapContainer = styled.div`
 
 const FilterBox = styled.div`
     position: fixed;
-    top: 65%;
-    right: 0;
-    transform: translate(-5%, -65%);
+    top: ${() => {
+        const viewportHeight = window.innerHeight;
+        if (window.innerWidth <= 768) {
+            return `${Math.min(55, viewportHeight * 0.55)}%`;
+        }
+        return `${Math.min(65, viewportHeight * 0.65)}%`;
+    }};
+    right: ${props => window.innerWidth <= 768 ? 'auto' : '0'};
+    left: ${props => window.innerWidth <= 768 ? '6%' : 'auto'};
+    transform: ${props => 
+        window.innerWidth <= 768 
+            ? 'translateY(-50%)' 
+            : 'translate(-5%, -65%)'
+    };
     background-color: #fff;
     padding: 32px;
     border-radius: 16px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     width: 350px;
     border: 1px solid rgba(5, 150, 105, 0.1);
-    
-    @media (max-width: 768px) {
-        position: fixed;
-        top: 55%;
-        left: 6%;
-    }
 `;
 
 const CloseButton = styled.button`
