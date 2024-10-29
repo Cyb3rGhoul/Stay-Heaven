@@ -20,6 +20,7 @@ import { useSelector } from "react-redux";
 import "./HotelDetails.css";
 import useHandleErr from "./utils/useHandleErr";
 import toast from "react-hot-toast";
+import ImageGallery from "./ImageGallery";
 
 const HotelDetails = () => {
     const { id } = useParams();
@@ -283,52 +284,7 @@ const HotelDetails = () => {
                                 </ShareButton>
                             </ActionButtons>
                         </TitleSection>
-                        <GalleryContainer>
-                            <MainImage>
-                                <img
-                                    src={
-                                        hotel.images?.length > 0
-                                            ? hotel.images[0]
-                                            : "https://via.placeholder.com/800x600"
-                                    }
-                                    alt="Gallery 1"
-                                />
-                            </MainImage>
-                            <SmallImages>
-                                <img
-                                    src={
-                                        hotel.images?.length > 1
-                                            ? hotel.images[1]
-                                            : "https://via.placeholder.com/400x300"
-                                    }
-                                    alt="Gallery 2"
-                                />
-                                <img
-                                    src={
-                                        hotel.images?.length > 2
-                                            ? hotel.images[2]
-                                            : "https://via.placeholder.com/400x300"
-                                    }
-                                    alt="Gallery 3"
-                                />
-                                <img
-                                    src={
-                                        hotel.images?.length > 3
-                                            ? hotel.images[3]
-                                            : "https://via.placeholder.com/400x300"
-                                    }
-                                    alt="Gallery 4"
-                                />
-                                <img
-                                    src={
-                                        hotel.images?.length > 4
-                                            ? hotel.images[4]
-                                            : "https://via.placeholder.com/400x300"
-                                    }
-                                    alt="Gallery 5"
-                                />
-                            </SmallImages>
-                        </GalleryContainer>
+                        <ImageGallery images={hotel.images} />
                         <Details>
                             <Left>
                                 <GuestReviews>
