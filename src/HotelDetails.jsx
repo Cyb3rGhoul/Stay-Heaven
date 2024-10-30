@@ -632,7 +632,7 @@ const HotelDetails = () => {
                             </Right>
                         </Details>
                         <div
-                            className="max-w-full mx-auto p-6 md:p-10 bg-slate-50 rounded-2xl shadow-md"
+                            className="max-w-full mx-auto p-6 md:p-10 bg-slate-50 rounded-2xl shadow-md max-md:mt-6"
                             id="comment-section"
                         >
                             {/* Comment Input Area */}
