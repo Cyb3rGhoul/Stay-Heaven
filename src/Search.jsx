@@ -322,7 +322,7 @@ const SearchBar = styled.div`
         padding: 12px 24px;
         border: none;
         border-radius: 8px;
-        background-color: #059669;
+        background-color: #4caf50;
         color: #fff;
         cursor: pointer;
         font-weight: 500;
@@ -421,7 +421,7 @@ const ResultCard = styled.div`
 
     .result-card-button {
         padding: 10px 20px;
-        background: linear-gradient(135deg, #10B981, #059669);
+        background: #4caf50;
         color: #fff;
         border: none;
         border-radius: 8px;

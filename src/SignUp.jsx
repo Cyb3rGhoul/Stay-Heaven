@@ -80,25 +80,73 @@ const SignUp = () => {
         toast.success("OTP verified successfully");
     };
 
+    const validateForm = () => {
+        if (!avatar) {
+            toast.error("Please upload a profile picture");
+            return false;
+        }
+        
+        if (!formData.fullname.trim()) {
+            toast.error("Please enter your full name");
+            return false;
+        }
+
+        if (!formData.username.trim()) {
+            toast.error("Please enter a username");
+            return false;
+        }
+
+        if (!formData.email.trim()) {
+            toast.error("Please enter your email address");
+            return false;
+        }
+
+        if (!otpVerified) {
+            toast.error("Please verify your email with OTP");
+            return false;
+        }
+
+        if (!formData.phone.trim()) {
+            toast.error("Please enter your phone number");
+            return false;
+        }
+
+        if (!formData.password) {
+            toast.error("Please enter a password");
+            return false;
+        }
+
+        // Basic password strength validation
+        if (formData.password.length < 8) {
+            toast.error("Password must be at least 8 characters long");
+            return false;
+        }
+
+        // Basic email format validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(formData.email)) {
+            toast.error("Please enter a valid email address");
+            return false;
+        }
+
+        // Basic phone number validation (assuming 10 digits)
+        const phoneRegex = /^\d{10}$/;
+        if (!phoneRegex.test(formData.phone)) {
+            toast.error("Please enter a valid 10-digit phone number");
+            return false;
+        }
+
+        return true;
+    };
+
     const handleSignUp = async (e) => {
         e.preventDefault();
-        if(!otpVerified){
-            toast.error("Please verify OTP");
+        
+        if (!validateForm()) {
             return;
         }
+
         setIsLoading(true);
-        if (
-            !avatar ||
-            !formData.username ||
-            !formData.email ||
-            !formData.password ||
-            !formData.fullname ||
-            !formData.phone
-        ) {
-            handleError(new Error("All fields are required"));
-            setIsLoading(false);
-            return;
-        }
 
         try {
             const formdata = new FormData();
@@ -130,6 +178,7 @@ const SignUp = () => {
                 phoneNumber: formData.phone,
             });
 
+            toast.success("Account created successfully!");
             navigate("/login");
         } catch (error) {
             handleError(error);

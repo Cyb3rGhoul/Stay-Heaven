@@ -155,8 +155,29 @@ const SellerDashboard = () => {
                 className="flex items-center justify-center mt-10"
             >
                 <div
-                    className={`${isMobile ? "w-full" : "w-full"
-                        } my-10 flex flex-col gap-5 rounded-lg bg-gradient-to-br from-amber-100 to-amber-300 h-fit pt-10 pb-10 shadow-lg`}
+                    className={`
+        ${isMobile ? "w-full" : "w-full"}
+
+        my-10 
+        flex 
+        flex-col 
+        gap-5 
+        rounded-xl
+        bg-gradient-to-br 
+        from-white 
+        via-gray-50
+        to-gray-100
+        h-fit 
+        pt-10 
+        pb-10 
+        shadow-[0_8px_30px_rgb(0,0,0,0.42)]
+        border
+        border-gray-100
+        backdrop-blur-sm
+        hover:shadow-[0_8px_30px_rgb(0,0,0,0.16)]
+        transition-all
+        duration-300
+      `}
                 >
                     <PieActiveArc
                         data={[
@@ -172,10 +193,7 @@ const SellerDashboard = () => {
                             },
                             {
                                 id: 2,
-                                value:
-                                    bookings -
-                                    confirmedBookings -
-                                    inprogressBookings,
+                                value: bookings - confirmedBookings - inprogressBookings,
                                 label: "Cancelled Bookings",
                             },
                         ]}
