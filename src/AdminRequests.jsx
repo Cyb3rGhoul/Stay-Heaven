@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import socket from "./utils/socket";
 import useHandleErr from "./utils/useHandleErr";
 import { Check, X } from "lucide-react"
+import toast from "react-hot-toast";
 
 const AdminRequests = () => {
     const [hotels, setHotels] = useState([]);
@@ -35,6 +36,11 @@ const AdminRequests = () => {
                 }
             );
             getAllPendingHotels();
+            if(approvalStatus === "approved"){
+                toast.success("Hotel Approved Successfully");
+            } else if(approvalStatus === "rejected"){
+                toast.error("Hotel Rejected Successfully");
+            }
         } catch (error) {
             handleError(error);
         }

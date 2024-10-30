@@ -23,7 +23,6 @@ const ForgotPassword = () => {
                 { username },
                 { withCredentials: true }
             );
-            console.log(response)
             if (response.data.statusCode === 200) {
                 toast.success("Password reset link sent to your email");
                 navigate("/login");

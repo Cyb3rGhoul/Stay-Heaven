@@ -30,7 +30,6 @@ const Landing = () => {
         gethotels();
 
         socket.on('hotel_is_approved', (data) => {
-            console.log('New hotel approved:', data);
             setHotels((prev) => [...prev, data.hotel]);
         });
 

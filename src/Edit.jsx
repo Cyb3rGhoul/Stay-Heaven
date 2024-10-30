@@ -35,6 +35,7 @@ const Edit = ({ selectedHotel, EditPopup }) => {
     const [pdfError, setPdfError] = useState(null);
 
     const handleClosePopup = () => {
+        toast.success("Hotel Edited Successfully");
         setFiles([]);
         setPreviews([]);
         setDeletedImages([]);
@@ -201,7 +202,6 @@ const Edit = ({ selectedHotel, EditPopup }) => {
 
     async function convertObjectUrlsToFiles() {
         const newFiles = [];
-        console.log("previews", previews);
         for (const img of previews) {
             // Check if the URL is an object URL (starting with "blob:")
             if (img.startsWith("blob:")) {

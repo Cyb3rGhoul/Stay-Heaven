@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+import daisyui from "daisyui"
+import tailwindScrollbar from "tailwind-scrollbar-daisyui";
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
@@ -13,7 +15,7 @@ export default {
     },
    },
   },
-  plugins: [require("daisyui"), require("tailwind-scrollbar-daisyui")],
+  plugins: [daisyui, tailwindScrollbar],
   variants: {
     // ...
     scrollbar: ["rounded"],

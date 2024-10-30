@@ -5,6 +5,8 @@ import Edit from "./Edit";
 import socket from "./utils/socket";
 import { Link } from "react-router-dom";
 import useHandleErr from "./utils/useHandleErr";
+import toast from "react-hot-toast";
+
 const SellerHotels = () => {
     const [hotels, setHotels] = useState([]);
     const [filteredHotels, setFilteredHotels] = useState([]);
@@ -208,7 +210,7 @@ const SellerHotels = () => {
             {isEditOpen && (
                 <Edit selectedHotel={selectedHotel} EditPopup={EditPopup} />
             )}
-            <div className="ml-4 mb-6 flex justify-between max-md:ml-[-.5rem]">
+            <div className="ml-4 mb-6 overflow-hidden flex max-md:flex-col-reverse max-md:items-center sm:justify-between max-md:ml-[-.5rem] w-[77vw]">
                 <button
                     onClick={popup}
                     className="btn text-white max-sm:scale-75 bg-emerald-600 hover:bg-emerald-700 transition-colors duration-300 shadow-md max-md:ml-[-.75rem]"
@@ -414,6 +416,9 @@ const SellerHotels = () => {
                                 </div>
                             </div>
                             <button
+                            onClick={() => {
+                                toast.success("Hotel Delete Request Submitted Successfully");
+                            }}
                                 type="submit"
                                 className="btn bg-green-500 outline-none text-white hover:bg-white hover:border-green-500 hover:border-2 hover:text-black transition-all duration-500"
                             >
@@ -553,9 +558,12 @@ const SellerHotels = () => {
                                     <td className="py-4 text-center">
                                         {hotel.deleted ? (
                                             <button
-                                                onClick={() =>
-                                                    onUndoHandler(hotel._id)
-                                                }
+                                                onClick={() => {
+                                                    onUndoHandler(hotel._id);
+                                                    toast.success(
+                                                        "Hotel Deleted Request Undone Successfully"
+                                                    );
+                                                }}
                                                 className="px-3 py-1 bg-yellow-500  rounded-md font-medium hover:bg-yellow-600 hover:scale-105 transition transform duration-200"
                                             >
                                                 Undo Delete Request

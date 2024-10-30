@@ -106,7 +106,6 @@ const SellerFormPage = () => {
                 const updatedUser = { ...prev, ...data.seller };
                 return updatedUser;
             });
-            console.log(user);
         });
 
         socket.on("seller_made", (data) => {

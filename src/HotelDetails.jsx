@@ -28,7 +28,7 @@ const HotelDetails = () => {
     const [user, setUser] = useState(
         useSelector((state) => state.user.userData)
     );
-    const handleError = useHandleErr()
+    const handleError = useHandleErr();
     const [features, setFeatures] = useState({
         wifi: false,
         ac: false,
@@ -185,11 +185,13 @@ const HotelDetails = () => {
     };
 
     const handleBookClick = () => {
-        if (hotel.owner === user._id) toast.error("You can't book your own hotel");
+        if (hotel.owner === user._id)
+            toast.error("You can't book your own hotel");
         else setShowPopup(true);
     };
 
-    const handlePay = async () => {
+    const handlePay = async (e) => {
+        e.preventDefault();
         if (checkInDate === null || checkOutDate === null) {
             toast.error("Please fill all the required fields");
             return;
@@ -197,6 +199,14 @@ const HotelDetails = () => {
 
         for (let i = 0; i < guestNames.length; i++) {
             if (Object.keys(guestNames[i]).length !== 3) {
+                toast.error("Please fill all the required fields");
+                return;
+            }
+            if (!/^\d{10}$/.test(guestNames[i].phoneNumber)) {
+                toast.error("Phone number should be 10 digits and contain only numbers");
+                return;
+            }
+            if(guestNames[i].firstName.length < 1 || guestNames[i].lastName.length < 1){
                 toast.error("Please fill all the required fields");
                 return;
             }
@@ -395,8 +405,8 @@ const HotelDetails = () => {
                                             ₹{" "}
                                             {typeof hotel.price === "number"
                                                 ? hotel.price.toLocaleString(
-                                                    "en-IN"
-                                                )
+                                                      "en-IN"
+                                                  )
                                                 : "N/A"}
                                         </DiscountedPrice>{" "}
                                         per night
@@ -410,7 +420,7 @@ const HotelDetails = () => {
                                     </button>
                                     {showPopup && (
                                         <PopupOverlay
-                                        onClick={handlePopupClose}
+                                            onClick={handlePopupClose}
                                         >
                                             <PopupContent
                                                 onClick={(e) =>
@@ -471,6 +481,7 @@ const HotelDetails = () => {
                                                                                     .value
                                                                             )
                                                                         }
+                                                                        minLength="1"
                                                                         placeholder="Enter first name"
                                                                     />
                                                                 </FormItem>
@@ -498,6 +509,7 @@ const HotelDetails = () => {
                                                                                     .value
                                                                             )
                                                                         }
+                                                                        minLength="1"
                                                                         placeholder="Enter last name"
                                                                     />
                                                                 </FormItem>
@@ -514,6 +526,7 @@ const HotelDetails = () => {
                                                                         value={
                                                                             guest.phoneNumber
                                                                         }
+                                                                        maxLength="10"
                                                                         onChange={(
                                                                             e
                                                                         ) =>
@@ -530,18 +543,18 @@ const HotelDetails = () => {
                                                                 </FormItem>
                                                                 {guestNames.length >
                                                                     1 && (
-                                                                        <RemoveGuestButton
-                                                                            type="button"
-                                                                            onClick={() =>
-                                                                                handleRemoveGuest(
-                                                                                    index
-                                                                                )
-                                                                            }
-                                                                        >
-                                                                            Remove
-                                                                            Guest
-                                                                        </RemoveGuestButton>
-                                                                    )}
+                                                                    <RemoveGuestButton
+                                                                        type="button"
+                                                                        onClick={() =>
+                                                                            handleRemoveGuest(
+                                                                                index
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        Remove
+                                                                        Guest
+                                                                    </RemoveGuestButton>
+                                                                )}
                                                             </GuestDetails>
                                                         )
                                                     )}
@@ -606,8 +619,8 @@ const HotelDetails = () => {
                                                         </SummaryItem>
                                                     </SummarySection>
                                                     <PayButton
-                                                        type="button"
-                                                        onClick={handlePay}
+                                                        type="submit"
+                                                        onClick={(e) => handlePay(e)}
                                                     >
                                                         Proceed to Payment
                                                     </PayButton>
@@ -618,29 +631,43 @@ const HotelDetails = () => {
                                 </PriceSection>
                             </Right>
                         </Details>
-                        <div className="max-w-full mx-auto p-6 md:p-10 bg-slate-50 rounded-2xl shadow-md" id="comment-section">
+                        <div
+                            className="max-w-full mx-auto p-6 md:p-10 bg-slate-50 rounded-2xl shadow-md"
+                            id="comment-section"
+                        >
                             {/* Comment Input Area */}
                             <div className="mb-10">
-                                <h2 className="text-2xl font-bold text-slate-800 mb-8">Write a Review</h2>
+                                <h2 className="text-2xl font-bold text-slate-800 mb-8">
+                                    Write a Review
+                                </h2>
 
                                 <div className="bg-white p-6 rounded-xl shadow-sm space-y-6">
                                     <div className="flex flex-col md:flex-row gap-8">
                                         <div className="flex-shrink-0">
-                                            <p className="text-sm text-slate-600 mb-2 z-[-10]">Your Rating</p>
-                                            <div style={{position:"relative", zIndex:"0"}}>
-                                            <Rating
-                                                name="half-rating"
-                                                defaultValue={0}
-                                                precision={0.5}
-                                                onChange={(e) => setComment({
-                                                    ...comment,
-                                                    rating: e.target.value,
-                                                })}
-                                                value={comment.rating}
-                                                size="large"
-                                                
-                                                className="text-green-600 relative z-0"
-                                            />
+                                            <p className="text-sm text-slate-600 mb-2 z-[-10]">
+                                                Your Rating
+                                            </p>
+                                            <div
+                                                style={{
+                                                    position: "relative",
+                                                    zIndex: showPopup ? "-1" : "0",
+                                                }}
+                                            >
+                                                <Rating
+                                                    name="half-rating"
+                                                    defaultValue={0}
+                                                    precision={0.5}
+                                                    onChange={(e) =>
+                                                        setComment({
+                                                            ...comment,
+                                                            rating: e.target
+                                                                .value,
+                                                        })
+                                                    }
+                                                    value={comment.rating}
+                                                    size="large"
+                                                    className="text-green-600 relative z-0"
+                                                />
                                             </div>
                                         </div>
 
@@ -649,10 +676,12 @@ const HotelDetails = () => {
                                                 className="w-full px-4 py-3 h-32 text-slate-700 bg-slate-50 border border-slate-200 
                         rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none 
                         transition-all duration-200 placeholder-slate-400"
-                                                onChange={(e) => setComment({
-                                                    ...comment,
-                                                    message: e.target.value,
-                                                })}
+                                                onChange={(e) =>
+                                                    setComment({
+                                                        ...comment,
+                                                        message: e.target.value,
+                                                    })
+                                                }
                                                 value={comment.message}
                                                 placeholder="Share your experience with this product..."
                                             />
@@ -673,7 +702,9 @@ const HotelDetails = () => {
                             {/* Reviews List */}
                             <div>
                                 <div className="flex items-center justify-between mb-6">
-                                    <h3 className="text-xl font-bold text-slate-800">Customer Reviews</h3>
+                                    <h3 className="text-xl font-bold text-slate-800">
+                                        Customer Reviews
+                                    </h3>
                                 </div>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
@@ -690,16 +721,32 @@ const HotelDetails = () => {
                                                 />
                                                 <div className="flex-1">
                                                     <div className="flex items-center justify-between">
-                                                        <h4 className="font-semibold text-slate-900">{review.user.username}</h4>
-                                                        {user && user._id === review.user._id && (
-                                                            <button
-                                                                onClick={() => handleDeleteReview(review._id)}
-                                                                className="p-1.5 text-slate-400 hover:text-red-500 
+                                                        <h4 className="font-semibold text-slate-900">
+                                                            {
+                                                                review.user
+                                                                    .username
+                                                            }
+                                                        </h4>
+                                                        {user &&
+                                                            user._id ===
+                                                                review.user
+                                                                    ._id && (
+                                                                <button
+                                                                    onClick={() =>
+                                                                        handleDeleteReview(
+                                                                            review._id
+                                                                        )
+                                                                    }
+                                                                    className="p-1.5 text-slate-400 hover:text-red-500 
                                         opacity-0 group-hover:opacity-100 transition-all duration-200 z-0"
-                                                            >
-                                                                <MdDelete size={18} />
-                                                            </button>
-                                                        )}
+                                                                >
+                                                                    <MdDelete
+                                                                        size={
+                                                                            18
+                                                                        }
+                                                                    />
+                                                                </button>
+                                                            )}
                                                     </div>
                                                     <Rating
                                                         name="half-rating-read"
@@ -708,7 +755,7 @@ const HotelDetails = () => {
                                                         value={review.rating}
                                                         readOnly
                                                         size="small"
-                                                        className="text-green-600 z-0"
+                                                        className={`text-green-600 relative ${showPopup && "z-[-1]"}`}
                                                     />
                                                 </div>
                                             </div>
@@ -721,7 +768,6 @@ const HotelDetails = () => {
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </Wrapper>
             </div>
@@ -730,7 +776,6 @@ const HotelDetails = () => {
 };
 
 export default HotelDetails;
-
 
 const fadeIn = keyframes`
     from {
@@ -848,7 +893,7 @@ const GuestReviews = styled.div`
 const GuestFavourite = styled.div`
     font-size: 16px;
     font-weight: bold;
-    color: #CD7F32;
+    color: #cd7f32;
 
     @media (max-width: 768px) {
         font-size: 14px;
@@ -1058,13 +1103,11 @@ const DiscountedPrice = styled.span`
     color: #e57373;
 `;
 
-
 const Avatar = styled.img`
     border-radius: 50%;
     height: 80px;
     margin-right: 10px;
 `;
-
 
 const slideIn = keyframes`
   from { 
@@ -1078,236 +1121,236 @@ const slideIn = keyframes`
 `;
 
 const PopupOverlay = styled.div`
-  position: fixed;
-  width: 100vw !important;
-  height: 100vh !important;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(5px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  animation: ${fadeIn} 0.3s ease-out;
+    position: fixed;
+    width: 100vw !important;
+    height: 100vh !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: ${fadeIn} 0.3s ease-out;
 `;
 
 const PopupContent = styled.div`
-position: relative;
-z-index: 1000;
-  margin-top: 5rem;
-  background: white;
-  padding: 2rem;
-  border-radius: 1rem;
-  max-width: 800px;
-  width: 90%;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
-  animation: ${slideIn} 0.4s ease-out;
-  scrollbar-width: none;
+    position: relative;
+    z-index: 1000;
+    margin-top: 5rem;
+    background: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    max-width: 800px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    animation: ${slideIn} 0.4s ease-out;
+    scrollbar-width: none;
 
-  &::-webkit-scrollbar {
-    display: none;
-    width: 0px;
-    background: transparent;
-  }
+    &::-webkit-scrollbar {
+        display: none;
+        width: 0px;
+        background: transparent;
+    }
 `;
 
 const PopupHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-  border-bottom: 2px solid #f0f0f0;
-  padding-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 1rem;
 
-  h2 {
-    font-size: 1.75rem;
-    color: #2d3748;
-    margin: 0;
-    font-weight: 600;
-  }
+    h2 {
+        font-size: 1.75rem;
+        color: #2d3748;
+        margin: 0;
+        font-weight: 600;
+    }
 `;
 
 const CloseButton = styled.button`
-  background-color: transparent;
-  border: none;
-  color: #718096;
-  font-size: 1.75rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  padding: 0.5rem;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
+    background-color: transparent;
+    border: none;
+    color: #718096;
+    font-size: 1.75rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
 
-  &:hover {
-    background-color: #f7fafc;
-    color: #2d3748;
-    transform: rotate(90deg);
-  }
+    &:hover {
+        background-color: #f7fafc;
+        color: #2d3748;
+        transform: rotate(90deg);
+    }
 
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
-  }
+    &:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
+    }
 `;
 
 const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
 `;
 
 const GuestDetails = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1.25rem;
-  background: #f8fafc;
-  padding: 1.5rem;
-  border-radius: 0.75rem;
-  margin-bottom: 0.75rem;
-  border: 1px solid #e2e8f0;
-  transition: all 0.3s ease;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.25rem;
+    background: #f8fafc;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    margin-bottom: 0.75rem;
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
 
-  &:hover {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    transform: translateY(-2px);
-  }
+    &:hover {
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        transform: translateY(-2px);
+    }
 `;
 
 const FormItem = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 
-  label {
-    font-weight: 600;
-    color: #4a5568;
-    font-size: 0.875rem;
-    letter-spacing: 0.025em;
-  }
-
-  input,
-  .react-datepicker-wrapper {
-    width: 100%;
-    padding: 0.75rem;
-    border: 2px solid #e2e8f0;
-    border-radius: 0.5rem;
-    font-size: 1rem;
-    transition: all 0.2s ease;
-
-    &:focus {
-      outline: none;
-      border-color: #4299e1;
-      box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.25);
+    label {
+        font-weight: 600;
+        color: #4a5568;
+        font-size: 0.875rem;
+        letter-spacing: 0.025em;
     }
 
-    &:hover {
-      border-color: #cbd5e0;
+    input,
+    .react-datepicker-wrapper {
+        width: 100%;
+        padding: 0.75rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        transition: all 0.2s ease;
+
+        &:focus {
+            outline: none;
+            border-color: #4299e1;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.25);
+        }
+
+        &:hover {
+            border-color: #cbd5e0;
+        }
     }
-  }
 `;
 
 const buttonBase = styled.button`
-  padding: 0.75rem 1.25rem;
-  font-size: 1rem;
-  font-weight: 600;
-  color: white;
-  border: none;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  letter-spacing: 0.025em;
+    padding: 0.75rem 1.25rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0.025em;
 
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
 
-  &:active {
-    transform: translateY(0);
-  }
+    &:active {
+        transform: translateY(0);
+    }
 
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
-  }
+    &:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
+    }
 `;
 
 const AddGuestButton = styled(buttonBase)`
-  background-color: #48bb78;
-  align-self: flex-start;
+    background-color: #48bb78;
+    align-self: flex-start;
 
-  &:hover {
-    background-color: #38a169;
-  }
+    &:hover {
+        background-color: #38a169;
+    }
 `;
 
 const PayButton = styled(buttonBase)`
-  background-color: #4299e1;
-  align-self: center;
-  width: 200px;
+    background-color: #4299e1;
+    align-self: center;
+    width: 200px;
 
-  &:hover {
-    background-color: #3182ce;
-  }
+    &:hover {
+        background-color: #3182ce;
+    }
 `;
 
 const RemoveGuestButton = styled(buttonBase)`
-  background-color: #f56565;
-  padding: 0.5rem 1rem;
-  font-size: 0.875rem;
+    background-color: #f56565;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
 
-  &:hover {
-    background-color: #e53e3e;
-  }
+    &:hover {
+        background-color: #e53e3e;
+    }
 `;
 
 const DatePickerWrapper = styled.div`
-  display: flex;
-  gap: 1.25rem;
-  margin-bottom: 1.25rem;
+    display: flex;
+    gap: 1.25rem;
+    margin-bottom: 1.25rem;
 
-  @media (max-width: 640px) {
-    flex-direction: column;
-  }
+    @media (max-width: 640px) {
+        flex-direction: column;
+    }
 `;
 
 const SummarySection = styled.div`
-  background: linear-gradient(135deg, #CD7F32, #DAA520);
-  padding: 1.5rem;
-  border-radius: 0.75rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(135deg, #cd7f32, #daa520);
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 `;
 
 const SummaryItem = styled.div`
-  text-align: center;
-  padding: 0.5rem 1rem;
-  
-  label {
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 0.875rem;
-    display: block;
-    margin-bottom: 0.375rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
+    text-align: center;
+    padding: 0.5rem 1rem;
 
-  p {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: white;
-    margin: 0;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  }
+    label {
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 0.875rem;
+        display: block;
+        margin-bottom: 0.375rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    p {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: white;
+        margin: 0;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
 `;

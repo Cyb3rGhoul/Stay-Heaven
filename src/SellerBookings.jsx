@@ -144,10 +144,10 @@ const SellerBookings = () => {
                 </div>
             )}
 
-            <div className="mb-6 flex justify-between">
+            <div className="ml-4 mb-6 overflow-hidden flex max-md:flex-col-reverse max-md:items-center sm:justify-between max-md:ml-[-.5rem]">
                 <button
                     onClick={popup}
-                    className="btn text-white max-sm:scale-75 bg-emerald-600 hover:bg-emerald-700 transition-colors duration-300 shadow-md max-md:ml-[-1.5rem]"
+                    className="btn text-white max-sm:scale-75 bg-emerald-600 max-md:w-fit hover:bg-emerald-700 transition-colors duration-300 shadow-md max-md:ml-[-1.5rem]"
                 >
                     Apply Filters
                 </button>

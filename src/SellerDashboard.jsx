@@ -46,7 +46,6 @@ const SellerDashboard = () => {
     };
 
     const formatNumber = (value) => {
-        console.log(value);
         if (value >= 1_000_000_000_000) {
             return (value / 1_000_000_000_000).toFixed(1) + "T";
         } else if (value >= 1_000_000_000) {

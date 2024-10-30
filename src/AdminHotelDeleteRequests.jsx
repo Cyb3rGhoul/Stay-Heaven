@@ -5,6 +5,7 @@ import axios from "./utils/axios";
 import { Link } from "react-router-dom";
 import socket from "./utils/socket";
 import useHandleErr from "./utils/useHandleErr";
+import toast from "react-hot-toast";
 
 const AdminHotelDeleteRequests = () => {
     const [hotels, setHotels] = useState([]);
@@ -37,6 +38,7 @@ const AdminHotelDeleteRequests = () => {
                     withCredentials: true,
                 }
             );
+            toast.success("Hotel Deleted Request Approved Successfully");
         } catch (error) {
             handleError(error)
         }
@@ -49,6 +51,7 @@ const AdminHotelDeleteRequests = () => {
                 { id },
                 { withCredentials: true }
             );
+            toast.success("Hotel Delete Request Rejected Successfully");
         } catch (error) {
             handleError(error)
         }

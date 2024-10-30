@@ -3,6 +3,7 @@ import axios from "./utils/axios";
 import { Link, useNavigate } from "react-router-dom";
 import socket from "./utils/socket";
 import useHandleErr from "./utils/useHandleErr";
+import toast from "react-hot-toast";
 
 const AdminUser = () => {
     const [users, setUsers] = useState([]);
@@ -90,6 +91,7 @@ const AdminUser = () => {
                     user._id === id ? { ...user, isAdmin: true } : user
                 )
             );
+            toast.success("User Made Admin Successfully");
         } catch (error) {
             handleError(error);
         }
@@ -114,6 +116,7 @@ const AdminUser = () => {
                     user._id === id ? { ...user, isAdmin: false } : user
                 )
             );
+            toast.success("User Removed Admin Successfully");
         } catch (error) {
             handleError(error);
         }
@@ -138,6 +141,7 @@ const AdminUser = () => {
                     user._id === id ? { ...user, isCreator: true } : user
                 )
             );
+            toast.success("User Made Seller Successfully");
         } catch (error) {
             handleError(error);
         }
@@ -162,6 +166,7 @@ const AdminUser = () => {
                     user._id === id ? { ...user, isCreator: false } : user
                 )
             );
+            toast.success("User Removed Seller Successfully");
         } catch (error) {
             handleError(error);
         }
@@ -181,6 +186,7 @@ const AdminUser = () => {
                     user._id === id ? { ...user, isban: true } : user
                 )
             );
+            toast.success("User Banned Successfully");
         } catch (error) {
             handleError(error);
         }
@@ -200,6 +206,7 @@ const AdminUser = () => {
                     user._id === id ? { ...user, isban: false } : user
                 )
             );
+            toast.success("User Unbanned Successfully");
         } catch (error) {
             handleError(error);
         }
@@ -369,7 +376,7 @@ const AdminUser = () => {
                     )}
                 </div>
             )}
-            <div className="ml-6 mb-6 flex justify-between">
+            <div className="ml-4 mb-6 overflow-hidden flex max-md:flex-col-reverse max-md:items-center sm:justify-between max-md:ml-[-.5rem]">
                 <button
                     onClick={popup}
                     className="btn text-white max-sm:scale-75 bg-emerald-600 hover:bg-emerald-700 transition-colors duration-300 shadow-md max-md:ml-[-2rem]"
@@ -683,8 +690,10 @@ const AdminUser = () => {
                                             onChange={(e) => {
                                                 if (e.target.value === "yes") {
                                                     makeBan(user._id);
+                                                    user.isban = true;
                                                 } else {
                                                     removeBan(user._id);
+                                                    user.isban = false; 
                                                 }
                                             }}
                                         >

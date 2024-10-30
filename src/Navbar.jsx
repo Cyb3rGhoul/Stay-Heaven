@@ -41,28 +41,6 @@ const Navbar = () => {
     const toggleDropdown = () => {
         setDropdownOpen(!dropdownOpen);
     };
-    // const getLoginStatus = async () => {
-    //     try {
-    //         const user = await axios.get("/user/current-user", {
-    //             withCredentials: true,
-    //         });
-    //         if (user) {
-    //             dispatch(toggleLogin(true));
-    //             dispatch(setUser(user.data.data));
-    //             setIsLoggedIn(true);
-    //             setprofileImage(user.data.data.avatar);
-    //             setIsAdmin(user.data.data.isAdmin);
-    //             setIsSeller(user.data.data.isCreator);
-    //             setIsBan(user.data.data.isban);
-    //         } else {
-    //             dispatch(toggleLogin(false));
-    //             dispatch(setUser({}));
-    //         }
-    //     } catch (error) {
-    //         handleErrors(error);
-    //         console.log(error);
-    //     }
-    // };
 
     useEffect(() => {
         setfixed(currentPath === "admin");
@@ -78,13 +56,11 @@ const Navbar = () => {
         socket.on("seller_made", (data) => {
             dispatch(setUser(data.seller))
             setIsSeller(data.seller.isCreator);
-            console.log(data.seller.isCreator)
         });
        
         socket.on("remove_creator", (data) => {
             dispatch(setUser(data.seller))
             setIsSeller(data.seller.isCreator);
-            console.log(data.seller.isCreator)
         });
 
         window.addEventListener('scroll', handleScroll);

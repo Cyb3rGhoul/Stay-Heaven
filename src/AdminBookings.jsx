@@ -71,7 +71,7 @@ const AdminBookings = () => {
             setOrders(response.data.data.orders);
             setFilteredOrders(response.data.data.orders);
         } catch (error) {
-           handleError(error)
+            handleError(error);
         }
     };
 
@@ -173,7 +173,7 @@ const AdminBookings = () => {
                 </div>
             )}
 
-            <div className="mb-6 flex justify-between">
+            <div className="ml-4 mb-6 overflow-hidden flex max-md:flex-col-reverse max-md:items-center sm:justify-between max-md:ml-[-.5rem]">
                 <button
                     onClick={popup}
                     className="btn text-white max-sm:scale-75 bg-emerald-600 hover:bg-emerald-700 transition-colors duration-300 shadow-md max-md:ml-[-1.5rem]"
@@ -420,7 +420,17 @@ const AdminBookings = () => {
                                         </button>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                        <span
+                                            className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full  ${
+                                                order.approvalStatus ===
+                                                "confirmed"
+                                                    ? "bg-green-100 text-green-800"
+                                                    : order.approvalStatus ===
+                                                      "in-progress"
+                                                    ? "bg-yellow-100 text-yellow-800"
+                                                    : "bg-red-100 text-red-800"
+                                            }`}
+                                        >
                                             {order.approvalStatus}
                                         </span>
                                     </td>

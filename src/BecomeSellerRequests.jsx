@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import socket from "./utils/socket";
 import { useSelector } from "react-redux";
 import useHandleErr from "./utils/useHandleErr";
+import toast from "react-hot-toast";
 
 const BecomeSellerRequests = () => {
     const [users, setUsers] = useState([]);
@@ -37,6 +38,7 @@ const BecomeSellerRequests = () => {
                 { withCredentials: true }
             );
             setUsers((prev) => prev.filter((user) => user._id !== id));
+            toast.success("Seller Approved Successfully");
         } catch (error) {
             handleError(error);
         }
@@ -50,6 +52,7 @@ const BecomeSellerRequests = () => {
                 { withCredentials: true }
             );
             setUsers((prev) => prev.filter((user) => user._id !== id));
+            toast.success("Seller Rejected Successfully");
         } catch (error) {
             handleError(error);
         }
@@ -71,7 +74,6 @@ const BecomeSellerRequests = () => {
 
         socket.on("seller_request_made", (data) => {
             setUsers((prev) => [...prev, data.seller]);
-            console.log(users);
         });
 
         return () => {

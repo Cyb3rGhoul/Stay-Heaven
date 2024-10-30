@@ -3,6 +3,7 @@ import axios from "./utils/axios";
 import { Link } from "react-router-dom";
 import socket from "./utils/socket";
 import useHandleErr from "./utils/useHandleErr";
+import toast from "react-hot-toast";
 
 const AdminHotels = () => {
     const [hotels, setHotels] = useState([]);
@@ -41,6 +42,13 @@ const AdminHotels = () => {
                     withCredentials: true,
                 }
             );
+
+            if(approvalStatus === "approved"){
+                toast.success("Hotel Approved Successfully");
+            }
+            else if(approvalStatus === "rejected"){
+                toast.error("Hotel Rejected Successfully");
+            }
         } catch (error) {
             handleError(error);
         }
@@ -114,7 +122,7 @@ const AdminHotels = () => {
 
     return (
         <div className="mt-10 w-full mx-auto px-2 sm:px-6 lg:px-8">
-            <div className="max-sm:ml-7 mb-6 flex justify-between max-sm:justify-center">
+            <div className="ml-4 mb-6 overflow-hidden flex max-md:flex-col-reverse max-md:items-center sm:justify-between max-md:ml-[-.5rem]">
                 <button
                     onClick={popup}
                     className="btn text-white max-sm:scale-75 bg-emerald-600 hover:bg-emerald-700 transition-colors duration-300 shadow-md"
@@ -377,6 +385,7 @@ const AdminHotels = () => {
                                                     hotel._id,
                                                     e.target.value
                                                 );
+                                                hotel.approvalStatus = e.target.value;
                                                 setHotels((prev) =>
                                                     prev.map((h) =>
                                                         h._id === hotel._id
