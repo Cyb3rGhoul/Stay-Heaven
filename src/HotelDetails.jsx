@@ -25,6 +25,8 @@ import ImageGallery from "./ImageGallery";
 const HotelDetails = () => {
     const { id } = useParams();
     const hotelId = id;
+    console.log("This is hotel id:",hotelId);
+    console.log("This is id: ", id);
     const [user, setUser] = useState(
         useSelector((state) => state.user.userData)
     );
