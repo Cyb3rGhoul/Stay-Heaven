@@ -28,7 +28,7 @@ const SellerNavbar = () => {
   return (
     <>
       <Navbar />
-      <div className={`fixed top-[8vh] left-0 h-[92vh] bg-white shadow-2xl transition-all duration-300 ${isMobile ? 'w-20 pl-3 pr-1' : 'w-1/5'}`}>
+      <div className={`fixed z-[3] top-[8vh] left-0 h-[92vh] bg-white shadow-2xl transition-all duration-300 ${isMobile ? 'w-20 pl-3 pr-1' : 'w-1/5'}`}>
         <div className={`flex flex-col justify-evenly h-full p-2 ${isMobile ? 'items-center' : 'p-4 space-y-4'}`}>
           {navItems.map((item) => (
             <NavLink

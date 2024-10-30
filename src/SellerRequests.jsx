@@ -61,7 +61,9 @@ const SellerRequests = () => {
         }
     };
 
-    useEffect(() => { }, []);
+    useEffect(() => {
+        
+     }, []);
     return (
         <div className="mt-10 px-4 sm:px-6 lg:px-8">
             <div className="overflow-x-auto max-md:ml-[-0.7rem]">

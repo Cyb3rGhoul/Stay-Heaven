@@ -1,4 +1,4 @@
-import React from "react";
+erimport React from "react";
 import styled from "styled-components";
 
 const MaxGuestsContainer = styled.div`

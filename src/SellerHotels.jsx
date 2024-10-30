@@ -18,7 +18,7 @@ const SellerHotels = () => {
     const [approvalStatus, setApprovalStatus] = useState(null);
     const [isOpen2, setisOpen2] = useState(false);
     const [selectedHotel1, setSelectedHotel1] = useState(null);
-    const handleError = useHandleErr()
+    const handleError = useHandleErr();
     const popup = () => {
         setIsOpen((prev) => !prev);
     };
@@ -103,7 +103,7 @@ const SellerHotels = () => {
     };
 
     const EditPopup = () => {
-        setSelectedHotel(null);
+        // setSelectedHotel(null);
         setIsEditOpen((prev) => !prev);
     };
 
@@ -186,16 +186,26 @@ const SellerHotels = () => {
             });
         });
 
+        socket.on("hotel_is_edited", (data) => {
+            setHotels((prev) =>
+                prev.map((hotel) => (hotel._id === data._id ? data : hotel))
+            );
+            setFilteredHotels((prev) =>
+                prev.map((hotel) => (hotel._id === data._id ? data : hotel))
+            );
+        });
+
         return () => {
             socket.off("hotel_is_approved");
             socket.off("hotel_delete_req_sent");
             socket.off("delete_request_undone");
             socket.off("hotel_deleted");
+            socket.off("hotel_is_edited");
         };
     }, []);
     return (
         <div className="mt-10 ml-2">
-            {(selectedHotel || isEditOpen) && (
+            {isEditOpen && (
                 <Edit selectedHotel={selectedHotel} EditPopup={EditPopup} />
             )}
             <div className="ml-4 mb-6 flex justify-between max-md:ml-[-.5rem]">
@@ -417,7 +427,10 @@ const SellerHotels = () => {
                 <table className="w-[77vw] divide-y divide-brown-300 border border-brown-200 rounded-lg overflow-hidden">
                     <thead className="bg-emerald-500 text-white">
                         <tr>
-                            <th scope="col" className="py-4 pl-4 pr-3 text-left text-sm font-semibold text-white">
+                            <th
+                                scope="col"
+                                className="py-4 pl-4 pr-3 text-left text-sm font-semibold text-white"
+                            >
                                 S.No.
                             </th>
                             <th className="py-4 px-4 text-center text-sm font-semibold text-white">
@@ -454,27 +467,57 @@ const SellerHotels = () => {
                             .filter((item) => {
                                 return searchTerm.toLowerCase() === ""
                                     ? item
-                                    : item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                                    item.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                                    item.state.toLowerCase().includes(searchTerm.toLowerCase());
+                                    : item.title
+                                          .toLowerCase()
+                                          .includes(searchTerm.toLowerCase()) ||
+                                          item.city
+                                              .toLowerCase()
+                                              .includes(
+                                                  searchTerm.toLowerCase()
+                                              ) ||
+                                          item.state
+                                              .toLowerCase()
+                                              .includes(
+                                                  searchTerm.toLowerCase()
+                                              );
                             })
                             .map((hotel, index) => (
-                                <tr key={hotel._id} className="hover:bg-emerald-200 transition duration-300 ease-in-out">
-                                    <td className="py-4 text-center font-medium ">{index + 1}</td>
-                                    <td className="py-4 text-center text-brown-700">{hotel.title}</td>
-                                    <td className="py-4 text-center text-brown-700">
-                                        ₹{typeof hotel.price === "number" ? hotel.price.toLocaleString("en-IN") : "N/A"}
+                                <tr
+                                    key={hotel._id}
+                                    className="hover:bg-emerald-200 transition duration-300 ease-in-out"
+                                >
+                                    <td className="py-4 text-center font-medium ">
+                                        {index + 1}
                                     </td>
-                                    <td className="py-4 text-center text-brown-700">{hotel.city}</td>
-                                    <td className="py-4 text-center text-brown-700">{hotel.state}</td>
                                     <td className="py-4 text-center text-brown-700">
-                                        {typeof hotel.revenue === "number" ? hotel.revenue.toLocaleString("en-IN") : "N/A"}
+                                        {hotel.title}
+                                    </td>
+                                    <td className="py-4 text-center text-brown-700">
+                                        ₹
+                                        {typeof hotel.price === "number"
+                                            ? hotel.price.toLocaleString(
+                                                  "en-IN"
+                                              )
+                                            : "N/A"}
+                                    </td>
+                                    <td className="py-4 text-center text-brown-700">
+                                        {hotel.city}
+                                    </td>
+                                    <td className="py-4 text-center text-brown-700">
+                                        {hotel.state}
+                                    </td>
+                                    <td className="py-4 text-center text-brown-700">
+                                        {typeof hotel.revenue === "number"
+                                            ? hotel.revenue.toLocaleString(
+                                                  "en-IN"
+                                              )
+                                            : "N/A"}
                                     </td>
                                     <td className="py-4 text-center">
                                         <button
                                             onClick={() => {
                                                 setSelectedHotel(hotel);
-                                                setIsEditOpen();
+                                                setIsEditOpen(true);
                                             }}
                                             className="px-3 py-1 bg-emerald-300 rounded-md  font-medium hover:bg-emerald-400 hover:scale-105 transition transform duration-200"
                                         >
@@ -482,7 +525,10 @@ const SellerHotels = () => {
                                         </button>
                                     </td>
                                     <td className="py-4 text-center">
-                                        <Link target="_blank" to={`${hotel.pdf}`}>
+                                        <Link
+                                            target="_blank"
+                                            to={`${hotel.pdf}`}
+                                        >
                                             <button className="px-3 py-1 bg-brown-200  rounded-md font-medium hover:bg-brown-300 hover:scale-105 transition transform duration-200">
                                                 Document
                                             </button>
@@ -493,7 +539,8 @@ const SellerHotels = () => {
                                             <button className="px-3 py-1 bg-emerald-500 text-white rounded-md font-medium hover:bg-emerald-600 hover:scale-105 transition transform duration-200">
                                                 Approved
                                             </button>
-                                        ) : hotel.approvalStatus === "pending" ? (
+                                        ) : hotel.approvalStatus ===
+                                          "pending" ? (
                                             <button className="px-3 py-1 bg-yellow-400  rounded-md font-medium hover:bg-yellow-500 hover:scale-105 transition transform duration-200">
                                                 Pending
                                             </button>
@@ -506,7 +553,9 @@ const SellerHotels = () => {
                                     <td className="py-4 text-center">
                                         {hotel.deleted ? (
                                             <button
-                                                onClick={() => onUndoHandler(hotel._id)}
+                                                onClick={() =>
+                                                    onUndoHandler(hotel._id)
+                                                }
                                                 className="px-3 py-1 bg-yellow-500  rounded-md font-medium hover:bg-yellow-600 hover:scale-105 transition transform duration-200"
                                             >
                                                 Undo Delete Request
@@ -514,7 +563,9 @@ const SellerHotels = () => {
                                         ) : (
                                             <button
                                                 onClick={() => {
-                                                    setSelectedHotel1(hotel._id);
+                                                    setSelectedHotel1(
+                                                        hotel._id
+                                                    );
                                                     setisOpen2(!isOpen2);
                                                 }}
                                                 className="px-3 py-1 bg-red-500 text-white rounded-md font-medium hover:bg-red-600 hover:scale-105 transition transform duration-200"
@@ -527,8 +578,6 @@ const SellerHotels = () => {
                             ))}
                     </tbody>
                 </table>
-
-
             </div>
         </div>
     );

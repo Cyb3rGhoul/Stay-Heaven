@@ -36,6 +36,7 @@ import AdminHotelDeleteRequests from "./AdminHotelDeleteRequests.jsx";
 import BecomeSellerRequests from "./BecomeSellerRequests.jsx";
 import { Toaster } from "react-hot-toast";
 import useHandleErr from "./utils/useHandleErr";
+import { Analytics } from '@vercel/analytics/react';
 
 const router = createBrowserRouter([
     {
@@ -210,5 +211,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
                 position="top-center"
                 reverseOrder={false}
             />
+             <Analytics />
     </Provider>
 );

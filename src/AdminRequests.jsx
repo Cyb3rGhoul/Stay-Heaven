@@ -8,7 +8,7 @@ import useHandleErr from "./utils/useHandleErr";
 
 const AdminRequests = () => {
     const [hotels, setHotels] = useState([]);
-    const handleError = useHandleErr()
+    const handleError = useHandleErr();
     const getAllPendingHotels = async () => {
         try {
             const response = await axios.post(
@@ -42,12 +42,23 @@ const AdminRequests = () => {
     useEffect(() => {
         getAllPendingHotels();
 
-        socket.on('hotel_is_created', (data) => {
+        socket.on("hotel_is_created", (data) => {
             setHotels((prev) => [...prev, data.hotel]);
         });
 
+        socket.on("hotel_is_edited", (data) => {
+            setHotels((prev) => {
+                let newarr = prev.filter((hotel) => hotel._id === data._id);
+                if (newarr.length === 0) return [...prev, data];
+                else
+                    return prev.map((hotel) =>
+                        hotel._id === data._id ? data : hotel
+                    );
+            });
+        });
         return () => {
-            socket.off('new-hotel');
+            socket.off("new-hotel");
+            socket.off("hotel_is_edited");
         };
     }, []);
 
@@ -67,7 +78,7 @@ const AdminRequests = () => {
                                         "City",
                                         "Status",
                                         "Document",
-                                        "Details"
+                                        "Details",
                                     ].map((header) => (
                                         <th
                                             key={header}
@@ -95,7 +106,12 @@ const AdminRequests = () => {
                                             {hotel.owner.username}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                                            ₹ {typeof hotel.price === 'number' ? hotel.price.toLocaleString('en-IN') : "N/A"}
+                                            ₹{" "}
+                                            {typeof hotel.price === "number"
+                                                ? hotel.price.toLocaleString(
+                                                      "en-IN"
+                                                  )
+                                                : "N/A"}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                                             {hotel.city}
@@ -103,12 +119,23 @@ const AdminRequests = () => {
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                                             <select
                                                 className="block w-fit py-2 px-3 border border-emerald-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"
-                                                onChange={(e) => approveHotel(hotel._id, e.target.value)}
+                                                onChange={(e) =>
+                                                    approveHotel(
+                                                        hotel._id,
+                                                        e.target.value
+                                                    )
+                                                }
                                                 defaultValue=""
                                             >
-                                                <option value="" disabled>Select Status</option>
-                                                <option value="approved">Approved</option>
-                                                <option value="rejected">Rejected</option>
+                                                <option value="" disabled>
+                                                    Select Status
+                                                </option>
+                                                <option value="approved">
+                                                    Approved
+                                                </option>
+                                                <option value="rejected">
+                                                    Rejected
+                                                </option>
                                             </select>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">

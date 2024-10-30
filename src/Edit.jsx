@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -10,6 +10,7 @@ import {
     FaCoffee,
 } from "react-icons/fa";
 import { CgGym } from "react-icons/cg";
+import { Link } from "react-router-dom";
 
 import { IoMdClose } from "react-icons/io";
 import randomImage from "./assets/random.jpg";
@@ -20,16 +21,27 @@ import toast from "react-hot-toast";
 const Edit = ({ selectedHotel, EditPopup }) => {
     const [selectedBooking, setSelectedBooking] = useState(selectedHotel);
     const [isCreateBookingOpen, setIsCreateBookingOpen] = useState(false);
-    const [previews, setPreviews] = useState([]);
+    const [previews, setPreviews] = useState(selectedHotel.images);
+    const [oldImages, setOldImages] = useState(selectedHotel.images);
+    const [newImages, setNewImages] = useState([]);
+    const [deletedImages, setDeletedImages] = useState([]);
     const file = useRef([]);
     const [files, setFiles] = useState([]);
+    const [updatedOldImages, setUpdatedOldImages] = useState(
+        selectedHotel.images
+    );
+    const [pdfFile, setPdfFile] = useState(null);
+    const pdfInputRef = useRef();
+    const [pdfError, setPdfError] = useState(null);
+
     const handleClosePopup = () => {
-        setSelectedBooking(null);
         setFiles([]);
         setPreviews([]);
+        setDeletedImages([]);
         setIsCreateBookingOpen(false);
+        EditPopup();
     };
-    const handleError = useHandleErr()
+    const handleError = useHandleErr();
 
     const handleDetailChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -65,18 +77,16 @@ const Edit = ({ selectedHotel, EditPopup }) => {
             state: "",
             pinCode: "",
             price: 0,
+            pdf: "",
         });
     };
 
     const removeFile = (index) => {
-        const updatedFiles = files.filter((_, i) => i !== index);
-        setFiles(updatedFiles);
-
         const updatedPreviews = previews.filter((_, i) => i !== index);
         setPreviews(updatedPreviews);
     };
     const handleAttach = () => {
-        if (files.length < 5) {
+        if (previews.length < 5) {
             file.current.disabled = false;
             file.current.click();
         } else {
@@ -84,26 +94,43 @@ const Edit = ({ selectedHotel, EditPopup }) => {
         }
     };
 
+    const handlePdfAttach = () => {
+        pdfInputRef.current.click();
+    };
+
+    const attachPdfHandler = (e) => {
+        const file = e.target.files[0];
+        if (file && file.type === "application/pdf") {
+            if (file.size <= 5 * 1024 * 1024) {
+                setPdfFile(file);
+                setPdfError(null);
+            } else {
+                setPdfError("The PDF file must be smaller than 5MB.");
+                setPdfFile(null);
+            }
+        } else {
+            setPdfError("Please upload a valid PDF file.");
+            setPdfFile(null);
+        }
+    };
+
     const attachHandler = async (e) => {
         const selectedFiles = Array.from(e.target.files);
-        if (selectedFiles.length + files.length > 5) {
+        if (selectedFiles.length + previews.length > 5) {
             toast.error("You can only upload a maximum of 5 files.");
             return;
         }
-
-        const updatedFiles = [...files, ...selectedFiles];
-        setFiles(updatedFiles);
 
         const newPreviews = selectedFiles.map((file) =>
             URL.createObjectURL(file)
         );
         setPreviews((prevPreviews) => [...prevPreviews, ...newPreviews]);
     };
-    const uploadImages = async () => {
+    const uploadImages = async (newfiles) => {
         let urls = [];
 
         try {
-            for (const file of files) {
+            for (const file of newfiles) {
                 const formdata = new FormData();
                 formdata.append("file", file);
                 formdata.append(
@@ -126,32 +153,126 @@ const Edit = ({ selectedHotel, EditPopup }) => {
             }
             return urls;
         } catch (error) {
-            handleError("Error while uploading the images", error);
+            toast.error("Error while uploading the images");
+            return;
+        }
+    };
+
+    const uploadPdf = async () => {
+        if (!pdfFile) return null;
+
+        try {
+            const formData = new FormData();
+            formData.append("file", pdfFile);
+            formData.append(
+                "upload_preset",
+                import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
+            );
+            formData.append(
+                "cloud_name",
+                import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+            );
+            const response = await axios.post(
+                `https://api.cloudinary.com/v1_1/${
+                    import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+                }/image/upload`,
+                formData
+            );
+            return response.data.secure_url;
+        } catch (error) {
+            toast.error("Error while uploading the PDF");
             return;
         }
     };
 
     const editHotel = async (hotel) => {
         try {
-            const response = await axios.put(`/edit/${hotel._id}`, hotel, {
-                withCredentials: true,
-            });
-            console.log(response);
+            await axios.post(
+                `/hotel/edit`,
+                { hotel },
+                {
+                    withCredentials: true,
+                }
+            );
         } catch (error) {
-            handleError("Error while creating the hotel", error);
-            return;
+            handleError(error);
         }
     };
+
+    async function convertObjectUrlsToFiles() {
+        const newFiles = [];
+        console.log("previews", previews);
+        for (const img of previews) {
+            // Check if the URL is an object URL (starting with "blob:")
+            if (img.startsWith("blob:")) {
+                // Convert the object URL to a File
+                const response = await fetch(img);
+                const blob = await response.blob();
+
+                // Use a placeholder name or derive one as needed
+                const fileName = `file_${Date.now()}`;
+                const file = new File([blob], fileName, { type: blob.type });
+
+                // Add to the new files array
+                newFiles.push(file);
+            }
+        }
+
+        // Update the files state with the new files
+        setFiles((prevFiles) => [...prevFiles, ...newFiles]);
+        return newFiles;
+    }
+
+    function arraysAreEqual(arr1, arr2) {
+        if (arr1.length !== arr2.length) return false;
+
+        return arr1.every((value, index) => value === arr2[index]);
+    }
     const handleSubmit = async () => {
-        const urls = await uploadImages();
-        const hotel = { ...selectedBooking, images: urls };
-        editHotel(hotel);
-        toast.success("Hotel Created Successfully");
-        setFiles([]);
-        setPreviews([]);
-        setSelectedBooking(null);
+        let deleted = [];
+        let updated = [];
+        let urls;
+        if (arraysAreEqual(previews, oldImages)) {
+            urls = oldImages;
+        } else {
+            setUpdatedOldImages((prev) => {
+                updated = prev.filter((img) => {
+                    if (previews.includes(img)) return true;
+                    else {
+                        deleted.push(img);
+                        return false;
+                    }
+                });
+
+                return updated;
+            });
+            let newfiles = await convertObjectUrlsToFiles();
+            urls = await uploadImages(newfiles);
+            urls = [...updated, ...urls];
+        }
+        const pdfUrl = await uploadPdf();
+        let hotel;
+        if (!pdfUrl)
+            hotel = {
+                ...selectedBooking,
+                images: urls,
+                newPdf: false,
+                old: selectedBooking.pdf,
+                deletedImages: deleted,
+            };
+        else
+            hotel = {
+                ...selectedBooking,
+                images: urls,
+                pdf: pdfUrl,
+                newPdf: true,
+                old: selectedBooking.pdf,
+                deletedImages: deleted,
+            };
+        await editHotel(hotel);
         handleClosePopup();
     };
+
     return (
         <PopupOverlay>
             <Popup>
@@ -186,7 +307,7 @@ const Edit = ({ selectedHotel, EditPopup }) => {
                     )}
                     <button
                         style={{
-                            opacity: files.length == 5 ? "0.2" : "1",
+                            opacity: previews.length == 5 ? "0.2" : "1",
                         }}
                         onClick={handleAttach}
                         className="flex border-green-500 border-2 w-fit px-2 py-1 rounded-md gap-2"
@@ -209,14 +330,16 @@ const Edit = ({ selectedHotel, EditPopup }) => {
                         onChange={handleDetailChange}
                     />
                     <Label>Max Guests Per Room</Label>
-                    <Input
+                    <input
+                        className="w-full p-1.5 border border-gray-300 rounded-md text-sm"
                         type="number"
                         name="maxGuests"
                         value={selectedBooking.maxGuests}
                         onChange={handleDetailChange}
                     />
                     <Label>Price: (in INR)</Label>
-                    <Input
+                    <input
+                        className="w-full p-1.5 border border-gray-300 rounded-md text-sm"
                         type="number"
                         name="price"
                         value={selectedBooking.price}
@@ -338,6 +461,29 @@ const Edit = ({ selectedHotel, EditPopup }) => {
                             Breakfast
                         </CheckboxLabel>
                     </CheckboxContainer>
+                    <input
+                        className="hidden"
+                        ref={pdfInputRef}
+                        onChange={attachPdfHandler}
+                        type="file"
+                        accept="application/pdf"
+                    />
+                    <button
+                        onClick={handlePdfAttach}
+                        className="flex border-green-500 border-2 w-fit px-2 py-1 rounded-md gap-2"
+                    >
+                        Update Hotel Document
+                    </button>
+                    {pdfFile && (
+                        <p className="text-green-500">
+                            PDF: {pdfInputRef.current.files[0].name}
+                        </p>
+                    )}
+                    <Link target="_blank" to={`${selectedBooking.pdf}`}>
+                        <button className="px-3 py-1 bg-zinc-200 rounded-md hover:bg-zinc-300 transition-colors">
+                            Preview Hotel Document
+                        </button>
+                    </Link>
                     <SubmitButton onClick={handleSubmit}>Edit</SubmitButton>
                 </ScrollablePopupContent>
             </Popup>

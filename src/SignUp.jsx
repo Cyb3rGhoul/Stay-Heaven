@@ -1,9 +1,20 @@
 import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
-import { Mail, Lock, User, Phone, ArrowRight, Eye, EyeOff, Camera } from "lucide-react";
+import {
+    Mail,
+    Lock,
+    User,
+    Phone,
+    ArrowRight,
+    Eye,
+    EyeOff,
+    Camera,
+} from "lucide-react";
 import axios from "./utils/axios";
 import useHandleErr from "./utils/useHandleErr";
+import { TbPasswordMobilePhone } from "react-icons/tb";
+import toast from "react-hot-toast";
 
 const SignUp = () => {
     const navigate = useNavigate();
@@ -21,6 +32,9 @@ const SignUp = () => {
     const [isFileSelected, setIsFileSelected] = useState(false);
     const avatarRef = useRef(null);
     const handleError = useHandleErr();
+    const [otpVerified, setOtpVerified] = useState(false);
+    const [otp, setOtp] = useState("");
+    const [otpEntered, setOtpEntered] = useState("");
 
     const handleInputChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -39,11 +53,48 @@ const SignUp = () => {
         setShowPassword(!showPassword);
     };
 
+    const sendOTP = async () => {
+        if (!formData.email) {
+            toast.error("Please enter email");
+            return;
+        }
+        try {
+            const response = await axios.post("/user/send-otp", {
+                email: formData.email,
+            });
+            if (response.data.statusCode === 200) {
+                setOtp(response.data.data.otp);
+                toast.success("OTP sent successfully");
+            }
+        } catch (error) {
+            handleError(error);
+        }
+    };
+
+    const verifyOTP = async () => {
+        if(otpEntered != otp){
+            toast.error("OTP entered is incorrect");
+            return;
+        } 
+        setOtpVerified(true);
+        toast.success("OTP verified successfully");
+    };
+
     const handleSignUp = async (e) => {
         e.preventDefault();
+        if(!otpVerified){
+            toast.error("Please verify OTP");
+            return;
+        }
         setIsLoading(true);
-
-        if (!avatar || !formData.username || !formData.email || !formData.password || !formData.fullname || !formData.phone) {
+        if (
+            !avatar ||
+            !formData.username ||
+            !formData.email ||
+            !formData.password ||
+            !formData.fullname ||
+            !formData.phone
+        ) {
             handleError(new Error("All fields are required"));
             setIsLoading(false);
             return;
@@ -52,11 +103,19 @@ const SignUp = () => {
         try {
             const formdata = new FormData();
             formdata.append("file", avatar);
-            formdata.append("upload_preset", import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET);
-            formdata.append("cloud_name", import.meta.env.VITE_CLOUDINARY_CLOUD_NAME);
-            
+            formdata.append(
+                "upload_preset",
+                import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
+            );
+            formdata.append(
+                "cloud_name",
+                import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+            );
+
             const response = await axios.post(
-                `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/image/upload`,
+                `https://api.cloudinary.com/v1_1/${
+                    import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+                }/image/upload`,
                 formdata
             );
 
@@ -136,21 +195,50 @@ const SignUp = () => {
                         </InputWrapper>
                     </InputGroup>
 
-                    <InputGroup>
-                        <InputWrapper>
-                            <IconWrapper>
-                                <Mail size={20} color="#666" />
-                            </IconWrapper>
-                            <Input
-                                type="email"
-                                name="email"
-                                placeholder="Email"
-                                value={formData.email}
-                                onChange={handleInputChange}
-                            />
-                        </InputWrapper>
-                    </InputGroup>
+                    <div className="flex justify-between">
+                        <InputGroup className="w-4/6">
+                            <InputWrapper>
+                                <IconWrapper>
+                                    <Mail size={20} color="#666" />
+                                </IconWrapper>
+                                <Input
+                                    type="email"
+                                    name="email"
+                                    placeholder="Email"
+                                    value={formData.email}
+                                    onChange={handleInputChange}
+                                />
+                            </InputWrapper>
+                        </InputGroup>
 
+                        <div
+                            onClick={sendOTP}
+                            className="btn max-sm:scale-75 bg-green-500 text-white hover:bg-green-600"
+                        >
+                            Send OTP
+                        </div>
+                    </div>
+                    <div className="flex justify-between">
+                        <InputGroup className="w-4/6">
+                            <InputWrapper>
+                                <IconWrapper>
+                                    <TbPasswordMobilePhone
+                                        size={20}
+                                        color="#666"
+                                    />
+                                </IconWrapper>
+                                <Input
+                                    type="text"
+                                    name="email-otp"
+                                    placeholder="Enter OTP"
+                                    onChange={(e) => setOtpEntered(e.target.value)}
+                                />
+                            </InputWrapper>
+                        </InputGroup>
+                        <div onClick={verifyOTP} className="btn max-sm:scale-75 bg-green-500 text-white hover:bg-green-600">
+                            Verify
+                        </div>
+                    </div>
                     <InputGroup>
                         <InputWrapper>
                             <IconWrapper>
@@ -241,10 +329,10 @@ const SignUpCard = styled.div`
     max-width: 28rem;
     background: white;
     border-radius: 1rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -1px rgba(0, 0, 0, 0.06);
     padding: 2rem;
     transition: transform 0.3s ease;
-
 `;
 
 const CardHeader = styled.div`
@@ -341,7 +429,7 @@ const Input = styled.input`
     font-size: 1rem;
     transition: all 0.2s ease;
     background: rgba(255, 255, 255, 0.9);
-    padding-right: ${props => props.type === "password" ? "3rem" : "1rem"};
+    padding-right: ${(props) => (props.type === "password" ? "3rem" : "1rem")};
 
     &:focus {
         outline: none;
@@ -415,7 +503,7 @@ const Divider = styled.div`
     display: flex;
     align-items: center;
     gap: 1rem;
-    margin: .25rem 0;
+    margin: 0.25rem 0;
 `;
 
 const DividerLine = styled.div`

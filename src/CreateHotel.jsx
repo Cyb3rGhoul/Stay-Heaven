@@ -448,7 +448,7 @@ const CreateHotel = () => {
                                 onClick={handlePdfAttach}
                                 className="flex border-green-500 border-2 w-fit px-2 py-1 rounded-md gap-2"
                             >
-                                Attach PDF
+                                Attach Hotel Documents PDF
                             </button>
                             {pdfError && (
                                 <p className="text-red-500">{pdfError}</p>
