@@ -4,6 +4,8 @@ import styled, { keyframes } from "styled-components";
 import { Mail, Lock, ArrowRight, Eye, EyeOff } from "lucide-react";
 import axios from "./utils/axios";
 import useHandleErr from "./utils/useHandleErr";
+import { useDispatch } from "react-redux";
+import { setUser, toggleLogin } from "./app/reducers/userSlice";
 
 const Login = () => {
     const navigate = useNavigate();
@@ -11,10 +13,27 @@ const Login = () => {
     const [password, setPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const handleError = useHandleErr();
-
+    const dispatch = useDispatch();
+    const getUser = async () => {
+      try {
+          const user = await axios.get("/user/current-user", {
+              withCredentials: true,
+          });
+          if (user) {
+              dispatch(toggleLogin(true));
+              dispatch(setUser(user.data.data));
+          } else {
+              dispatch(toggleLogin(false));
+              dispatch(setUser({}));
+          }
+      } catch (error) {
+         console.log("")
+      }
+  };
     const handleLogin = async (e) => {
         e.preventDefault();
         setIsLoading(true);
+        let flag = false;
         try {
             await axios.post(
                 "/user/login",
@@ -26,12 +45,13 @@ const Login = () => {
                     withCredentials: true,
                 }
             );
-            navigate("/");
-            window.location.reload();
+            await getUser();
         } catch (error) {
             handleError(error);
+            flag = true;
         } finally {
             setIsLoading(false);
+            if(!flag) window.location.href = "/";
         }
     };
 

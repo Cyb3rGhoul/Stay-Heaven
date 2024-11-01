@@ -25,7 +25,7 @@ import ImageGallery from "./ImageGallery";
 const HotelDetails = () => {
     const { id } = useParams();
     const hotelId = id;
-    console.log("This is hotel id:", hotelId);
+    console.log("This is hotel id:",hotelId);
     console.log("This is id: ", id);
     const [user, setUser] = useState(
         useSelector((state) => state.user.userData)
@@ -91,22 +91,20 @@ const HotelDetails = () => {
         getHotelRatings();
     }, [reviews]);
 
-    const handleDeleteReview = (id) => {
-        return async () => {
-            try {
-                await axios.post(
-                    `/comment/delete/${id}`,
-                    { hotelId },
-                    { withCredentials: true }
-                );
-                setReviews((reviews) =>
-                    reviews.filter((review) => review._id !== id)
-                );
-            } catch (error) {
-                handleError(error);
-            }
-        };
-    };
+    const handleDeleteReview = async (id) => {
+        try {
+            await axios.post(
+                `/comment/delete/${id}`,
+                { hotelId },
+                { withCredentials: true }
+            );
+            setReviews((reviews) =>
+                reviews.filter((review) => review._id !== id)
+            );
+        } catch (error) {
+            handleError(error);
+        }
+    }
     const commentHandler = async () => {
         try {
             const response = await axios.post(
@@ -191,7 +189,17 @@ const HotelDetails = () => {
             toast.error("You can't book your own hotel");
         else setShowPopup(true);
     };
-
+    function generateUniqueId() {
+        const characters =
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        let uniqueId = "";
+        for (let i = 0; i < 10; i++) {
+            uniqueId += characters.charAt(
+                Math.floor(Math.random() * characters.length)
+            );
+        }
+        return uniqueId;
+    }
     const handlePay = async (e) => {
         e.preventDefault();
         if (checkInDate === null || checkOutDate === null) {
@@ -205,10 +213,12 @@ const HotelDetails = () => {
                 return;
             }
             if (!/^\d{10}$/.test(guestNames[i].phoneNumber)) {
-                toast.error("Phone number should be 10 digits and contain only numbers");
+                toast.error(
+                    "Phone number should be 10 digits and contain only numbers"
+                );
                 return;
             }
-            if (guestNames[i].firstName.length < 1 || guestNames[i].lastName.length < 1) {
+            if(guestNames[i].firstName.length < 1 || guestNames[i].lastName.length < 1){
                 toast.error("Please fill all the required fields");
                 return;
             }
@@ -216,12 +226,13 @@ const HotelDetails = () => {
         setShowPopup(false);
 
         try {
+            const uniqueId = generateUniqueId();
             const {
                 data: {
                     data: { order },
                 },
             } = await axios.post(
-                `/payment/checkout`,
+                `/payment/checkout/${uniqueId}`,
                 {
                     rooms,
                     days: totalDays,
@@ -234,7 +245,7 @@ const HotelDetails = () => {
                     data: { key },
                 },
             } = await axios.post(
-                `/payment/getkey`,
+                `/payment/getkey/${uniqueId}`,
                 { userId: user._id, guestNames, checkInDate, checkOutDate },
                 { withCredentials: true }
             );
@@ -248,7 +259,7 @@ const HotelDetails = () => {
                 order_id: order.id,
                 callback_url:
                     import.meta.env.VITE_BACKEND_URL +
-                    "/payment/paymentverification",
+                    `/payment/paymentverification/${uniqueId}`,
                 prefill: {
                     name: user.fullName,
                     email: user.email,
@@ -608,7 +619,9 @@ const HotelDetails = () => {
                                                     </SummarySection>
                                                     <PayButton
                                                         type="submit"
-                                                        onClick={(e) => handlePay(e)}
+                                                        onClick={(e) =>
+                                                            handlePay(e)
+                                                        }
                                                     >
                                                         Proceed to Payment
                                                     </PayButton>
@@ -638,7 +651,9 @@ const HotelDetails = () => {
                                             <div
                                                 style={{
                                                     position: "relative",
-                                                    zIndex: showPopup ? "-1" : "0",
+                                                    zIndex: showPopup
+                                                        ? "-1"
+                                                        : "0",
                                                 }}
                                             >
                                                 <Rating
@@ -743,7 +758,10 @@ const HotelDetails = () => {
                                                         value={review.rating}
                                                         readOnly
                                                         size="small"
-                                                        className={`text-green-600 relative ${showPopup && "z-[-1]"}`}
+                                                        className={`text-green-600 relative ${
+                                                            showPopup &&
+                                                            "z-[-1]"
+                                                        }`}
                                                     />
                                                 </div>
                                             </div>

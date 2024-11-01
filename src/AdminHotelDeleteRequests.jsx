@@ -189,13 +189,17 @@ const AdminHotelDeleteRequests = () => {
                                                     src={tick}
                                                     alt="approve"
                                                     className="w-6 h-6 cursor-pointer hover:scale-110 transition-transform"
-                                                    onClick={() => approveDelete(hotel._id)}
+                                                    onClick={() => {
+                                                        approveDelete(hotel._id)
+                                                    }}
                                                 />
                                                 <img
                                                     src={cross}
                                                     alt="reject"
                                                     className="w-6 h-6 cursor-pointer hover:scale-110 transition-transform"
-                                                    onClick={() => rejectDelete(hotel._id)}
+                                                    onClick={() => {
+                                                        rejectDelete(hotel._id)
+                                                    }}
                                                 />
                                             </div>
                                         </td>

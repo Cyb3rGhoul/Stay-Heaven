@@ -17,7 +17,7 @@ const SellerRequests = () => {
     const handleError = useHandleErr();
     const dispatch = useDispatch();
     const [orders, setOrders] = useState(() => {
-        const order = user.receivedOrders.filter(
+        const order = user.receivedOrders?.filter(
             (order) => order.approvalStatus == "in-progress"
         );
         return order;
@@ -37,7 +37,7 @@ const SellerRequests = () => {
                     withCredentials: true,
                 }
             );
-            setOrders((prev) => prev.filter((order) => order._id != id));
+            setOrders((prev) => prev?.filter((order) => order._id != id));
             setUser((prev) => {
                 const updatedUser = {
                     ...prev,
