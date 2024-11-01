@@ -7,18 +7,24 @@
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: #B2572B !important; /* Darker thumb color */
+  background-color: #B2572B !important; 
   border-radius: 10px;
 }
 
 *::-webkit-scrollbar-track {
-  background-color: #edf2f7 !important; /* Lighter track color */
+  background-color: #edf2f7 !important;
 }
 
 /* Firefox Scrollbar */
 * {
   scrollbar-width: thin !important;
-  scrollbar-color: #B2572B #edf2f7 !important; /* Custom thumb and track color */
+  scrollbar-color: #B2572B #edf2f7 !important; 
+  user-select: none;
+}
+
+img {
+  user-select: none;
+  pointer-events: none;
 }
 
 .scrollbar-thumb-rounded::-webkit-scrollbar-thumb {

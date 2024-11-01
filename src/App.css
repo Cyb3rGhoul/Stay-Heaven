@@ -5,6 +5,15 @@
   text-align: center;
 }
 
+*{
+  user-select: none;
+}
+
+img {
+  user-select: none;
+  pointer-events: none;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
