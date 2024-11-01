@@ -24,7 +24,6 @@
 
 img {
   user-select: none;
-  pointer-events: none;
 }
 
 .scrollbar-thumb-rounded::-webkit-scrollbar-thumb {
