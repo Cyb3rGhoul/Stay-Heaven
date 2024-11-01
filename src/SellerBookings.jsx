@@ -2,6 +2,7 @@ import axios from "./utils/axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import useHandleErr from "./utils/useHandleErr";
+import socket from "./utils/socket";
 const SellerBookings = () => {
     const [orders, setOrders] = useState([]);
     const [filteredOrders, setFilteredOrders] = useState([]);
@@ -80,6 +81,14 @@ const SellerBookings = () => {
 
     useEffect(() => {
         getAllOrders();
+        socket.on("order_is_created", (data) => {
+           setOrders(prev => [...prev, data.order])
+           setFilteredOrders(prev => [...prev, data.order])
+        });
+
+        return () => {
+            socket.off("order_is_created")
+        }
     }, []);
     return (
         <div className="mt-10 px-4 sm:px-6 lg:px-8">
