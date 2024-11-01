@@ -25,7 +25,7 @@ import ImageGallery from "./ImageGallery";
 const HotelDetails = () => {
     const { id } = useParams();
     const hotelId = id;
-    console.log("This is hotel id:", hotelId);
+    console.log("This is hotel id:",hotelId);
     console.log("This is id: ", id);
     const [user, setUser] = useState(
         useSelector((state) => state.user.userData)
@@ -220,10 +220,7 @@ const HotelDetails = () => {
                 );
                 return;
             }
-            if (
-                guestNames[i].firstName.length < 1 ||
-                guestNames[i].lastName.length < 1
-            ) {
+            if(guestNames[i].firstName.length < 1 || guestNames[i].lastName.length < 1){
                 toast.error("Please fill all the required fields");
                 return;
             }
@@ -423,8 +420,8 @@ const HotelDetails = () => {
                                             ₹{" "}
                                             {typeof hotel.price === "number"
                                                 ? hotel.price.toLocaleString(
-                                                      "en-IN"
-                                                  )
+                                                    "en-IN"
+                                                )
                                                 : "N/A"}
                                         </DiscountedPrice>{" "}
                                         per night
@@ -561,18 +558,18 @@ const HotelDetails = () => {
                                                                 </FormItem>
                                                                 {guestNames.length >
                                                                     1 && (
-                                                                    <RemoveGuestButton
-                                                                        type="button"
-                                                                        onClick={() =>
-                                                                            handleRemoveGuest(
-                                                                                index
-                                                                            )
-                                                                        }
-                                                                    >
-                                                                        Remove
-                                                                        Guest
-                                                                    </RemoveGuestButton>
-                                                                )}
+                                                                        <RemoveGuestButton
+                                                                            type="button"
+                                                                            onClick={() =>
+                                                                                handleRemoveGuest(
+                                                                                    index
+                                                                                )
+                                                                            }
+                                                                        >
+                                                                            Remove
+                                                                            Guest
+                                                                        </RemoveGuestButton>
+                                                                    )}
                                                             </GuestDetails>
                                                         )
                                                     )}
@@ -588,17 +585,10 @@ const HotelDetails = () => {
                                                                 Check-In Date
                                                             </label>
                                                             <DatePicker
-                                                                selected={
-                                                                    checkInDate
-                                                                }
-                                                                onChange={(
-                                                                    date
-                                                                ) =>
-                                                                    setCheckInDate(
-                                                                        date
-                                                                    )
-                                                                }
+                                                                selected={checkInDate}
+                                                                onChange={(date) => setCheckInDate(date)}
                                                                 placeholderText="Check-In"
+                                                                minDate={new Date()} // This disables all dates before today
                                                             />
                                                         </FormItem>
                                                         <FormItem>
@@ -606,17 +596,10 @@ const HotelDetails = () => {
                                                                 Check-Out Date
                                                             </label>
                                                             <DatePicker
-                                                                selected={
-                                                                    checkOutDate
-                                                                }
-                                                                onChange={(
-                                                                    date
-                                                                ) =>
-                                                                    setCheckOutDate(
-                                                                        date
-                                                                    )
-                                                                }
+                                                                selected={checkOutDate}
+                                                                onChange={(date) => setCheckOutDate(date)}
                                                                 placeholderText="Select check-out date"
+                                                                minDate={checkInDate || new Date()} // This ensures check-out date can't be before check-in date
                                                             />
                                                         </FormItem>
                                                     </DatePickerWrapper>
@@ -751,8 +734,8 @@ const HotelDetails = () => {
                                                         </h4>
                                                         {user &&
                                                             user._id ===
-                                                                review.user
-                                                                    ._id && (
+                                                            review.user
+                                                                ._id && (
                                                                 <button
                                                                     onClick={() =>
                                                                         handleDeleteReview(

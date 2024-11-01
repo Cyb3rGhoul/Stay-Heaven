@@ -1,33 +1,80 @@
-# StayHeaven
+# Stay Heaven 🌟
 
-StayHeaven is a destination, hotel, and house booking website that aims to provide users with a seamless experience in finding their ideal accommodations, whether it's for a vacation, business trip, or any other purpose. Similar to platforms like Airbnb, StayHeaven offers a wide range of options for users to choose from, ensuring that everyone can find the perfect place to stay, no matter their preferences or budget.
+![Stay Heaven](https://github.com/Cyb3rGhoul/Stay-Heaven/blob/main/src/assets/stayheaven.png?raw=true) 
+### Website link: [stayheaven.vercel.app](https://stayheaven.vercel.app)
 
-## Features
+Stay Heaven is your one-stop platform for finding and listing the perfect stays! With a sleek, user-friendly interface and robust features, this MERN-stack application combines the best of hotel booking platforms, offering a seamless experience for both travelers and property owners.
 
-- **Search and Filter:** Easily search for accommodations based on location, dates, price range, and other preferences.
-- **User Authentication:** Secure user authentication system to manage bookings and account information.
-- **Detailed Listings:** Comprehensive listings with photos, descriptions, amenities, and reviews to help users make informed decisions.
-- **Booking Management:** Streamlined booking process with options for cancellations, modifications, and messaging with hosts.
-- **Interactive Maps:** View accommodations on interactive maps to understand their location and proximity to points of interest.
-- **Payment Integration:** Secure payment processing for booking accommodations directly through the platform.
+## 🌍 About Stay Heaven
+Stay Heaven was developed as a comprehensive hotel booking platform with an integrated admin and seller system, providing everything from secure user registration and property listings to payment processing. Our mission was to create an all-inclusive experience, catering to guests searching for stays and hosts looking to list properties, with real-time updates and secure transactions.
 
-## Installation
+Built by **Harsh Shukla**, **Meet**, and **Chetan**, this project encapsulates the culmination of countless hours spent on Discord calls, code reviews, and the relentless pursuit of innovation.
 
-To run StayHeaven locally on your machine, follow these steps:
+## 🚀 Key Features
 
-1. Clone the repository: `git clone https://github.com/your-username/Stay-Heaven.git`
-2. Navigate to the project directory: `cd Stay-Heaven`
-3. Install dependencies: `npm install`
-4. Start the development server: `npm run dev`
+- **User Interface**: A modern, responsive landing page showcasing top hotels.
+- **Advanced Search**: Real-time filters and sorting to match guests' needs precisely.
+- **Hotel Pages**: Each hotel listing is enriched with booking details, user reviews, and a comment section.
+- **Secure Payments**: Powered by **Razorpay** for safe and seamless transactions.
+  
+### Admin Dashboard
+- Manage users and content, oversee bookings, and monitor site activity with a visually intuitive interface.
+- Real-time booking management, user monitoring, and data visualization for quick insights.
+  
+### Seller Dashboard
+- Property owners can create and list properties in real-time.
+- Instant updates to the admin dashboard upon new listings, allowing for immediate review and approval.
+- Ability to manage property bookings, view profit analytics, and monitor booking status (successful, pending) with real-time data.
 
-## Contributors
+## 🛠️ Tech Stack
 
-StayHeaven is a collaborative project made by three contributors:
+**Frontend**: 
+- **React** with **Tailwind CSS** for a visually appealing and responsive design.
+- **DaisyUI** and **Toastify** for seamless UI elements and notification handling.
+- **React Router** for SPA navigation.
+  
+**Backend**:
+- **Node.js** and **Express.js** for scalable server management.
+- **MongoDB** for dynamic data storage.
+- **Redis** for caching and fast data retrieval.
+  
+**Additional Tools**:
+- **Socket.io** for real-time updates and communication.
+- **Razorpay** for secure payment processing.
+- **Lucid** for enhanced icons and visuals.
 
-- [Harsh Shukla](https://github.com/Cyb3rGhoul)
-- [Meet Bikhani](https://github.com/meetbikhani)
-- [Chetan Singh](https://github.com/Chetan8299)
+## 📊 Real-Time Features
 
----
+- **Instant updates** across the platform through **Socket.io**.
+- **Live status tracking** for bookings, property listings, and admin approvals.
+- **Graphical representations** in dashboards for quick data analysis.
 
-StayHeaven is built using React, a popular JavaScript library for building user interfaces. If you encounter any issues or have suggestions for improvement, feel free to submit an issue or pull request on GitHub. We hope you enjoy using StayHeaven for all your accommodation needs!
+## 🚧 Installation Guide
+
+1. **Clone the Repositories**:
+   - Frontend: [Link to Front-end GitHub Repo](https://github.com/Cyb3rGhoul/Stay-Heaven)
+   - Backend: [Link to Back-end GitHub Repo](https://github.com/Chetan8299/stay-heaven-backend)
+
+2. **Setup Environment Variables**: 
+   - Configure `.env` files for both frontend and backend with your API keys and MongoDB URI.
+
+3. **Install Dependencies**:
+   ```bash
+   cd frontend
+   npm install
+   cd ../backend
+   npm install
+
+
+4. **Run Application**:
+   - Frontend: `npm run dev` in the frontend directory.
+   - Backend: `npm run dev` in the backend directory.
+
+## 💡 Inspiration
+This project was conceived by **Harsh**, **Meet**, and **Chetan** in June 2024. It started as a challenge to build a full-stack application and evolved into a passion project. We wanted to create something beyond a simple booking platform — something that would serve as a marketplace for users and property owners alike.
+
+## 👥 Contributors
+
+- **Harsh Shukla** - [LinkedIn](https://www.linkedin.com/in/harsh-shukla-1inkdein/) | [GitHub](https://github.com/Cyb3rGhoul)
+- **Meet** - [LinkedIn](https://www.linkedin.com/in/meetbikhani/) | [GitHub](https://github.com/meetbikhani)
+- **Chetan** - [LinkedIn](https://www.linkedin.com/in/chetan-singh-168564251/) | [GitHub](https://github.com/Chetan8299/)
