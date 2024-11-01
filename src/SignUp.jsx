@@ -15,6 +15,7 @@ import axios from "./utils/axios";
 import useHandleErr from "./utils/useHandleErr";
 import { TbPasswordMobilePhone } from "react-icons/tb";
 import toast from "react-hot-toast";
+import Preloader from "./Preloader";
 
 const SignUp = () => {
     const navigate = useNavigate();
@@ -35,7 +36,7 @@ const SignUp = () => {
     const [otpVerified, setOtpVerified] = useState(false);
     const [otp, setOtp] = useState("");
     const [otpEntered, setOtpEntered] = useState("");
-
+    const [loading, setLoading] = useState(false);
     const handleInputChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
@@ -72,10 +73,10 @@ const SignUp = () => {
     };
 
     const verifyOTP = async () => {
-        if(otpEntered != otp){
+        if (otpEntered != otp) {
             toast.error("OTP entered is incorrect");
             return;
-        } 
+        }
         setOtpVerified(true);
         toast.success("OTP verified successfully");
     };
@@ -85,7 +86,7 @@ const SignUp = () => {
             toast.error("Please upload a profile picture");
             return false;
         }
-        
+
         if (!formData.fullname.trim()) {
             toast.error("Please enter your full name");
             return false;
@@ -141,11 +142,11 @@ const SignUp = () => {
 
     const handleSignUp = async (e) => {
         e.preventDefault();
-        
+
         if (!validateForm()) {
             return;
         }
-
+        setLoading(true);
         setIsLoading(true);
 
         try {
@@ -184,10 +185,13 @@ const SignUp = () => {
             handleError(error);
         } finally {
             setIsLoading(false);
+            setLoading(false);
         }
     };
 
-    return (
+    return loading ? (
+        <Preloader />
+    ) : (
         <PageWrapper>
             <SignUpCard>
                 <CardHeader>
@@ -280,11 +284,16 @@ const SignUp = () => {
                                     type="text"
                                     name="email-otp"
                                     placeholder="Enter OTP"
-                                    onChange={(e) => setOtpEntered(e.target.value)}
+                                    onChange={(e) =>
+                                        setOtpEntered(e.target.value)
+                                    }
                                 />
                             </InputWrapper>
                         </InputGroup>
-                        <div onClick={verifyOTP} className="btn max-sm:scale-75 bg-green-500 text-white hover:bg-green-600">
+                        <div
+                            onClick={verifyOTP}
+                            className="btn max-sm:scale-75 bg-green-500 text-white hover:bg-green-600"
+                        >
                             Verify
                         </div>
                     </div>

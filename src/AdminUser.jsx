@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import socket from "./utils/socket";
 import useHandleErr from "./utils/useHandleErr";
 import toast from "react-hot-toast";
+import Preloader from "./Preloader";
 
 const AdminUser = () => {
     const [users, setUsers] = useState([]);
@@ -16,11 +17,13 @@ const AdminUser = () => {
     const [isAdmin, setIsAdmin] = useState(null);
     const [isSeller, setIsSeller] = useState(null);
     const [isBan, setIsBan] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
-    const handleError = useHandleErr()
+    const handleError = useHandleErr();
     const popup = () => {
         setIsOpen((prev) => !prev);
     };
+
 
     const headers = [
         "S.No.",
@@ -36,7 +39,7 @@ const AdminUser = () => {
         "Ban",
         "Address",
         "Aadhaar Card",
-        "Pan Card"
+        "Pan Card",
     ];
 
     const submitHandler = (e) => {
@@ -213,6 +216,7 @@ const AdminUser = () => {
     };
 
     const getUsers = async () => {
+        setIsLoading(true);
         try {
             const response = await axios.post(
                 "/admin/all-users",
@@ -225,6 +229,8 @@ const AdminUser = () => {
             setFilteredUsers(response.data.data.users);
         } catch (error) {
             handleError(error);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -257,7 +263,9 @@ const AdminUser = () => {
             socket.off("removed_seller");
         };
     }, []);
-    return (
+    return isLoading ? (
+        <Preloader />
+    ) : (
         <div className="mt-10">
             {(order || createdhotel || pastbookings) && (
                 <div className="w-screen h-full bg-black/60 fixed top-0 left-0 z-10 flex items-center justify-center">
@@ -557,9 +565,19 @@ const AdminUser = () => {
                             .filter((item) => {
                                 return searchTerm.toLowerCase() === ""
                                     ? item
-                                    : item.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                                    item.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                                    item.fullName.toLowerCase().includes(searchTerm.toLowerCase());
+                                    : item.username
+                                          .toLowerCase()
+                                          .includes(searchTerm.toLowerCase()) ||
+                                          item.email
+                                              .toLowerCase()
+                                              .includes(
+                                                  searchTerm.toLowerCase()
+                                              ) ||
+                                          item.fullName
+                                              .toLowerCase()
+                                              .includes(
+                                                  searchTerm.toLowerCase()
+                                              );
                             })
                             .map((user, index) => (
                                 <tr key={index} className="hover:bg-gray-50">
@@ -569,10 +587,16 @@ const AdminUser = () => {
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <div className="flex items-center">
                                             <div className="h-10 w-10 flex-shrink-0">
-                                                <img className="h-10 w-10 rounded-full" src={user.avatar} alt="" />
+                                                <img
+                                                    className="h-10 w-10 rounded-full"
+                                                    src={user.avatar}
+                                                    alt=""
+                                                />
                                             </div>
                                             <div className="ml-4">
-                                                <div className="text-sm font-medium text-gray-900">{user.username}</div>
+                                                <div className="text-sm font-medium text-gray-900">
+                                                    {user.username}
+                                                </div>
                                             </div>
                                         </div>
                                     </td>
@@ -590,21 +614,34 @@ const AdminUser = () => {
                                             className="text-sm text-gray-500 bg-amber-50 border border-amber-200 rounded-md px-3 py-1 focus:outline-none focus:ring-2 focus:ring-amber-200"
                                             value=""
                                             onChange={(e) => {
-                                                const selectedOrderId = e.target.value;
-                                                const selectedOrder = user.previousBookings.find(
-                                                    (order) => order._id === selectedOrderId
-                                                );
+                                                const selectedOrderId =
+                                                    e.target.value;
+                                                const selectedOrder =
+                                                    user.previousBookings.find(
+                                                        (order) =>
+                                                            order._id ===
+                                                            selectedOrderId
+                                                    );
                                                 if (selectedOrder) {
-                                                    setPastbookings(selectedOrder);
+                                                    setPastbookings(
+                                                        selectedOrder
+                                                    );
                                                 }
                                             }}
                                         >
-                                            <option value="" disabled>Order ID</option>
-                                            {user.previousBookings.map((order) => (
-                                                <option key={order._id} value={order._id}>
-                                                    {order._id}
-                                                </option>
-                                            ))}
+                                            <option value="" disabled>
+                                                Order ID
+                                            </option>
+                                            {user.previousBookings.map(
+                                                (order) => (
+                                                    <option
+                                                        key={order._id}
+                                                        value={order._id}
+                                                    >
+                                                        {order._id}
+                                                    </option>
+                                                )
+                                            )}
                                         </select>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
@@ -626,7 +663,9 @@ const AdminUser = () => {
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <select
                                             className="text-sm text-gray-500 bg-amber-50 border border-amber-200 rounded-md px-3 py-1 focus:outline-none focus:ring-2 focus:ring-amber-200"
-                                            value={user.isCreator ? "yes" : "no"}
+                                            value={
+                                                user.isCreator ? "yes" : "no"
+                                            }
                                             onChange={(e) => {
                                                 if (e.target.value === "yes") {
                                                     makeCreator(user._id);
@@ -645,19 +684,31 @@ const AdminUser = () => {
                                             className="text-sm text-gray-500 bg-amber-50 border border-amber-200 rounded-md px-3 py-1 focus:outline-none focus:ring-2 focus:ring-amber-200 disabled:opacity-50"
                                             value=""
                                             onChange={(e) => {
-                                                const hoteltitle = e.target.value;
-                                                const selectedHotel = user.myCreatedPlaces.find(
-                                                    (hotel) => hotel.title === hoteltitle
-                                                );
+                                                const hoteltitle =
+                                                    e.target.value;
+                                                const selectedHotel =
+                                                    user.myCreatedPlaces.find(
+                                                        (hotel) =>
+                                                            hotel.title ===
+                                                            hoteltitle
+                                                    );
                                                 if (selectedHotel) {
-                                                    setCreatedHotel(selectedHotel);
+                                                    setCreatedHotel(
+                                                        selectedHotel
+                                                    );
                                                 }
                                             }}
                                         >
-                                            <option value="" disabled>Hotels</option>
-                                            {user.myCreatedPlaces.map((hotel) => (
-                                                <option key={hotel.title}>{hotel.title}</option>
-                                            ))}
+                                            <option value="" disabled>
+                                                Hotels
+                                            </option>
+                                            {user.myCreatedPlaces.map(
+                                                (hotel) => (
+                                                    <option key={hotel.title}>
+                                                        {hotel.title}
+                                                    </option>
+                                                )
+                                            )}
                                         </select>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
@@ -666,21 +717,32 @@ const AdminUser = () => {
                                             className="text-sm text-gray-500 bg-amber-50 border border-amber-200 rounded-md px-3 py-1 focus:outline-none focus:ring-2 focus:ring-amber-200 disabled:opacity-50"
                                             value=""
                                             onChange={(e) => {
-                                                const receivedbooking = e.target.value;
-                                                const selectedbooking = user.receivedOrders.find(
-                                                    (order) => order._id === receivedbooking
-                                                );
+                                                const receivedbooking =
+                                                    e.target.value;
+                                                const selectedbooking =
+                                                    user.receivedOrders.find(
+                                                        (order) =>
+                                                            order._id ===
+                                                            receivedbooking
+                                                    );
                                                 if (selectedbooking) {
                                                     setOrder(selectedbooking);
                                                 }
                                             }}
                                         >
-                                            <option value="" disabled>Received Order ID</option>
-                                            {user.receivedOrders.map((order) => (
-                                                <option key={order._id} value={order._id}>
-                                                    {order._id}
-                                                </option>
-                                            ))}
+                                            <option value="" disabled>
+                                                Received Order ID
+                                            </option>
+                                            {user.receivedOrders.map(
+                                                (order) => (
+                                                    <option
+                                                        key={order._id}
+                                                        value={order._id}
+                                                    >
+                                                        {order._id}
+                                                    </option>
+                                                )
+                                            )}
                                         </select>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
@@ -693,7 +755,7 @@ const AdminUser = () => {
                                                     user.isban = true;
                                                 } else {
                                                     removeBan(user._id);
-                                                    user.isban = false; 
+                                                    user.isban = false;
                                                 }
                                             }}
                                         >
@@ -706,7 +768,10 @@ const AdminUser = () => {
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm">
                                         {user.aadhaar ? (
-                                            <Link target="_blank" to={`${user.aadhaar}`}>
+                                            <Link
+                                                target="_blank"
+                                                to={`${user.aadhaar}`}
+                                            >
                                                 <button className="px-3 py-1 text-emerald-600 hover:text-emerald-900 font-medium transition duration-300">
                                                     Document
                                                 </button>
@@ -717,7 +782,10 @@ const AdminUser = () => {
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm">
                                         {user.pan ? (
-                                            <Link target="_blank" to={`${user.pan}`}>
+                                            <Link
+                                                target="_blank"
+                                                to={`${user.pan}`}
+                                            >
                                                 <button className="px-3 py-1 text-emerald-600 hover:text-emerald-900 font-medium transition duration-300">
                                                     Document
                                                 </button>

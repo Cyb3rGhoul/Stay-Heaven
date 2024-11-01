@@ -7,11 +7,14 @@ import socket from "./utils/socket";
 import useHandleErr from "./utils/useHandleErr";
 import { Check, X } from "lucide-react"
 import toast from "react-hot-toast";
+import Preloader from "./Preloader";
 
 const AdminRequests = () => {
     const [hotels, setHotels] = useState([]);
     const handleError = useHandleErr();
+    const [isLoading, setIsLoading] = useState(false);
     const getAllPendingHotels = async () => {
+        setIsLoading(true);
         try {
             const response = await axios.post(
                 "/admin/all-pending-hotels",
@@ -23,6 +26,8 @@ const AdminRequests = () => {
             setHotels(response.data.data.hotels);
         } catch (error) {
             handleError(error);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -70,7 +75,7 @@ const AdminRequests = () => {
     }, []);
 
     return (
-        <div className="mt-10 px-4 sm:px-6 lg:px-8">
+        isLoading? <Preloader /> :  <div className="mt-10 px-4 sm:px-6 lg:px-8">
             <div className="overflow-x-auto max-md:ml-[-0.7rem]">
                 <div className="inline-block min-w-full py-2 align-middle">
                     <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg max-md:rounded-lg">

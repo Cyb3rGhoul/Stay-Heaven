@@ -6,9 +6,11 @@ import { useDispatch } from 'react-redux';
 import { setSearch } from "./app/reducers/userSlice";
 import socket from "./utils/socket";
 import useHandleErr from "./utils/useHandleErr";
+import Preloader from "./Preloader";
 
 const Landing = () => {
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
     const [showAllCities, setShowAllCities] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const dispatch = useDispatch();
@@ -18,11 +20,14 @@ const Landing = () => {
     };
     const [hotels, setHotels] = useState([]);
     const gethotels = async () => {
+        setIsLoading(true);
         try {
             const response = await axios("/hotel/hotels");
             setHotels(response.data.data.hotels);
         } catch (error) {
             handleError(error);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -124,7 +129,8 @@ const Landing = () => {
     const allCities = [...cities, ...internationalCities];
 
     return (
-        <>
+        isLoading ? <Preloader /> :(
+            <>
             <div className="landing">
                 <div className="landing__search-container" style={{
                     marginTop: "5rem",
@@ -229,6 +235,7 @@ const Landing = () => {
                 </div>
             )}
         </>
+           )
     );
 };
 

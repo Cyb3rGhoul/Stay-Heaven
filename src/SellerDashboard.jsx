@@ -5,8 +5,10 @@ import axios from "./utils/axios";
 import total from "./assets/total.png";
 import bookingsicon from "./assets/bookings.png";
 import useHandleErr from "./utils/useHandleErr";
+import Preloader from "./Preloader";
 
 const SellerDashboard = () => {
+    const [isLoading, setIsLoading] = useState(false);
     const [duration, setDuration] = useState("overall");
     const [hotels, setHotels] = useState(null);
     const [bookings, setBookings] = useState(null);
@@ -15,6 +17,7 @@ const SellerDashboard = () => {
     const [revenue, setRevenue] = useState(0);
     const handleError = useHandleErr()
     const getSellerData = async (duration) => {
+        setIsLoading(true);
         try {
             const response = await axios.post(
                 "/user/get-seller-dashboard-data",
@@ -42,6 +45,8 @@ const SellerDashboard = () => {
             setBookings(data.receivedOrders.length);
         } catch (error) {
             handleError(error);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -84,7 +89,7 @@ const SellerDashboard = () => {
     }, []);
 
     return (
-        <div className="sell mt-12 w-full h-fit px-5 md:px-10">
+        isLoading ? <Preloader /> :  <div className="sell mt-12 w-full h-fit px-5 md:px-10">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10">
                 <motion.h1
                     initial={{ opacity: 0, y: -20 }}

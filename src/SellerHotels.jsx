@@ -6,9 +6,11 @@ import socket from "./utils/socket";
 import { Link } from "react-router-dom";
 import useHandleErr from "./utils/useHandleErr";
 import toast from "react-hot-toast";
+import Preloader from "./Preloader";
 
 const SellerHotels = () => {
     const [hotels, setHotels] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);  
     const [filteredHotels, setFilteredHotels] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
     const [orders, setOrders] = useState(null);
@@ -80,6 +82,7 @@ const SellerHotels = () => {
     };
 
     const getAllSellerHotels = async () => {
+        setIsLoading(true);
         try {
             const response = await axios.get("/user/current-user", {
                 withCredentials: true,
@@ -101,6 +104,8 @@ const SellerHotels = () => {
             setOrders(allOrders);
         } catch (error) {
             handleError(error);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -206,7 +211,7 @@ const SellerHotels = () => {
         };
     }, []);
     return (
-        <div className="mt-10 ml-2">
+        isLoading ? <Preloader /> :  <div className="mt-10 ml-2">
             {isEditOpen && (
                 <Edit selectedHotel={selectedHotel} EditPopup={EditPopup} />
             )}

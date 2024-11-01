@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import socket from "./utils/socket";
 import useHandleErr from "./utils/useHandleErr";
 import toast from "react-hot-toast";
+import Preloader from "./Preloader";
 
 const AdminHotels = () => {
     const [hotels, setHotels] = useState([]);
@@ -16,8 +17,10 @@ const AdminHotels = () => {
     const popup = () => {
         setIsOpen((prev) => !prev);
     };
+    const [isLoading, setIsLoading] = useState(false);  
 
     const getAllHotels = async () => {
+        setIsLoading(true);
         try {
             const response = await axios.post(
                 "/admin/all-hotels",
@@ -30,6 +33,8 @@ const AdminHotels = () => {
             setFilteredHotels(response.data.data.hotels);
         } catch (error) {
             handleError(error);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -121,7 +126,7 @@ const AdminHotels = () => {
     }, []);
 
     return (
-        <div className="mt-10 w-full mx-auto px-2 sm:px-6 lg:px-8">
+      isLoading ? <Preloader /> :  <div className="mt-10 w-full mx-auto px-2 sm:px-6 lg:px-8">
             <div className="ml-4 mb-6 overflow-hidden flex max-md:flex-col-reverse max-md:items-center sm:justify-between max-md:ml-[-.5rem]">
                 <button
                     onClick={popup}
