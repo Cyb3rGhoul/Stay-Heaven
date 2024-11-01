@@ -13,7 +13,7 @@ const Navbar = () => {
     const [isSticky, setIsSticky] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(
-        useSelector((state) => state.user.isLoggedIn)
+        useSelector((state) => state.user.userData.isLoggedIn)
     );
     const [profileImage, setprofileImage] = useState(
         useSelector((state) => state.user.userData.avatar)
