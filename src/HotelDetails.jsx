@@ -91,22 +91,20 @@ const HotelDetails = () => {
         getHotelRatings();
     }, [reviews]);
 
-    const handleDeleteReview = (id) => {
-        return async () => {
-            try {
-                await axios.post(
-                    `/comment/delete/${id}`,
-                    { hotelId },
-                    { withCredentials: true }
-                );
-                setReviews((reviews) =>
-                    reviews.filter((review) => review._id !== id)
-                );
-            } catch (error) {
-                handleError(error);
-            }
-        };
-    };
+    const handleDeleteReview = async (id) => {
+        try {
+            await axios.post(
+                `/comment/delete/${id}`,
+                { hotelId },
+                { withCredentials: true }
+            );
+            setReviews((reviews) =>
+                reviews.filter((review) => review._id !== id)
+            );
+        } catch (error) {
+            handleError(error);
+        }
+    }
     const commentHandler = async () => {
         try {
             const response = await axios.post(
