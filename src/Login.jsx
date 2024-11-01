@@ -11,7 +11,7 @@ const Login = () => {
     const navigate = useNavigate();
     const [emailOrUsername, setEmailOrUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const handleError = useHandleErr();
     const dispatch = useDispatch();
     const getUser = async () => {
@@ -32,6 +32,7 @@ const Login = () => {
   };
     const handleLogin = async (e) => {
         e.preventDefault();
+        isLoading(true);
         try {
             await axios.post(
                 "/user/login",
