@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import randomImage from "./assets/random.jpg";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Rating from "@mui/material/Rating";
+import socket from "./utils/socket";
 
 const PreviousBookings = () => {
     const [selectedBooking, setSelectedBooking] = useState(null);
@@ -34,20 +35,58 @@ const PreviousBookings = () => {
 
         return formattedDate; // Correctly returning formattedDate
     };
+
+    const getTime = (time) => {
+        time = new Date(time);
+        // Format the time as 12:00 PM
+        const formattedTime = time.toLocaleTimeString("en-US", {
+            hour12: true,
+            hour: "numeric",
+            minute: "numeric",
+        });
+    
+        // Format the date as dd/mm/yyyy
+        const formattedDate = time.toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+        });
+    
+        // Combine the formatted time and date
+        const formattedTimeAndDate = `${formattedTime} - ${formattedDate}`;
+    
+        return formattedTimeAndDate;
+    }; 
+    
     const handleRatingClick = (booking, index) => {
-        const updatedBookings = bookings.map((b) =>
+        const updatedBookings = booking.map((b) =>
             b.id === booking.id ? { ...b, rating: index + 1 } : b
         );
-        // Update the bookings state with updatedBookings (if needed)
-        // For now, we directly update the state for the example
         setSelectedBooking({ ...selectedBooking, rating: index + 1 });
     };
 
+    useEffect(()=> {
+        socket.on("order_is_created", (data) => {
+            setpreviousBookings(prev => [...prev, data.order])
+        })
+
+        socket.on("order_is_accepted_or_rejected", (data) => {
+            setpreviousBookings(prev => prev.map((order) => order.id === data._id? data : order))
+        })
+
+        return () => {
+            socket.off("order_is_created")
+            socket.off("order_is_accepted_or_rejected")
+        }
+    })
     return (
         <Container >
             <Title style={{marginTop: "3em"}}>Previous Bookings</Title>
             <ScrollableContainer>
-                {previousBookings.map((booking) => (
+                {previousBookings
+                .slice()
+                .reverse()
+                .map((booking) => (
                     <BookingCard
                         key={booking._id}
                         onClick={() => handleCardClick(booking)}
@@ -61,6 +100,8 @@ const PreviousBookings = () => {
                                 {getDate(booking.checkout)}{" "}
                             </p>
                             <p>Price: ₹{booking.amount}</p>
+                            <p>Ordered at: {getTime(booking.createdAt)}</p>
+                            <p>Status: {booking.approvalStatus}</p>
                         </Description>
                     </BookingCard>
                 ))}
