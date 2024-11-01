@@ -54,7 +54,6 @@ const Login = () => {
             flag = true;
         } finally {
             setIsLoading(false);
-            setLoading(false);
             if (!flag) window.location.href = "/";
         }
     };
