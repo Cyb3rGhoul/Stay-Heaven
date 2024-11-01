@@ -44,10 +44,8 @@ const Login = () => {
                     withCredentials: true,
                 }
             );
-            await getUser();
-            // navigate("/");
             window.location.href = "/";
-            // window.location.reload();
+            await getUser();
         } catch (error) {
             handleError(error);
         } finally {
