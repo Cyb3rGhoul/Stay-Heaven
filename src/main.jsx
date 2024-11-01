@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import "./index.css";
@@ -35,7 +35,8 @@ import SellerBookings from "./SellerBookings.jsx";
 import AdminHotelDeleteRequests from "./AdminHotelDeleteRequests.jsx";
 import BecomeSellerRequests from "./BecomeSellerRequests.jsx";
 import { Toaster } from "react-hot-toast";
-import { Analytics } from '@vercel/analytics/react';
+import { Analytics } from "@vercel/analytics/react";
+import Preloader from "./Preloader.jsx";
 
 const router = createBrowserRouter([
     {
@@ -96,7 +97,7 @@ const router = createBrowserRouter([
                     },
                     {
                         path: "hotels-delete-request",
-                        element: <AdminHotelDeleteRequests />
+                        element: <AdminHotelDeleteRequests />,
                     },
                     {
                         path: "users",
@@ -104,7 +105,7 @@ const router = createBrowserRouter([
                     },
                     {
                         path: "become-seller",
-                        element: <BecomeSellerRequests />
+                        element: <BecomeSellerRequests />,
                     },
                     {
                         path: "bookings",
@@ -160,6 +161,7 @@ const router = createBrowserRouter([
 
 function Base() {
     const dispatch = useDispatch();
+    const [isLoading, setIsLoading] = useState(true);
     const getUser = async () => {
         try {
             const user = await axios.get("/user/current-user", {
@@ -173,44 +175,46 @@ function Base() {
                 dispatch(setUser({}));
             }
         } catch (error) {
-           console.log("")
+            console.log("");
+        } finally {
+            setIsLoading(false);
         }
     };
 
     useEffect(() => {
         getUser();
-        console.log("user updated")
+        console.log("user updated");
     }, []);
-    return <RouterProvider router={router} />;
+    return isLoading ? <Preloader /> : <RouterProvider router={router} />;
 }
 
 ReactDOM.createRoot(document.getElementById("root")).render(
     <Provider store={store}>
         <Base />
         <Toaster
-                toastOptions={{
-                    success: {
-                        style: {
-                            color: "green",
-                            background: "white",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                        },
+            toastOptions={{
+                success: {
+                    style: {
+                        color: "green",
+                        background: "white",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
                     },
-                    error: {
-                        style: {
-                            color: "red",
-                            background: "white",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                        },
+                },
+                error: {
+                    style: {
+                        color: "red",
+                        background: "white",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
                     },
-                }}
-                position="top-center"
-                reverseOrder={false}
-            />
-             <Analytics />
+                },
+            }}
+            position="top-center"
+            reverseOrder={false}
+        />
+        <Analytics />
     </Provider>
 );

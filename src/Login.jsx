@@ -11,7 +11,7 @@ const Login = () => {
     const navigate = useNavigate();
     const [emailOrUsername, setEmailOrUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const handleError = useHandleErr();
     const dispatch = useDispatch();
     const getUser = async () => {
@@ -32,7 +32,6 @@ const Login = () => {
   };
     const handleLogin = async (e) => {
         e.preventDefault();
-        setIsLoading(true);
         try {
             await axios.post(
                 "/user/login",
@@ -44,12 +43,12 @@ const Login = () => {
                     withCredentials: true,
                 }
             );
-            window.location.href = "/";
             await getUser();
         } catch (error) {
             handleError(error);
         } finally {
             setIsLoading(false);
+            window.location.href = "/";
         }
     };
 
