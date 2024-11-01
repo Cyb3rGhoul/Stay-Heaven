@@ -18,7 +18,7 @@ const AdminBookings = () => {
     const popup = () => {
         setIsOpen((prev) => !prev);
     };
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     const submitHandler = (e) => {
         e.preventDefault();

@@ -30,7 +30,7 @@ const Search = () => {
     const toggleFilter = () => {
         setFilterOpen(!filterOpen);
     };
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [features, setFeatures] = useState({
         wifi: false,
         ac: false,

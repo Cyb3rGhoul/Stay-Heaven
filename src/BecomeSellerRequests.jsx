@@ -10,7 +10,7 @@ import toast from "react-hot-toast";
 import Preloader from "./Preloader";
 
 const BecomeSellerRequests = () => {
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [users, setUsers] = useState([]);
     const handleError = useHandleErr()
     const getUsers = async () => {

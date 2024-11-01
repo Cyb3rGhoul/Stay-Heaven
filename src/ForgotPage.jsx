@@ -9,7 +9,7 @@ const ForgotPassword = () => {
     const navigate = useNavigate();
     const [username, setUsername] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const handleError = useHandleErr();
 
     const handleEmailPhoneSubmit = async (e) => {

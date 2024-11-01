@@ -17,7 +17,7 @@ const AdminUser = () => {
     const [isAdmin, setIsAdmin] = useState(null);
     const [isSeller, setIsSeller] = useState(null);
     const [isBan, setIsBan] = useState(null);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
     const handleError = useHandleErr();
     const popup = () => {

@@ -28,7 +28,7 @@ const SignUp = () => {
     });
     const [avatar, setAvatar] = useState(null);
     const [showAvatar, setShowAvatar] = useState(null);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [showPassword, setShowPassword] = useState(false);
     const [isFileSelected, setIsFileSelected] = useState(false);
     const avatarRef = useRef(null);

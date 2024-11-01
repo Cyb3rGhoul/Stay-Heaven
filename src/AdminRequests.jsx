@@ -12,7 +12,7 @@ import Preloader from "./Preloader";
 const AdminRequests = () => {
     const [hotels, setHotels] = useState([]);
     const handleError = useHandleErr();
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const getAllPendingHotels = async () => {
         setIsLoading(true);
         try {

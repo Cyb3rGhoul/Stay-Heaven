@@ -17,7 +17,7 @@ const AdminHotels = () => {
     const popup = () => {
         setIsOpen((prev) => !prev);
     };
-    const [isLoading, setIsLoading] = useState(false);  
+    const [isLoading, setIsLoading] = useState(true);  
 
     const getAllHotels = async () => {
         setIsLoading(true);

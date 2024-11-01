@@ -8,7 +8,7 @@ import useHandleErr from "./utils/useHandleErr";
 import Preloader from "./Preloader";
 
 const SellerDashboard = () => {
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [duration, setDuration] = useState("overall");
     const [hotels, setHotels] = useState(null);
     const [bookings, setBookings] = useState(null);

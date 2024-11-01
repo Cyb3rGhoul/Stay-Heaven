@@ -50,7 +50,7 @@ const HotelDetails = () => {
         message: "",
         rating: 0,
     });
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [hotelRating, setHotelRating] = useState(0);
     const [rooms, setRooms] = useState(0);
     const [amount, setAmount] = useState(0);

@@ -10,7 +10,7 @@ import { Toaster } from "react-hot-toast";
 import Preloader from "./Preloader";
 
 const AdminDashboard = () => {
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [data, setData] = useState([
         {
             title: "Bookings",

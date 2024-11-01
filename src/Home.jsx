@@ -10,7 +10,7 @@ import Preloader from "./Preloader";
 
 const Landing = () => {
     const navigate = useNavigate();
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [showAllCities, setShowAllCities] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const dispatch = useDispatch();

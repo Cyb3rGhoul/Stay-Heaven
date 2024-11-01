@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 import Preloader from "./Preloader";
 
 const AdminHotelDeleteRequests = () => {
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [hotels, setHotels] = useState([]);
     const [modal, setModal] = useState(false);
     const [reason, setReason] = useState("");

@@ -10,7 +10,7 @@ import Preloader from "./Preloader";
 
 const SellerHotels = () => {
     const [hotels, setHotels] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);  
+    const [isLoading, setIsLoading] = useState(true);  
     const [filteredHotels, setFilteredHotels] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
     const [orders, setOrders] = useState(null);

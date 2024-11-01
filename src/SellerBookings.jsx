@@ -6,7 +6,7 @@ import socket from "./utils/socket";
 import Preloader from "./Preloader";
 
 const SellerBookings = () => {
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [orders, setOrders] = useState([]);
     const [filteredOrders, setFilteredOrders] = useState([]);
     const [order, setOrder] = useState({});
