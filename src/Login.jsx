@@ -33,6 +33,7 @@ const Login = () => {
     const handleLogin = async (e) => {
         e.preventDefault();
         setIsLoading(true);
+        let flag = false;
         try {
             await axios.post(
                 "/user/login",
@@ -47,9 +48,10 @@ const Login = () => {
             await getUser();
         } catch (error) {
             handleError(error);
+            flag = true;
         } finally {
             setIsLoading(false);
-            window.location.href = "/";
+            if(!flag) window.location.href = "/";
         }
     };
 
