@@ -35,7 +35,6 @@ import SellerBookings from "./SellerBookings.jsx";
 import AdminHotelDeleteRequests from "./AdminHotelDeleteRequests.jsx";
 import BecomeSellerRequests from "./BecomeSellerRequests.jsx";
 import { Toaster } from "react-hot-toast";
-import useHandleErr from "./utils/useHandleErr";
 import { Analytics } from '@vercel/analytics/react';
 
 const router = createBrowserRouter([
@@ -180,6 +179,7 @@ function Base() {
 
     useEffect(() => {
         getUser();
+        console.log("user updated")
     }, []);
     return <RouterProvider router={router} />;
 }
