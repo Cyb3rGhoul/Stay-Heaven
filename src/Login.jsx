@@ -13,7 +13,7 @@ const Login = () => {
     const [emailOrUsername, setEmailOrUsername] = useState("");
     const [password, setPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const handleError = useHandleErr();
     const dispatch = useDispatch();
     const getUser = async () => {
