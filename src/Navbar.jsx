@@ -9,7 +9,6 @@ import socket from "./utils/socket";
 import useHandleErr from "./utils/useHandleErr";
 
 const Navbar = () => {
-    console.log("mai chala hu ",  useSelector((state) => state.user))
     const [menuOpen, setMenuOpen] = useState(false);
     const [isSticky, setIsSticky] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
