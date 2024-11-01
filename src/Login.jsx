@@ -32,7 +32,7 @@ const Login = () => {
   };
     const handleLogin = async (e) => {
         e.preventDefault();
-        isLoading(true);
+        setIsLoading(true);
         try {
             await axios.post(
                 "/user/login",
