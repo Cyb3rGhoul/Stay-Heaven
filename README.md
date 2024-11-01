@@ -1,6 +1,7 @@
 # Stay Heaven 🌟
 
 ![Stay Heaven](https://github.com/Cyb3rGhoul/Stay-Heaven/blob/main/src/assets/stayheaven.png?raw=true) 
+### Website link: [stayheaven.vercel.app](https://stayheaven.vercel.app)
 
 Stay Heaven is your one-stop platform for finding and listing the perfect stays! With a sleek, user-friendly interface and robust features, this MERN-stack application combines the best of hotel booking platforms, offering a seamless experience for both travelers and property owners.
 
@@ -51,8 +52,8 @@ Built by **Harsh Shukla**, **Meet**, and **Chetan**, this project encapsulates t
 ## 🚧 Installation Guide
 
 1. **Clone the Repositories**:
-   - Frontend: [Link to Front-end GitHub Repo](#)
-   - Backend: [Link to Back-end GitHub Repo](#)
+   - Frontend: [Link to Front-end GitHub Repo](https://github.com/Cyb3rGhoul/Stay-Heaven)
+   - Backend: [Link to Back-end GitHub Repo](https://github.com/Chetan8299/stay-heaven-backend)
 
 2. **Setup Environment Variables**: 
    - Configure `.env` files for both frontend and backend with your API keys and MongoDB URI.
