@@ -7,12 +7,15 @@ import { setSearch } from "./app/reducers/userSlice";
 import socket from "./utils/socket";
 import useHandleErr from "./utils/useHandleErr";
 import Preloader from "./Preloader";
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const Landing = () => {
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
     const [showAllCities, setShowAllCities] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 6;
     const dispatch = useDispatch();
     const handleError = useHandleErr()
     const toggleShowAllCities = () => {
@@ -29,6 +32,19 @@ const Landing = () => {
         } finally {
             setIsLoading(false);
         }
+    };
+
+    const indexOfLastHotel = currentPage * itemsPerPage;
+    const indexOfFirstHotel = indexOfLastHotel - itemsPerPage;
+    const currentHotels = hotels.slice(indexOfFirstHotel, indexOfLastHotel);
+    const totalPages = Math.ceil(hotels.length / itemsPerPage);
+
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+        window.scrollTo({
+            top: document.querySelector('.landing__grid-container').offsetTop - 100,
+            behavior: 'smooth'
+        });
     };
 
     useEffect(() => {
@@ -183,33 +199,67 @@ const Landing = () => {
                     </div>
                 </div>
                 <div className="landing__grid-container">
-                    <div className="landing__grid">
-                        {hotels.map((hotel) => (
-                            <div
-                                key={hotel._id}
-                                className="landing__grid-item animate-fadeIn"
-                                onClick={() => navigate(`/hotel/${hotel._id}`)}
-                            >
-                                <img
-                                    src={hotel.images[0]}
-                                    alt={hotel.title}
-                                    className="landing__grid-item-image"
-                                />
-                                <div className="landing__grid-item-content flex flex-col gap-1">
-                                    <div className="flex justify-between items-center">
-                                        <div className="text-lg font-bold">{hotel.title}</div>
-                                        <StarRating value={hotel.rating} />
-                                    </div>
-                                    <div className="text-left">
-                                        ₹ {typeof hotel.price === 'number' ? hotel.price.toLocaleString('en-IN') : "N/A"}
+                        <div className="landing__grid">
+                            {currentHotels.map((hotel) => (
+                                <div
+                                    key={hotel._id}
+                                    className="landing__grid-item animate-fadeIn"
+                                    onClick={() => navigate(`/hotel/${hotel._id}`)}
+                                >
+                                    <img
+                                        src={hotel.images[0]}
+                                        alt={hotel.title}
+                                        className="landing__grid-item-image"
+                                    />
+                                    <div className="landing__grid-item-content flex flex-col gap-1">
+                                        <div className="flex justify-between items-center">
+                                            <div className="text-lg font-bold">{hotel.title}</div>
+                                            <StarRating value={hotel.rating} />
+                                        </div>
+                                        <div className="text-left">
+                                            ₹ {typeof hotel.price === 'number' ? hotel.price.toLocaleString('en-IN') : "N/A"}
+                                        </div>
                                     </div>
                                 </div>
+                            ))}
+                        </div>
+
+                        {/* Pagination Controls */}
+                        {totalPages > 1 && (
+                            <div className="landing__pagination">
+                                <button 
+                                    onClick={() => handlePageChange(currentPage - 1)}
+                                    disabled={currentPage === 1}
+                                    className="landing__pagination-button"
+                                >
+                                    <ChevronLeft className="w-5 h-5" />
+                                </button>
+                                
+                                <div className="landing__pagination-numbers">
+                                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
+                                        <button
+                                            key={pageNum}
+                                            onClick={() => handlePageChange(pageNum)}
+                                            className={`landing__pagination-number ${
+                                                pageNum === currentPage ? 'landing__pagination-number--active' : ''
+                                            }`}
+                                        >
+                                            {pageNum}
+                                        </button>
+                                    ))}
+                                </div>
+
+                                <button 
+                                    onClick={() => handlePageChange(currentPage + 1)}
+                                    disabled={currentPage === totalPages}
+                                    className="landing__pagination-button"
+                                >
+                                    <ChevronRight className="w-5 h-5" />
+                                </button>
                             </div>
-                        ))}
+                        )}
                     </div>
                 </div>
-
-            </div>
             {showAllCities && (
                 <div className="landing__modal">
                     <div className="landing__modal-content">
