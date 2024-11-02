@@ -289,6 +289,9 @@ const HotelDetails = () => {
         });
     };
 
+    useEffect(() => {
+        window.scrollTo(0, 0);
+      }, []);
     return (
        isLoading ? <Preloader /> :  <>
             <div className="hotelPage" id="hotelPage">
