@@ -190,7 +190,7 @@ const fadeIn = keyframes`
 `;
 
 const Container = styled.div`
-    height: 100vh;
+    min-height: 100vh;
     padding: 20px;
     background-color: #f0f0f0;
     color: #333;

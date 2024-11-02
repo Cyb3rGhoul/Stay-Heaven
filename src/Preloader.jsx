@@ -4,6 +4,7 @@ import "./Preloader.css";
 const Preloader = () => {
   return (
     <div className="preloader-outer-div">
+      <div className="flex flex-col items-center gap-8 relative">
       <svg
         className="pl"
         viewBox="0 0 160 160"
@@ -211,6 +212,25 @@ const Preloader = () => {
           </g>
         </g>
       </svg>
+      <div className="flex flex-col items-center gap-2 max-w-md text-center animate-pulse">
+          <p className="text-gray-600 font-medium text-sm sm:text-base">
+            Please wait while we load your experience
+          </p>
+          <p className="text-gray-500 text-xs sm:text-sm font-normal px-4">
+            Our website is hosted on a free tier server, which may cause slight initial delays. Thank you for your patience! 🙏
+          </p>
+        </div>
+
+        {/* Loading Status */}
+        <div className="absolute bottom-[-120px] item-center bg-blue-50 border border-blue-100 rounded-lg p-3 shadow-sm">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+            <p className="text-blue-600 text-xs">
+              Server is warming up...
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
