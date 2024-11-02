@@ -22,11 +22,12 @@ import useHandleErr from "./utils/useHandleErr";
 import toast from "react-hot-toast";
 import ImageGallery from "./ImageGallery";
 import Preloader from "./Preloader";
+import { Map } from 'lucide-react';
 
 const HotelDetails = () => {
     const { id } = useParams();
     const hotelId = id;
-    console.log("This is hotel id:",hotelId);
+    console.log("This is hotel id:", hotelId);
     console.log("This is id: ", id);
     const [user, setUser] = useState(
         useSelector((state) => state.user.userData)
@@ -50,6 +51,10 @@ const HotelDetails = () => {
         message: "",
         rating: 0,
     });
+    const openGoogleMapsWithAddress = (hotelAddress) => {
+        const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(hotelAddress)}`;
+        window.open(googleMapsUrl, '_blank');
+    };
     const [isLoading, setIsLoading] = useState(true);
     const [hotelRating, setHotelRating] = useState(0);
     const [rooms, setRooms] = useState(0);
@@ -223,7 +228,7 @@ const HotelDetails = () => {
                 );
                 return;
             }
-            if(guestNames[i].firstName.length < 1 || guestNames[i].lastName.length < 1){
+            if (guestNames[i].firstName.length < 1 || guestNames[i].lastName.length < 1) {
                 toast.error("Please fill all the required fields");
                 return;
             }
@@ -291,9 +296,9 @@ const HotelDetails = () => {
 
     useEffect(() => {
         window.scrollTo(0, 0);
-      }, []);
+    }, []);
     return (
-       isLoading ? <Preloader /> :  <>
+        isLoading ? <Preloader /> : <>
             <div className="hotelPage" id="hotelPage">
                 <Wrapper>
                     <div>
@@ -406,9 +411,17 @@ const HotelDetails = () => {
                                 <Description>
                                     <p>Description: {hotel.description}</p>
                                 </Description>
-                                <Address>
-                                    <p>Address: {hotel.address}</p>
-                                </Address>
+                                <div className="flex items-center gap-4">
+                                    <p className="text-gray-700">Address: {hotel.address}</p>
+                                    <button
+                                        onClick={() => openGoogleMapsWithAddress(hotel.address)}
+                                        className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-md transition-colors"
+                                        title="View on Map"
+                                    >
+                                        <Map size={18} className="w-4 h-4 md:w-[18px] md:h-[18px]" />
+                                        <span className="hidden md:inline">View on Map</span>
+                                    </button>
+                                </div>
                                 <City>
                                     <p>City: {hotel.city}</p>
                                 </City>
@@ -766,10 +779,9 @@ const HotelDetails = () => {
                                                         value={review.rating}
                                                         readOnly
                                                         size="small"
-                                                        className={`text-green-600 relative ${
-                                                            showPopup &&
+                                                        className={`text-green-600 relative ${showPopup &&
                                                             "z-[-1]"
-                                                        }`}
+                                                            }`}
                                                     />
                                                 </div>
                                             </div>

@@ -127,6 +127,7 @@ const AdminHotels = () => {
 
     return (
       isLoading ? <Preloader /> :  <div className="mt-10 w-full mx-auto px-2 sm:px-6 lg:px-8">
+        <h1 className="text-3xl font-bold mb-6 text-emerald-900 max-md:text-2xl max-sm:text-xl max-md:text-center">Hotels List</h1>
             <div className="ml-4 mb-6 overflow-hidden flex max-md:flex-col-reverse max-md:items-center sm:justify-between max-md:ml-[-.5rem]">
                 <button
                     onClick={popup}

@@ -92,6 +92,7 @@ const AdminHotelDeleteRequests = () => {
     }, []);
     return (
        isLoading ? <Preloader /> :  <div className="mt-10 px-4 sm:px-6 lg:px-8">
+            <h1 className="text-3xl font-bold mb-6 text-emerald-900 max-md:text-2xl max-sm:text-xl max-md:text-center">Delete Request</h1>
             {modal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
                     <div className="bg-white rounded-lg shadow-xl w-full max-w-md mx-4 h-fit max-h-[90vh] overflow-y-auto">
