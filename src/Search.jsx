@@ -322,7 +322,7 @@ const Search = () => {
 export default Search;
 
 const Wrapper = styled.div`
-    background: linear-gradient(to bottom, #f0fff4, #fff);
+    background-color: #f0f5ff;
     color: #2d3436;
     min-height: 100vh;
     padding: 20px;
@@ -480,8 +480,8 @@ const ResultCard = styled.div`
 
     .result-card-button {
         padding: 10px 20px;
-        background: #4caf50;
-        color: #fff;
+        background: #f3e5d0;
+        color: #6E260E;
         border: none;
         border-radius: 8px;
         cursor: pointer;
@@ -668,7 +668,8 @@ const PageButton = styled.button`
     transition: all 0.3s ease;
     
     &:hover:not(:disabled) {
-        background-color: #f7fafc;
+        background-color: #1c8e20;
+        color: white;
     }
     
     &:disabled {
@@ -685,7 +686,7 @@ const PageButton = styled.button`
 
 const NavigationButton = styled(PageButton)`
     &:hover:not(:disabled) {
-        background-color: #f7fafc;
+        background-color: #1c8e20;
     }
 `;
 

@@ -213,7 +213,7 @@ const Landing = () => {
                                     />
                                     <div className="landing__grid-item-content flex flex-col gap-1">
                                         <div className="flex justify-between items-center">
-                                            <div className="text-lg font-bold">{hotel.title}</div>
+                                            <div className="text-base font-bold max-md:text-sm">{hotel.title}</div>
                                             <StarRating value={hotel.rating} />
                                         </div>
                                         <div className="text-left">
