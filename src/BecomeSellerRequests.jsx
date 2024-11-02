@@ -7,11 +7,14 @@ import socket from "./utils/socket";
 import { useSelector } from "react-redux";
 import useHandleErr from "./utils/useHandleErr";
 import toast from "react-hot-toast";
+import Preloader from "./Preloader";
 
 const BecomeSellerRequests = () => {
+    const [isLoading, setIsLoading] = useState(true);
     const [users, setUsers] = useState([]);
     const handleError = useHandleErr()
     const getUsers = async () => {
+        setIsLoading(true);
         try {
             const response = await axios.post(
                 "/admin/all-users",
@@ -27,6 +30,8 @@ const BecomeSellerRequests = () => {
             );
         } catch (error) {
             handleError(error);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -83,7 +88,7 @@ const BecomeSellerRequests = () => {
         };
     }, []);
     return (
-        <div className="mt-10 px-4 sm:px-6 lg:px-8">
+       isLoading ? <Preloader /> :  <div className="mt-10 px-4 sm:px-6 lg:px-8">
             <div className="overflow-x-auto  max-md:ml-[-.6rem]">
                 <div className="inline-block min-w-full py-2 align-middle">
                     <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg max-md:rounded-lg">

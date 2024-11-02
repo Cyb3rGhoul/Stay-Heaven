@@ -21,6 +21,7 @@ import "./HotelDetails.css";
 import useHandleErr from "./utils/useHandleErr";
 import toast from "react-hot-toast";
 import ImageGallery from "./ImageGallery";
+import Preloader from "./Preloader";
 
 const HotelDetails = () => {
     const { id } = useParams();
@@ -49,6 +50,7 @@ const HotelDetails = () => {
         message: "",
         rating: 0,
     });
+    const [isLoading, setIsLoading] = useState(true);
     const [hotelRating, setHotelRating] = useState(0);
     const [rooms, setRooms] = useState(0);
     const [amount, setAmount] = useState(0);
@@ -119,6 +121,7 @@ const HotelDetails = () => {
         }
     };
     const getHotelDetails = async () => {
+        setIsLoading(true);
         try {
             const response = await axios.get(`/hotel/${id}`);
             features.gym = response.data.data.hotel.facilities.includes("gym");
@@ -135,6 +138,8 @@ const HotelDetails = () => {
             setReviews(response.data.data.hotel.comments);
         } catch (error) {
             handleError(error);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -285,7 +290,7 @@ const HotelDetails = () => {
     };
 
     return (
-        <>
+       isLoading ? <Preloader /> :  <>
             <div className="hotelPage" id="hotelPage">
                 <Wrapper>
                     <div>

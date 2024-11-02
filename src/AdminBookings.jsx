@@ -3,6 +3,7 @@ import axios from "./utils/axios";
 import { Link } from "react-router-dom";
 import socket from "./utils/socket";
 import useHandleErr from "./utils/useHandleErr";
+import Preloader from "./Preloader";
 
 const AdminBookings = () => {
     const [orders, setOrders] = useState([]);
@@ -17,6 +18,7 @@ const AdminBookings = () => {
     const popup = () => {
         setIsOpen((prev) => !prev);
     };
+    const [isLoading, setIsLoading] = useState(true);
 
     const submitHandler = (e) => {
         e.preventDefault();
@@ -60,6 +62,7 @@ const AdminBookings = () => {
     };
 
     const getAllOrders = async () => {
+        setIsLoading(true);
         try {
             const response = await axios.post(
                 "/admin/all-orders",
@@ -72,6 +75,8 @@ const AdminBookings = () => {
             setFilteredOrders(response.data.data.orders);
         } catch (error) {
             handleError(error);
+        } finally{
+            setIsLoading(false);
         }
     };
 
@@ -93,7 +98,7 @@ const AdminBookings = () => {
     }, []);
 
     return (
-        <div className="mt-10 px-4 sm:px-6 lg:px-8">
+       isLoading ? <Preloader /> :  <div className="mt-10 px-4 sm:px-6 lg:px-8">
             {modal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
                     <div className="bg-white rounded-lg shadow-xl w-full max-w-md mx-4 max-h-[90vh] overflow-y-auto">

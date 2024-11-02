@@ -7,8 +7,10 @@ import PieActiveArc from "./PieActiveArc";
 import axios from "./utils/axios";
 import useHandleErr from "./utils/useHandleErr.js";
 import { Toaster } from "react-hot-toast";
+import Preloader from "./Preloader";
 
 const AdminDashboard = () => {
+    const [isLoading, setIsLoading] = useState(true);
     const [data, setData] = useState([
         {
             title: "Bookings",
@@ -43,6 +45,7 @@ const AdminDashboard = () => {
     const handleError = useHandleErr();
 
     const getAdminDashboardData = async (duration) => {
+        setIsLoading(true);
         try {
             const response = await axios.post(
                 "/admin/admin-dashboard",
@@ -85,6 +88,8 @@ const AdminDashboard = () => {
             );
         } catch (error) {
             handleError(error);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -107,7 +112,7 @@ const AdminDashboard = () => {
     }, []);
 
     return (
-        <>
+       isLoading ? <Preloader /> :  <>
             <div
                 className="mt-14 w-full h-fit px-4 sm:px-6 md:px-8 lg:px-10"
                 style={{

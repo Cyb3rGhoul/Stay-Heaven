@@ -82,9 +82,11 @@ const Navbar = () => {
             );
             dispatch(toggleLogin(false));
             dispatch(setUser({}));
-            navigate("/");
+            
         } catch (error) {
             handleError(error)
+        } finally {
+           window.location.href = "/";
         }
     };
 

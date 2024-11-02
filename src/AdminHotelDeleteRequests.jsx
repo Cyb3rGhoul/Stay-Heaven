@@ -6,13 +6,16 @@ import { Link } from "react-router-dom";
 import socket from "./utils/socket";
 import useHandleErr from "./utils/useHandleErr";
 import toast from "react-hot-toast";
+import Preloader from "./Preloader";
 
 const AdminHotelDeleteRequests = () => {
+    const [isLoading, setIsLoading] = useState(true);
     const [hotels, setHotels] = useState([]);
     const [modal, setModal] = useState(false);
     const [reason, setReason] = useState("");
     const handleError = useHandleErr();
     const getAllPendingHotels = async () => {
+        setIsLoading(true);
         try {
             const response = await axios.post(
                 "/admin/all-hotels",
@@ -26,6 +29,8 @@ const AdminHotelDeleteRequests = () => {
             );
         } catch (error) {
             handleError(error)
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -86,7 +91,7 @@ const AdminHotelDeleteRequests = () => {
         };
     }, []);
     return (
-        <div className="mt-10 px-4 sm:px-6 lg:px-8">
+       isLoading ? <Preloader /> :  <div className="mt-10 px-4 sm:px-6 lg:px-8">
             {modal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
                     <div className="bg-white rounded-lg shadow-xl w-full max-w-md mx-4 h-fit max-h-[90vh] overflow-y-auto">

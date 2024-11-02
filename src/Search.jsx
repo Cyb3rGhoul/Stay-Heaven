@@ -15,19 +15,22 @@ import { CgGym } from "react-icons/cg";
 import axios from "./utils/axios";
 import { useSelector } from "react-redux";
 import useHandleErr from "./utils/useHandleErr";
+import Preloader from "./Preloader";
 
 const Search = () => {
     const navigate = useNavigate();
     const [filterOpen, setFilterOpen] = useState(false);
     const [priceRange, setPriceRange] = useState([0, 50000]);
     const [sortOption, setSortOption] = useState(null);
-    const [search, setSearch] = useState(useSelector(state => state.user.searchTerm));
+    const [search, setSearch] = useState(
+        useSelector((state) => state.user.searchTerm)
+    );
     const [hotels, setHotels] = useState([]);
-    const handleError = useHandleErr()
+    const handleError = useHandleErr();
     const toggleFilter = () => {
         setFilterOpen(!filterOpen);
     };
-
+    const [loading, setLoading] = useState(true);
     const [features, setFeatures] = useState({
         wifi: false,
         ac: false,
@@ -41,17 +44,14 @@ const Search = () => {
         setFeatures({ ...features, [e.target.name]: e.target.checked });
     };
 
-
-
     const filterHandler = async () => {
-
+        setLoading(true);
         const queryParams = Object.keys(features)
             .filter((key) => features[key])
             .map((key) => `${encodeURIComponent(key)}=true`)
             .join("&");
 
-
-        let searchParam = `&searchterm=${encodeURIComponent(search)}`
+        let searchParam = `&searchterm=${encodeURIComponent(search)}`;
 
         if (sortOption !== null) {
             const sort = sortOption[0] === "p" ? "sort=price" : "sort=rating";
@@ -60,14 +60,15 @@ const Search = () => {
         }
         searchParam += `&min_price=${priceRange[0]}&max_price=${priceRange[1]}`;
 
-
         try {
             const response = await axios.post(
                 `/hotel/search?${queryParams}${searchParam}`
             );
             setHotels(response.data.data.hotels);
         } catch (error) {
-            handleError(error)
+            handleError(error);
+        }finally{
+            setLoading(false)
         }
     };
     const ResetHandler = () => {
@@ -86,12 +87,14 @@ const Search = () => {
     useEffect(() => {
         filterHandler();
     }, []);
-    return (
+    return loading ? (
+        <Preloader />
+    ) : (
         <div className="">
             <Wrapper>
                 <Content>
                     <SearchResults>
-                        <SearchBar style={{marginTop:"5rem"}}>
+                        <SearchBar style={{ marginTop: "5rem" }}>
                             <input
                                 type="text"
                                 placeholder="Search Destination/Hotel"
@@ -105,7 +108,12 @@ const Search = () => {
                         </SearchBar>
                         <ResultsGrid>
                             {hotels.map((hotel) => (
-                                <ResultCard key={hotel._id} className="animate-fadeIn"> {/* Add the animation class here */}
+                                <ResultCard
+                                    key={hotel._id}
+                                    className="animate-fadeIn"
+                                >
+                                    {" "}
+                                    {/* Add the animation class here */}
                                     <img
                                         src={hotel.images[0]}
                                         alt={hotel.title}
@@ -113,10 +121,19 @@ const Search = () => {
                                     />
                                     <div className="result-card-content">
                                         <h3>{hotel.title}</h3>
-                                        <p>₹ {typeof hotel.price === 'number' ? hotel.price.toLocaleString('en-IN') : "N/A"}</p>
+                                        <p>
+                                            ₹{" "}
+                                            {typeof hotel.price === "number"
+                                                ? hotel.price.toLocaleString(
+                                                      "en-IN"
+                                                  )
+                                                : "N/A"}
+                                        </p>
                                         <button
                                             className="result-card-button"
-                                            onClick={() => navigate(`/hotel/${hotel._id}`)}
+                                            onClick={() =>
+                                                navigate(`/hotel/${hotel._id}`)
+                                            }
                                         >
                                             View Details
                                         </button>
@@ -124,7 +141,6 @@ const Search = () => {
                                 </ResultCard>
                             ))}
                         </ResultsGrid>
-
                     </SearchResults>
                 </Content>
                 {filterOpen && (
@@ -224,7 +240,9 @@ const Search = () => {
                                     },
                                 }}
                             >
-                                <option disabled value="">Select</option>
+                                <option disabled value="">
+                                    Select
+                                </option>
                                 <option value="p:LowToHigh">
                                     Price: Low to High
                                 </option>
@@ -337,14 +355,14 @@ const SearchBar = styled.div`
 
 const FilterButton = styled.button`
     padding: 12px 24px;
-    background: linear-gradient(135deg, #8B4513, #CD853F) !important;
+    background: linear-gradient(135deg, #8b4513, #cd853f) !important;
     border: none;
     border-radius: 8px;
     color: #fff;
     cursor: pointer;
     font-weight: 500;
     transition: all 0.3s ease;
-    
+
     &:hover {
         transform: translateY(-1px);
         box-shadow: 0 4px 12px rgba(205, 133, 63, 0.2);
@@ -355,15 +373,15 @@ const ResultsGrid = styled.div`
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 24px;
-    
+
     @media (max-width: 1200px) {
         grid-template-columns: repeat(3, 1fr);
     }
-    
+
     @media (max-width: 900px) {
         grid-template-columns: repeat(2, 1fr);
     }
-    
+
     @media (max-width: 600px) {
         grid-template-columns: 1fr;
     }
@@ -445,7 +463,7 @@ const MapContainer = styled.div`
     position: relative;
     height: 100%;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
-    
+
     @media (min-width: 768px) {
         height: 90vh;
     }
@@ -466,13 +484,10 @@ const FilterBox = styled.div`
         }
         return `${Math.min(65, viewportHeight * 0.65)}%`;
     }};
-    right: ${props => window.innerWidth <= 768 ? 'auto' : '0'};
-    left: ${props => window.innerWidth <= 768 ? '6%' : 'auto'};
-    transform: ${props => 
-        window.innerWidth <= 768 
-            ? 'translateY(-50%)' 
-            : 'translate(-5%, -65%)'
-    };
+    right: ${(props) => (window.innerWidth <= 768 ? "auto" : "0")};
+    left: ${(props) => (window.innerWidth <= 768 ? "6%" : "auto")};
+    transform: ${(props) =>
+        window.innerWidth <= 768 ? "translateY(-50%)" : "translate(-5%, -65%)"};
     background-color: #fff;
     padding: 32px;
     border-radius: 16px;
@@ -491,7 +506,7 @@ const CloseButton = styled.button`
     color: #059669;
     cursor: pointer;
     transition: transform 0.3s ease;
-    
+
     &:hover {
         transform: rotate(90deg);
     }
@@ -529,7 +544,7 @@ const CheckboxLabel = styled.label`
             : "0 2px 8px rgba(0, 0, 0, 0.05)"};
 
     &:hover {
-        border-color: #10B981;
+        border-color: #10b981;
         transform: translateY(-2px);
         box-shadow: 0 6px 16px rgba(5, 150, 105, 0.1);
     }
@@ -544,7 +559,7 @@ const PriceRange = styled.div`
     justify-content: space-between;
     align-items: center;
     margin-top: 8px;
-    
+
     span {
         font-size: 0.95rem;
         color: #2d3436;

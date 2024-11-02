@@ -1,4 +1,4 @@
-import React, {  useState } from "react";
+import React, {  useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser as setUserRedux } from "./app/reducers/userSlice";
 import tick from "./assets/tick.png";
@@ -7,6 +7,8 @@ import { Link } from "react-router-dom";
 import axios from "./utils/axios";
 import useHandleErr from "./utils/useHandleErr";
 import toast from "react-hot-toast";
+import socket from "./utils/socket"
+
 
 const SellerRequests = () => {
     const [user, setUser] = useState(
@@ -56,6 +58,22 @@ const SellerRequests = () => {
             handleError(error);
         }
     };
+
+    useEffect(() => {
+      socket.on("order_is_created", (data) => {
+        setOrders((prev) => [...prev, data.order])
+    })
+
+    socket.on("order_is_accepted_or_rejected", (data) => {
+        setOrders((prev) => prev.filter((order) => order.id !== data._id))
+    })
+
+    return () => {
+        socket.off("order_is_created")
+        socket.off("order_is_accepted_or_rejected")
+    }
+    }, [])
+    
 
     return (
         <div className="mt-10 px-4 sm:px-6 lg:px-8">

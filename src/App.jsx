@@ -10,24 +10,24 @@ import axios from "./utils/axios.jsx";
 import { setUser, toggleLogin } from "./app/reducers/userSlice.jsx";
 
 const App = () => {
-    const [loading, setLoading] = useState(true);
+    // const [loading, setLoading] = useState(true);
     const location = useLocation();
-    const navigationType = useNavigationType();
+    // const navigationType = useNavigationType();
     const isadminpath = location.pathname.split("/")[1] === "admin";
     const issellerpath = location.pathname.split("/")[1] === "seller";
     const dispatch = useDispatch();
-    useEffect(() => {
-        const timer = setTimeout(() => setLoading(false), 700);
-        return () => clearTimeout(timer);
-    }, []);
+    // useEffect(() => {
+    //     const timer = setTimeout(() => setLoading(false), 700);
+    //     return () => clearTimeout(timer);
+    // }, []);
 
-    useEffect(() => {
-        if (navigationType !== "POP") {
-            setLoading(true);
-            const timer = setTimeout(() => setLoading(false), 700);
-            return () => clearTimeout(timer);
-        }
-    }, [location, navigationType]);
+    // useEffect(() => {
+    //     if (navigationType !== "POP") {
+    //         setLoading(true);
+    //         const timer = setTimeout(() => setLoading(false), 700);
+    //         return () => clearTimeout(timer);
+    //     }
+    // }, [location, navigationType]);
     const getUser = async () => {
         try {
             const user = await axios.get("/user/current-user", {
@@ -52,8 +52,8 @@ const App = () => {
     return (
         <div className="h-screen scrollbar scrollbar-thumb-rounded relative">
             <GlobalStyles />
-            {loading && <Preloader />}
-            {!loading && (
+            {/* {loading && <Preloader />} */}
+            {/* {!loading && ( */}
                 <>
                     {!isadminpath && !issellerpath && <Navbar />}
                     <main
@@ -68,7 +68,7 @@ const App = () => {
                     </main>
                     {!isadminpath && !issellerpath && <Footer />}
                 </>
-            )}
+            {/* )} */}
         </div>
     );
 };
