@@ -4,6 +4,7 @@ import GoogleMap from "./GoogleMap";
 import { useNavigate } from "react-router-dom";
 import ReactSlider from "react-slider";
 import "react-datepicker/dist/react-datepicker.css";
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import {
     FaWifi,
     FaSnowflake,
@@ -39,6 +40,21 @@ const Search = () => {
         kitchen: false,
         gym: false,
     });
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 16;
+
+    const indexOfLastHotel = currentPage * itemsPerPage;
+    const indexOfFirstHotel = indexOfLastHotel - itemsPerPage;
+    const currentHotels = hotels.slice(indexOfFirstHotel, indexOfLastHotel);
+    const totalPages = Math.ceil(hotels.length / itemsPerPage);
+
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+        document.querySelector('.results-grid')?.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+    };
 
     const handleFeatureChange = (e) => {
         setFeatures({ ...features, [e.target.name]: e.target.checked });
@@ -67,7 +83,7 @@ const Search = () => {
             setHotels(response.data.data.hotels);
         } catch (error) {
             handleError(error);
-        }finally{
+        } finally {
             setLoading(false)
         }
     };
@@ -106,14 +122,12 @@ const Search = () => {
                                 Filter
                             </FilterButton>
                         </SearchBar>
-                        <ResultsGrid>
-                            {hotels.map((hotel) => (
+                        <ResultsGrid className="results-grid">
+                            {currentHotels.map((hotel) => (
                                 <ResultCard
                                     key={hotel._id}
                                     className="animate-fadeIn"
                                 >
-                                    {" "}
-                                    {/* Add the animation class here */}
                                     <img
                                         src={hotel.images[0]}
                                         alt={hotel.title}
@@ -124,16 +138,12 @@ const Search = () => {
                                         <p>
                                             ₹{" "}
                                             {typeof hotel.price === "number"
-                                                ? hotel.price.toLocaleString(
-                                                      "en-IN"
-                                                  )
+                                                ? hotel.price.toLocaleString("en-IN")
                                                 : "N/A"}
                                         </p>
                                         <button
                                             className="result-card-button"
-                                            onClick={() =>
-                                                navigate(`/hotel/${hotel._id}`)
-                                            }
+                                            onClick={() => navigate(`/hotel/${hotel._id}`)}
                                         >
                                             View Details
                                         </button>
@@ -141,6 +151,37 @@ const Search = () => {
                                 </ResultCard>
                             ))}
                         </ResultsGrid>
+
+                        {/* Pagination Controls */}
+                        {totalPages > 1 && (
+                            <PaginationContainer>
+                                <NavigationButton
+                                    onClick={() => handlePageChange(currentPage - 1)}
+                                    disabled={currentPage === 1}
+                                >
+                                    <ChevronLeft size={20} />
+                                </NavigationButton>
+
+                                <PaginationNumbers>
+                                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
+                                        <PageButton
+                                            key={pageNum}
+                                            onClick={() => handlePageChange(pageNum)}
+                                            active={pageNum === currentPage}
+                                        >
+                                            {pageNum}
+                                        </PageButton>
+                                    ))}
+                                </PaginationNumbers>
+
+                                <NavigationButton
+                                    onClick={() => handlePageChange(currentPage + 1)}
+                                    disabled={currentPage === totalPages}
+                                >
+                                    <ChevronRight size={20} />
+                                </NavigationButton>
+                            </PaginationContainer>
+                        )}
                     </SearchResults>
                 </Content>
                 {filterOpen && (
@@ -600,6 +641,54 @@ const sliderStyles = `
     background: linear-gradient(to right, #10B981, #059669);
   }
 `;
+
+const PaginationContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 40px 0;
+    gap: 20px;
+`;
+
+const PaginationNumbers = styled.div`
+    display: flex;
+    gap: 10px;
+`;
+
+const PageButton = styled.button`
+    width: 40px;
+    height: 40px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background-color: white;
+    transition: all 0.3s ease;
+    
+    &:hover:not(:disabled) {
+        background-color: #f7fafc;
+    }
+    
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+    
+    ${props => props.active && `
+        background-color: #4caf50;
+        color: white;
+        border-color: #4caf50;
+    `}
+`;
+
+const NavigationButton = styled(PageButton)`
+    &:hover:not(:disabled) {
+        background-color: #f7fafc;
+    }
+`;
+
 
 const styleTag = document.createElement("style");
 styleTag.innerHTML = sliderStyles;

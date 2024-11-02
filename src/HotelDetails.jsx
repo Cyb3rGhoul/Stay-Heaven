@@ -837,40 +837,6 @@ const ShareButton = styled.button`
     }
 `;
 
-const GalleryContainer = styled.div`
-    animation: ${fadeIn} 2.5s ease forwards;
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 10px;
-    border: 2px solid #ddd;
-    border-radius: 10px;
-    padding: 10px;
-    margin-bottom: 20px;
-`;
-
-const MainImage = styled.div`
-    img {
-        width: 100%;
-        height: 500px;
-        object-fit: cover;
-        border-radius: 10px;
-    }
-`;
-
-const SmallImages = styled.div`
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    gap: 10px;
-
-    img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border-radius: 10px;
-    }
-`;
-
 const Details = styled.div`
     display: flex;
     flex-direction: column;
