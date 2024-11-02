@@ -397,7 +397,7 @@
   }
   
   .landing__pagination-button:hover:not(:disabled) {
-      background-color: #f7fafc;
+      background-color: #4caf50;
   }
   
   .landing__pagination-button:disabled {

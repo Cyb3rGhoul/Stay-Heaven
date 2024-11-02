@@ -668,7 +668,7 @@ const PageButton = styled.button`
     transition: all 0.3s ease;
     
     &:hover:not(:disabled) {
-        background-color: #f7fafc;
+        background-color: #4caf50;
     }
     
     &:disabled {
