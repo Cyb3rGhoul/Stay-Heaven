@@ -15,7 +15,7 @@ const Landing = () => {
     const [showAllCities, setShowAllCities] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 6;
+    const itemsPerPage = 12;
     const dispatch = useDispatch();
     const handleError = useHandleErr()
     const toggleShowAllCities = () => {

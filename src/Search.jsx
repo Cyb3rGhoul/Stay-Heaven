@@ -41,9 +41,8 @@ const Search = () => {
         gym: false,
     });
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 12;
+    const itemsPerPage = 16;
 
-    // Calculate pagination values
     const indexOfLastHotel = currentPage * itemsPerPage;
     const indexOfFirstHotel = indexOfLastHotel - itemsPerPage;
     const currentHotels = hotels.slice(indexOfFirstHotel, indexOfLastHotel);
@@ -51,7 +50,6 @@ const Search = () => {
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
-        // Smooth scroll to top of results
         document.querySelector('.results-grid')?.scrollIntoView({
             behavior: 'smooth',
             block: 'start'
