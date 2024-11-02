@@ -4,6 +4,7 @@ import randomImage from "./assets/random.jpg";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Rating from "@mui/material/Rating";
+import { X } from 'lucide-react';
 
 const PreviousBookings = () => {
     const [selectedBooking, setSelectedBooking] = useState(null);
@@ -66,36 +67,71 @@ const PreviousBookings = () => {
                 ))}
             </ScrollableContainer>
             {selectedBooking && (
-                <PopupOverlay>
-                    <Popup>
-                        <CloseButton onClick={handleClosePopup}>✖</CloseButton>
-                        <PopupImage
-                            src={selectedBooking.hotel.images[0]}
-                            alt="Booking"
-                            onClick={handleImageClick}
-                        />
-                        <PopupDescription>
-                            <h2>{selectedBooking.hotel.description}</h2>
-                            <p>
-                                Guests:{" "}
-                                {selectedBooking.guests
-                                    .map((guest) => guest.firstName + " " + guest.lastName)     
-                                    .join(", ")}
-                            </p>
-                            <p>
-                                {" "}
-                                Date: {getDate(selectedBooking.checkin)} to{" "}
-                                {getDate(selectedBooking.checkout)}{" "}
-                            </p>
-                            <p>Total: ₹{selectedBooking.amount}</p>
-                            <Link to={`/hotel/${selectedBooking.hotel._id}`}>
-                                <button className="bg-green-500 text-white p-2 rounded-md">
-                                    More Details
-                                </button>
-                            </Link>
-                        </PopupDescription>
-                    </Popup>
-                </PopupOverlay>
+                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+                <div className="mt-12  bg-white rounded-xl w-full max-w-2xl max-h-[90vh] overflow-hidden shadow-2xl relative animate-fade-in">
+                  {/* Close Button */}
+                  <button 
+                    onClick={handleClosePopup}
+                    className="absolute right-4 top-4 z-10 p-1 rounded-full bg-white/80 hover:bg-white transition-colors duration-200"
+                  >
+                    <X className="h-5 w-5 text-gray-600" />
+                  </button>
+          
+                  {/* Image Section */}
+                  <div className="relative w-full h-[300px] sm:h-[400px]">
+                    <img
+                      src={selectedBooking.hotel.images[0]}
+                      alt="Hotel"
+                      onClick={handleImageClick}
+                      className="w-full h-full object-cover cursor-pointer hover:opacity-95 transition-opacity duration-200"
+                    />
+                  </div>
+          
+                  {/* Content Section */}
+                  <div className="p-6 space-y-4">
+                    {/* Description */}
+                    <h2 className="text-xl font-semibold text-gray-800 leading-tight">
+                      {selectedBooking.hotel.description}
+                    </h2>
+          
+                    {/* Guest Information */}
+                    <div className="space-y-3 text-gray-600">
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                        <span className="font-medium">Guests:</span>
+                        <span>{selectedBooking.guests
+                          .map((guest) => guest.firstName + " " + guest.lastName)
+                          .join(", ")}
+                        </span>
+                      </div>
+          
+                      {/* Date Information */}
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                        <span className="font-medium">Date:</span>
+                        <span>
+                          {getDate(selectedBooking.checkin)} to {getDate(selectedBooking.checkout)}
+                        </span>
+                      </div>
+          
+                      {/* Price Information */}
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                        <span className="font-medium">Total:</span>
+                        <span className="text-green-600 font-semibold">
+                          ₹{selectedBooking.amount.toLocaleString()}
+                        </span>
+                      </div>
+                    </div>
+          
+                    {/* Action Button */}
+                    <div className="pt-4">
+                      <Link to={`/hotel/${selectedBooking.hotel._id}`}>
+                        <button className="w-full sm:w-auto px-6 py-2.5 bg-green-500 hover:bg-green-600 text-white font-medium rounded-lg transition-colors duration-200 focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+                          View Details
+                        </button>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
             )}
         </Container>
     );
@@ -165,66 +201,4 @@ const Description = styled.div`
     gap: 10px;
     font-size: 14px;
     color: #333;
-`;
-
-const Star = styled.span`
-    font-size: 20px;
-    cursor: pointer;
-    color: ${({ isFilled }) => (isFilled ? "#ffd700" : "#ccc")};
-    &:hover {
-        color: #ffd700;
-    }
-`;
-
-const PopupOverlay = styled.div`
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-`;
-
-const Popup = styled.div`
-    display: flex;
-    flex-direction: column;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    height: 90%;
-    width: 90%;
-    max-width: 600px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    position: relative;
-`;
-
-const CloseButton = styled.button`
-    position: absolute;
-    top: 0px;
-    right: 10px;
-    background: none;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-`;
-
-const PopupImage = styled.img`
-    width: 100%;
-    height: 60%;
-    border-radius: 8px;
-    cursor: pointer;
-    margin: 0 auto;
-`;
-
-const PopupDescription = styled.div`
-    margin-top: 20px;
-    font-size: 16px;
-    color: #333;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
 `;
