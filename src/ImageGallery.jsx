@@ -46,7 +46,7 @@ const ImageModal = ({ isOpen, onClose, images, initialIndex = 0 }) => {
             <img
               src={images[currentIndex]}
               alt={`Full size ${currentIndex + 1}`}
-              className="max-h-[85vh] w-auto max-w-[95vw] object-contain"
+              className="max-h-[50vh] w-auto max-w-[95vw] object-contain"
             />
           </div>
           
@@ -213,28 +213,28 @@ const ImageGallery = ({ images = [] }) => {
     switch (safeImages.length) {
       case 0:
         return (
-          <div className="w-full aspect-video max-h-[500px] bg-gray-100 rounded-lg flex items-center justify-center">
+          <div className="w-full aspect-video max-h-[550px] bg-gray-100 rounded-lg flex items-center justify-center">
             <p className="text-gray-500">No images available</p>
           </div>
         );
       
       case 1:
         return (
-          <div className="w-full aspect-video max-h-[500px] overflow-hidden">
+          <div className="w-full aspect-video max-h-[550px] overflow-hidden">
             {renderImage(safeImages[0], 0, 'w-full h-full')}
           </div>
         );
       
       case 2:
         return (
-          <div className="w-full grid grid-cols-2 gap-4 aspect-video max-h-[500px]">
+          <div className="w-full grid grid-cols-2 gap-4 aspect-video max-h-[550px]">
             {safeImages.map((img, index) => renderImage(img, index))}
           </div>
         );
       
       case 3:
         return (
-          <div className="w-full grid grid-cols-2 gap-4 aspect-video max-h-[500px]">
+          <div className="w-full grid grid-cols-2 gap-4 aspect-video max-h-[550px]">
             {renderImage(safeImages[0], 0)}
             <div className="grid grid-rows-2 gap-4">
               {safeImages.slice(1).map((img, index) => renderImage(img, index + 1))}
@@ -244,7 +244,7 @@ const ImageGallery = ({ images = [] }) => {
       
       case 4:
         return (
-          <div className="w-full grid grid-cols-3 gap-4 aspect-video max-h-[500px]">
+          <div className="w-full grid grid-cols-3 gap-4 aspect-video max-h-[550px]">
             {renderImage(safeImages[0], 0, 'col-span-2 h-full')}
             <div className="grid grid-rows-3 gap-4">
               {safeImages.slice(1).map((img, index) => renderImage(img, index + 1))}
@@ -254,7 +254,7 @@ const ImageGallery = ({ images = [] }) => {
       
       default: // 5 or more images
         return (
-          <div className="w-full grid grid-cols-3 gap-4 aspect-video max-h-[500px]">
+          <div className="w-full grid grid-cols-3 gap-4 aspect-video max-h-[550px]">
             {renderImage(safeImages[0], 0, 'col-span-2 h-full')}
             <div className="grid grid-rows-2 gap-4">
               <div className="grid grid-cols-2 gap-4">
