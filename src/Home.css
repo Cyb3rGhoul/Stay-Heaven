@@ -374,7 +374,8 @@
   }
   
   .landing__pagination-number:hover {
-      background-color: #f7fafc;
+      background-color: #1c8e20;
+      color: white;
   }
   
   .landing__pagination-number--active {
@@ -397,7 +398,8 @@
   }
   
   .landing__pagination-button:hover:not(:disabled) {
-      background-color: #4caf50;
+      background-color: #fff;
+      color: #000000;
   }
   
   .landing__pagination-button:disabled {
