@@ -1,5 +1,5 @@
 // src/pages/SinglePage.js (entire file)
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import {
     FaShareAlt,
@@ -26,8 +26,6 @@ import Preloader from "./Preloader";
 const HotelDetails = () => {
     const { id } = useParams();
     const hotelId = id;
-    console.log("This is hotel id:",hotelId);
-    console.log("This is id: ", id);
     const [user, setUser] = useState(
         useSelector((state) => state.user.userData)
     );
@@ -288,10 +286,6 @@ const HotelDetails = () => {
             currency: "INR",
         });
     };
-
-    useEffect(() => {
-        window.scrollTo(0, 0);
-      }, []);
     return (
        isLoading ? <Preloader /> :  <>
             <div className="hotelPage" id="hotelPage">

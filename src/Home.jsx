@@ -204,7 +204,7 @@ const Landing = () => {
                                 <div
                                     key={hotel._id}
                                     className="landing__grid-item animate-fadeIn"
-                                    onClick={() => navigate(`/hotel/${hotel._id}`)}
+                                    onClick={() => window.location.href = `/hotel/${hotel._id}`}
                                 >
                                     <img
                                         src={hotel.images[0]}
