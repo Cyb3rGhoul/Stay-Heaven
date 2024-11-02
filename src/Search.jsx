@@ -322,7 +322,7 @@ const Search = () => {
 export default Search;
 
 const Wrapper = styled.div`
-    background: linear-gradient(to bottom, #f0fff4, #fff);
+    background: linear-gradient(to bottom, #f3e5d0, #e6ccb2);
     color: #2d3436;
     min-height: 100vh;
     padding: 20px;
