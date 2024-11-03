@@ -212,6 +212,7 @@ const SellerHotels = () => {
     }, []);
     return (
         isLoading ? <Preloader /> :  <div className="mt-10 ml-2">
+            <h1 className="text-3xl font-bold mb-6 text-emerald-900 px-4 max-md:text-2xl max-sm:text-xl max-md:text-center">Hotels List</h1>
             {isEditOpen && (
                 <Edit selectedHotel={selectedHotel} EditPopup={EditPopup} />
             )}
@@ -243,6 +244,7 @@ const SellerHotels = () => {
                     </svg>
                 </label>
             </div>
+            
             {isOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 transition-opacity duration-300 ease-in-out">
                     <div className="bg-white rounded-lg shadow-xl p-6 m-4 max-w-xl w-full max-h-[90vh] overflow-y-auto">
@@ -389,7 +391,7 @@ const SellerHotels = () => {
                     </div>
                 </div>
             )}
-
+            
             {isOpen2 && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 transition-opacity duration-300 ease-in-out">
                     <div className="bg-white rounded-lg shadow-xl p-6 m-4 max-w-xl w-full max-h-[90vh] overflow-y-auto">

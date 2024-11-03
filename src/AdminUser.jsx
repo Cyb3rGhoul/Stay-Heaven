@@ -267,6 +267,7 @@ const AdminUser = () => {
         <Preloader />
     ) : (
         <div className="mt-10">
+            <h1 className="text-3xl font-bold mb-6 text-emerald-900 px-4 max-md:text-2xl max-sm:text-xl max-md:text-center">Users</h1>
             {(order || createdhotel || pastbookings) && (
                 <div className="w-screen h-full bg-black/60 fixed top-0 left-0 z-10 flex items-center justify-center">
                     {order && (

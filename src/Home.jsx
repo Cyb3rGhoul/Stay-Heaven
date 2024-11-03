@@ -145,60 +145,60 @@ const Landing = () => {
     const allCities = [...cities, ...internationalCities];
 
     return (
-        isLoading ? <Preloader /> :(
+        isLoading ? <Preloader /> : (
             <>
-            <div className="landing">
-                <div className="landing__search-container" style={{
-                    marginTop: "5rem",
-                }}>
-                    <input
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        type="text"
-                        className="landing__search-input"
-                        placeholder="Search Destination/Hotel"
-                    />
-                    <Link to={`/search`}>
-                        <button
-                            className="landing__search-button"
-                            onClick={() => {
-                                dispatch(setSearch(searchTerm));
-                            }}
-                            style={{
-                                padding: window.innerWidth < 768 ? "0.45rem 0.75rem" : "",
-                            }}
-                        >
-                            Search
-                        </button>
-                    </Link>
-                </div>
-                <div className="landing__hero">
-                    <div className="landing__city-container">
-                        <div className="landing__city-grid">
-                            {cities.map((city, index) => (
-                                <div key={index} className="landing__city-item" onClick={() => {
-                                    dispatch(setSearch(city.name));
-                                    navigate("/search");
-                                }}>
-                                    <img
-                                        src={city.image}
-                                        alt={city.name}
-                                        className="landing__city-image m-auto"
-                                    />
-                                    <p className="landing__city-name">
-                                        {city.name}
-                                    </p>
-                                </div>
-                            ))}
-                        </div>
-                        <button
-                            className="landing__view-all-cities"
-                            onClick={toggleShowAllCities}
-                        >
-                            View All Cities
-                        </button>
+                <div className="landing">
+                    <div className="landing__search-container" style={{
+                        marginTop: "5rem",
+                    }}>
+                        <input
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            type="text"
+                            className="landing__search-input"
+                            placeholder="Search Destination/Hotel"
+                        />
+                        <Link to={`/search`}>
+                            <button
+                                className="landing__search-button"
+                                onClick={() => {
+                                    dispatch(setSearch(searchTerm));
+                                }}
+                                style={{
+                                    padding: window.innerWidth < 768 ? "0.45rem 0.75rem" : "",
+                                }}
+                            >
+                                Search
+                            </button>
+                        </Link>
                     </div>
-                </div>
-                <div className="landing__grid-container">
+                    <div className="landing__hero">
+                        <div className="landing__city-container">
+                            <div className="landing__city-grid">
+                                {cities.map((city, index) => (
+                                    <div key={index} className="landing__city-item" onClick={() => {
+                                        dispatch(setSearch(city.name));
+                                        navigate("/search");
+                                    }}>
+                                        <img
+                                            src={city.image}
+                                            alt={city.name}
+                                            className="landing__city-image m-auto"
+                                        />
+                                        <p className="landing__city-name">
+                                            {city.name}
+                                        </p>
+                                    </div>
+                                ))}
+                            </div>
+                            <button
+                                className="landing__view-all-cities"
+                                onClick={toggleShowAllCities}
+                            >
+                                View All Cities
+                            </button>
+                        </div>
+                    </div>
+                    <div className="landing__grid-container">
                         <div className="landing__grid">
                             {currentHotels.map((hotel) => (
                                 <div
@@ -211,48 +211,54 @@ const Landing = () => {
                                         alt={hotel.title}
                                         className="landing__grid-item-image"
                                     />
-                                    <div className="landing__grid-item-content flex flex-col gap-1">
-                                        <div className="flex justify-between items-center">
-                                            <div className="text-base font-bold max-md:text-sm">{hotel.title}</div>
+                                    <div className="landing__grid-item-content">
+                                        <div className="flex justify-between items-start">
+                                            <h3 className="landing__grid-item-title">{hotel.title}</h3>
                                             <StarRating value={hotel.rating} />
                                         </div>
-                                        <div className="text-left">
+                                        <div className="landing__grid-item-price">
                                             ₹ {typeof hotel.price === 'number' ? hotel.price.toLocaleString('en-IN') : "N/A"}
                                         </div>
+                                        <button
+                                            onClick={() => navigate(`/hotel/${hotel._id}`)}
+                                            className="hotel-view-button"
+                                        >
+                                            View Details
+                                        </button>
                                     </div>
                                 </div>
                             ))}
                         </div>
 
-                        {/* Pagination Controls */}
                         {totalPages > 1 && (
                             <div className="landing__pagination">
-                                <button 
+                                <button
                                     onClick={() => handlePageChange(currentPage - 1)}
                                     disabled={currentPage === 1}
                                     className="landing__pagination-button"
+                                    aria-label="Previous page"
                                 >
                                     <ChevronLeft className="w-5 h-5" />
                                 </button>
-                                
+
                                 <div className="landing__pagination-numbers">
                                     {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
                                         <button
                                             key={pageNum}
                                             onClick={() => handlePageChange(pageNum)}
-                                            className={`landing__pagination-number ${
-                                                pageNum === currentPage ? 'landing__pagination-number--active' : ''
-                                            }`}
+                                            className={`landing__pagination-number ${pageNum === currentPage ? 'landing__pagination-number--active' : ''
+                                                }`}
                                         >
                                             {pageNum}
                                         </button>
                                     ))}
                                 </div>
 
-                                <button 
+                                <button
                                     onClick={() => handlePageChange(currentPage + 1)}
                                     disabled={currentPage === totalPages}
                                     className="landing__pagination-button"
+                                    aria-label="Next page"
                                 >
                                     <ChevronRight className="w-5 h-5" />
                                 </button>
@@ -260,32 +266,32 @@ const Landing = () => {
                         )}
                     </div>
                 </div>
-            {showAllCities && (
-                <div className="landing__modal">
-                    <div className="landing__modal-content">
-                        <span
-                            className="landing__modal-close"
-                            onClick={toggleShowAllCities}
-                        >
-                            &times;
-                        </span>
-                        <div className="landing__modal-grid">
-                            {allCities.map((city, index) => (
-                                <div key={index} className="landing__city-item" onClick={() => {
-                                    dispatch(setSearch(city.name));
-                                    navigate("/search");
-                                }}>
-                                    <p className="landing__city-name">
-                                        {city.name}
-                                    </p>
-                                </div>
-                            ))}
+                {showAllCities && (
+                    <div className="landing__modal">
+                        <div className="landing__modal-content">
+                            <span
+                                className="landing__modal-close"
+                                onClick={toggleShowAllCities}
+                            >
+                                &times;
+                            </span>
+                            <div className="landing__modal-grid">
+                                {allCities.map((city, index) => (
+                                    <div key={index} className="landing__city-item" onClick={() => {
+                                        dispatch(setSearch(city.name));
+                                        navigate("/search");
+                                    }}>
+                                        <p className="landing__city-name">
+                                            {city.name}
+                                        </p>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
-                </div>
-            )}
-        </>
-           )
+                )}
+            </>
+        )
     );
 };
 

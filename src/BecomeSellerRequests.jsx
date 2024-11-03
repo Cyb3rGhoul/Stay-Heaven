@@ -90,6 +90,7 @@ const BecomeSellerRequests = () => {
     }, []);
     return (
         isLoading ? <Preloader /> : <div className="mt-10 px-4 sm:px-6 lg:px-8">
+            <h1 className="text-3xl font-bold mb-6 text-emerald-900 max-md:text-2xl max-sm:text-xl max-md:text-center">Seller Requests</h1>
             <div className="overflow-x-auto  max-md:ml-[-.6rem]">
                 <div className="inline-block min-w-full py-2 align-middle">
                     <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg max-md:rounded-lg">

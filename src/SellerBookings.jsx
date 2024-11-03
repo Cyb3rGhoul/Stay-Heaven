@@ -158,7 +158,7 @@ const SellerBookings = () => {
                     </div>
                 </div>
             )}
-
+            <h1 className="text-3xl font-bold mb-6 text-emerald-900 max-md:text-2xl max-sm:text-xl max-md:text-center">Bookings</h1>
             <div className="ml-4 mb-6 overflow-hidden flex max-md:flex-col-reverse max-md:items-center sm:justify-between max-md:ml-[-.5rem]">
                 <button
                     onClick={popup}

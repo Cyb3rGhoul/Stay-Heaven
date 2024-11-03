@@ -496,57 +496,46 @@ const ResultCard = styled.div`
     }
 `;
 
-const MapContainer = styled.div`
-    flex: 3;
-    background-color: #fff;
-    border-radius: 16px;
-    overflow: hidden;
-    position: relative;
-    height: 100%;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
-
-    @media (min-width: 768px) {
-        height: 90vh;
-    }
-
-    iframe {
-        width: 100%;
-        height: 100vh;
-        border: 0;
-    }
-`;
-
 const FilterBox = styled.div`
     position: fixed;
     top: ${() => {
         const viewportHeight = window.innerHeight;
         if (window.innerWidth <= 768) {
-            return `${Math.min(55, viewportHeight * 0.55)}%`;
+            return `${Math.min(50, viewportHeight * 0.50)}%`;
         }
         return `${Math.min(65, viewportHeight * 0.65)}%`;
     }};
-    right: ${(props) => (window.innerWidth <= 768 ? "auto" : "0")};
-    left: ${(props) => (window.innerWidth <= 768 ? "6%" : "auto")};
+    right: ${(props) => (window.innerWidth <= 768 ? "0" : "0")};
+    left: ${(props) => (window.innerWidth <= 768 ? "0" : "auto")};
     transform: ${(props) =>
         window.innerWidth <= 768 ? "translateY(-50%)" : "translate(-5%, -65%)"};
     background-color: #fff;
-    padding: 32px;
+    padding: ${props => window.innerWidth <= 768 ? "24px 16px" : "32px"};
     border-radius: 16px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    width: 350px;
+    width: ${props => window.innerWidth <= 768 ? "90%" : "350px"};
+    margin: ${props => window.innerWidth <= 768 ? "0 auto" : "0"};
     border: 1px solid rgba(5, 150, 105, 0.1);
+    max-height: ${props => window.innerWidth <= 768 ? "85vh" : "none"};
+    overflow-y: auto;
+
+    @media (max-width: 480px) {
+        width: 95%;
+        padding: 20px 12px;
+    }
 `;
 
 const CloseButton = styled.button`
     position: absolute;
-    top: 16px;
-    right: 16px;
+    top: ${props => window.innerWidth <= 768 ? "12px" : "16px"};
+    right: ${props => window.innerWidth <= 768 ? "12px" : "16px"};
     background: none;
     border: none;
-    font-size: 24px;
+    font-size: ${props => window.innerWidth <= 768 ? "20px" : "24px"};
     color: #059669;
     cursor: pointer;
     transition: transform 0.3s ease;
+    z-index: 1;
 
     &:hover {
         transform: rotate(90deg);
@@ -554,29 +543,33 @@ const CloseButton = styled.button`
 `;
 
 const FilterSection = styled.div`
-    margin-bottom: 24px;
+    margin-bottom: ${props => window.innerWidth <= 768 ? "20px" : "24px"};
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: ${props => window.innerWidth <= 768 ? "8px" : "12px"};
 `;
 
 const CheckboxContainer = styled.div`
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: ${props => window.innerWidth <= 768 ? "8px" : "12px"};
     justify-content: center;
+    
+    @media (max-width: 480px) {
+        gap: 6px;
+    }
 `;
 
 const CheckboxLabel = styled.label`
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 8px;
+    padding: ${props => window.innerWidth <= 768 ? "6px" : "8px"};
     border: 2px solid ${({ checked }) => (checked ? "#059669" : "#eee")};
     border-radius: 12px;
     cursor: pointer;
     transition: all 0.3s ease;
-    width: 90px;
+    width: ${props => window.innerWidth <= 768 ? "80px" : "90px"};
     text-align: center;
     background-color: ${({ checked }) => (checked ? "#ECFDF5" : "#fff")};
     box-shadow: ${({ checked }) =>
@@ -589,6 +582,12 @@ const CheckboxLabel = styled.label`
         transform: translateY(-2px);
         box-shadow: 0 6px 16px rgba(5, 150, 105, 0.1);
     }
+
+    @media (max-width: 480px) {
+        width: 70px;
+        font-size: 0.9rem;
+        padding: 4px;
+    }
 `;
 
 const HiddenCheckbox = styled.input.attrs({ type: "checkbox" })`
@@ -599,12 +598,18 @@ const PriceRange = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 8px;
+    margin-top: ${props => window.innerWidth <= 768 ? "6px" : "8px"};
 
     span {
-        font-size: 0.95rem;
+        font-size: ${props => window.innerWidth <= 768 ? "0.9rem" : "0.95rem"};
         color: #2d3436;
         font-weight: 500;
+    }
+
+    @media (max-width: 480px) {
+        span {
+            font-size: 0.85rem;
+        }
     }
 `;
 
@@ -612,13 +617,13 @@ const sliderStyles = `
   .horizontal-slider {
     width: 100%;
     height: 8px;
-    margin: 16px 0;
+    margin: ${window.innerWidth <= 768 ? "12px 0" : "16px 0"};
   }
   
   .example-thumb {
     margin-top: -6px;
-    height: 20px;
-    width: 20px;
+    height: ${window.innerWidth <= 768 ? "18px" : "20px"};
+    width: ${window.innerWidth <= 768 ? "18px" : "20px"};
     background: linear-gradient(135deg, #10B981, #059669);
     border-radius: 50%;
     cursor: grab;
@@ -633,12 +638,22 @@ const sliderStyles = `
   
   .example-track {
     background: #eee;
-    height: 8px;
+    height: ${window.innerWidth <= 768 ? "6px" : "8px"};
     border-radius: 4px;
   }
   
   .example-track.example-track-1 {
     background: linear-gradient(to right, #10B981, #059669);
+  }
+
+  @media (max-width: 480px) {
+    .example-thumb {
+      height: 16px;
+      width: 16px;
+    }
+    .example-track {
+      height: 4px;
+    }
   }
 `;
 
