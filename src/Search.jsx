@@ -4,7 +4,7 @@ import GoogleMap from "./GoogleMap";
 import { useNavigate } from "react-router-dom";
 import ReactSlider from "react-slider";
 import "react-datepicker/dist/react-datepicker.css";
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import {
     FaWifi,
     FaSnowflake,
@@ -50,9 +50,9 @@ const Search = () => {
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
-        document.querySelector('.results-grid')?.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
+        document.querySelector(".results-grid")?.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
         });
     };
 
@@ -61,6 +61,7 @@ const Search = () => {
     };
 
     const filterHandler = async () => {
+        setFilterOpen(false);
         setLoading(true);
         const queryParams = Object.keys(features)
             ?.filter((key) => features[key])
@@ -84,7 +85,7 @@ const Search = () => {
         } catch (error) {
             handleError(error);
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
     };
     const ResetHandler = () => {
@@ -110,17 +111,177 @@ const Search = () => {
             <Wrapper>
                 <Content>
                     <SearchResults>
-                        <SearchBar style={{ marginTop: "5rem" }}>
+                        <SearchBar style={{ marginTop: "9vh", position: "relative" }}>
                             <input
                                 type="text"
                                 placeholder="Search Destination/Hotel"
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
                             />
-                            <button onClick={filterHandler}>Search</button>
+                            <button className="search" onClick={filterHandler}>Search</button>
                             <FilterButton onClick={toggleFilter}>
                                 Filter
                             </FilterButton>
+                            {filterOpen && (
+                                <FilterBox>
+                                    <CloseButton onClick={toggleFilter}>
+                                        ×
+                                    </CloseButton>
+                                    <h3>Filter Options</h3>
+                                    <FilterSection>
+                                        <label>Price Range:</label>
+                                        <ReactSlider
+                                            className="horizontal-slider"
+                                            thumbClassName="example-thumb"
+                                            trackClassName="example-track"
+                                            value={priceRange}
+                                            min={0}
+                                            max={50000}
+                                            step={1000}
+                                            onChange={(value) =>
+                                                setPriceRange(value)
+                                            }
+                                        />
+                                        <PriceRange>
+                                            <span>₹{priceRange[0]}</span>
+                                            <span>₹{priceRange[1]}</span>
+                                        </PriceRange>
+                                    </FilterSection>
+                                    <FilterSection>
+                                        <CheckboxContainer>
+                                            <CheckboxLabel
+                                                checked={features.wifi}
+                                            >
+                                                <HiddenCheckbox
+                                                    name="wifi"
+                                                    checked={features.wifi}
+                                                    onChange={
+                                                        handleFeatureChange
+                                                    }
+                                                />
+                                                <FaWifi size={24} />
+                                                WiFi
+                                            </CheckboxLabel>
+                                            <CheckboxLabel
+                                                checked={features.ac}
+                                            >
+                                                <HiddenCheckbox
+                                                    name="ac"
+                                                    checked={features.ac}
+                                                    onChange={
+                                                        handleFeatureChange
+                                                    }
+                                                />
+                                                <FaSnowflake size={24} />
+                                                AC
+                                            </CheckboxLabel>
+                                            <CheckboxLabel
+                                                checked={features.breakfast}
+                                            >
+                                                <HiddenCheckbox
+                                                    name="breakfast"
+                                                    checked={features.breakfast}
+                                                    onChange={
+                                                        handleFeatureChange
+                                                    }
+                                                />
+                                                <FaCoffee size={24} />
+                                                Breakfast
+                                            </CheckboxLabel>
+                                            <CheckboxLabel
+                                                checked={features.parking}
+                                            >
+                                                <HiddenCheckbox
+                                                    name="parking"
+                                                    checked={features.parking}
+                                                    onChange={
+                                                        handleFeatureChange
+                                                    }
+                                                />
+                                                <FaParking size={24} />
+                                                Parking
+                                            </CheckboxLabel>
+                                            <CheckboxLabel
+                                                checked={features.kitchen}
+                                            >
+                                                <HiddenCheckbox
+                                                    name="kitchen"
+                                                    checked={features.kitchen}
+                                                    onChange={
+                                                        handleFeatureChange
+                                                    }
+                                                />
+                                                <FaUtensils size={24} />
+                                                Kitchen
+                                            </CheckboxLabel>
+                                            <CheckboxLabel
+                                                checked={features.gym}
+                                            >
+                                                <HiddenCheckbox
+                                                    name="gym"
+                                                    checked={features.laundry}
+                                                    onChange={
+                                                        handleFeatureChange
+                                                    }
+                                                />
+                                                <CgGym size={32} />
+                                                Gym
+                                            </CheckboxLabel>
+                                        </CheckboxContainer>
+                                    </FilterSection>
+                                    <FilterSection>
+                                        <label>Sort By:</label>
+                                        <select
+                                            onChange={(e) =>
+                                                setSortOption(e.target.value)
+                                            }
+                                            value={sortOption || ""}
+                                            style={{
+                                                padding: "10px",
+                                                fontSize: "16px",
+                                                borderRadius: "5px",
+                                                border: "1px solid #ccc",
+                                                width: "100%",
+                                                boxSizing: "border-box",
+                                                "@media (max-width: 768px)": {
+                                                    fontSize: "14px",
+                                                    padding: "8px",
+                                                },
+                                            }}
+                                        >
+                                            <option disabled value="">
+                                                Select
+                                            </option>
+                                            <option value="p:LowToHigh">
+                                                Price: Low to High
+                                            </option>
+                                            <option value="p:HighToLow">
+                                                Price: High to Low
+                                            </option>
+                                            <option value="r:HighToLow">
+                                                Rating: High to Low
+                                            </option>
+                                            <option value="r:LowToHigh">
+                                                Rating: Low to High
+                                            </option>
+                                        </select>
+                                        <div className="flex gap-5 mt-4">
+                                            <button
+                                                onClick={filterHandler}
+                                                className="bg-green-500 text-white p-2 rounded-md mt-2 mx-auto"
+                                            >
+                                                Apply Filter
+                                            </button>
+                                            <button
+                                                onClick={ResetHandler}
+                                                className="bg-white text-green-500 border-green-500 border-2 p-2 rounded-md mt-2 mx-auto"
+                                            >
+                                                Reset Filter
+                                            </button>
+                                        </div>
+                                    </FilterSection>
+                                </FilterBox>
+                            )}
                         </SearchBar>
                         <ResultsGrid className="results-grid">
                             {currentHotels?.map((hotel) => (
@@ -138,12 +299,16 @@ const Search = () => {
                                         <p>
                                             ₹{" "}
                                             {typeof hotel.price === "number"
-                                                ? hotel.price.toLocaleString("en-IN")
+                                                ? hotel.price.toLocaleString(
+                                                      "en-IN"
+                                                  )
                                                 : "N/A"}
                                         </p>
                                         <button
                                             className="result-card-button"
-                                            onClick={() => navigate(`/hotel/${hotel._id}`)}
+                                            onClick={() =>
+                                                navigate(`/hotel/${hotel._id}`)
+                                            }
                                         >
                                             View Details
                                         </button>
@@ -156,17 +321,24 @@ const Search = () => {
                         {totalPages > 1 && (
                             <PaginationContainer>
                                 <NavigationButton
-                                    onClick={() => handlePageChange(currentPage - 1)}
+                                    onClick={() =>
+                                        handlePageChange(currentPage - 1)
+                                    }
                                     disabled={currentPage === 1}
                                 >
                                     <ChevronLeft size={20} />
                                 </NavigationButton>
 
                                 <PaginationNumbers>
-                                    {Array.from({ length: totalPages }, (_, i) => i + 1)?.map((pageNum) => (
+                                    {Array.from(
+                                        { length: totalPages },
+                                        (_, i) => i + 1
+                                    )?.map((pageNum) => (
                                         <PageButton
                                             key={pageNum}
-                                            onClick={() => handlePageChange(pageNum)}
+                                            onClick={() =>
+                                                handlePageChange(pageNum)
+                                            }
                                             active={pageNum === currentPage}
                                         >
                                             {pageNum}
@@ -175,7 +347,9 @@ const Search = () => {
                                 </PaginationNumbers>
 
                                 <NavigationButton
-                                    onClick={() => handlePageChange(currentPage + 1)}
+                                    onClick={() =>
+                                        handlePageChange(currentPage + 1)
+                                    }
                                     disabled={currentPage === totalPages}
                                 >
                                     <ChevronRight size={20} />
@@ -184,136 +358,6 @@ const Search = () => {
                         )}
                     </SearchResults>
                 </Content>
-                {filterOpen && (
-                    <FilterBox>
-                        <CloseButton onClick={toggleFilter}>×</CloseButton>
-                        <h3>Filter Options</h3>
-                        <FilterSection>
-                            <label>Price Range:</label>
-                            <ReactSlider
-                                className="horizontal-slider"
-                                thumbClassName="example-thumb"
-                                trackClassName="example-track"
-                                value={priceRange}
-                                min={0}
-                                max={50000}
-                                step={1000}
-                                onChange={(value) => setPriceRange(value)}
-                            />
-                            <PriceRange>
-                                <span>₹{priceRange[0]}</span>
-                                <span>₹{priceRange[1]}</span>
-                            </PriceRange>
-                        </FilterSection>
-                        <FilterSection>
-                            <CheckboxContainer>
-                                <CheckboxLabel checked={features.wifi}>
-                                    <HiddenCheckbox
-                                        name="wifi"
-                                        checked={features.wifi}
-                                        onChange={handleFeatureChange}
-                                    />
-                                    <FaWifi size={24} />
-                                    WiFi
-                                </CheckboxLabel>
-                                <CheckboxLabel checked={features.ac}>
-                                    <HiddenCheckbox
-                                        name="ac"
-                                        checked={features.ac}
-                                        onChange={handleFeatureChange}
-                                    />
-                                    <FaSnowflake size={24} />
-                                    AC
-                                </CheckboxLabel>
-                                <CheckboxLabel checked={features.breakfast}>
-                                    <HiddenCheckbox
-                                        name="breakfast"
-                                        checked={features.breakfast}
-                                        onChange={handleFeatureChange}
-                                    />
-                                    <FaCoffee size={24} />
-                                    Breakfast
-                                </CheckboxLabel>
-                                <CheckboxLabel checked={features.parking}>
-                                    <HiddenCheckbox
-                                        name="parking"
-                                        checked={features.parking}
-                                        onChange={handleFeatureChange}
-                                    />
-                                    <FaParking size={24} />
-                                    Parking
-                                </CheckboxLabel>
-                                <CheckboxLabel checked={features.kitchen}>
-                                    <HiddenCheckbox
-                                        name="kitchen"
-                                        checked={features.kitchen}
-                                        onChange={handleFeatureChange}
-                                    />
-                                    <FaUtensils size={24} />
-                                    Kitchen
-                                </CheckboxLabel>
-                                <CheckboxLabel checked={features.gym}>
-                                    <HiddenCheckbox
-                                        name="gym"
-                                        checked={features.laundry}
-                                        onChange={handleFeatureChange}
-                                    />
-                                    <CgGym size={32} />
-                                    Gym
-                                </CheckboxLabel>
-                            </CheckboxContainer>
-                        </FilterSection>
-                        <FilterSection>
-                            <label>Sort By:</label>
-                            <select
-                                onChange={(e) => setSortOption(e.target.value)}
-                                value={sortOption || ""}
-                                style={{
-                                    padding: "10px",
-                                    fontSize: "16px",
-                                    borderRadius: "5px",
-                                    border: "1px solid #ccc",
-                                    width: "100%",
-                                    boxSizing: "border-box",
-                                    "@media (max-width: 768px)": {
-                                        fontSize: "14px",
-                                        padding: "8px",
-                                    },
-                                }}
-                            >
-                                <option disabled value="">
-                                    Select
-                                </option>
-                                <option value="p:LowToHigh">
-                                    Price: Low to High
-                                </option>
-                                <option value="p:HighToLow">
-                                    Price: High to Low
-                                </option>
-                                <option value="r:HighToLow">
-                                    Rating: High to Low
-                                </option>
-                                <option value="r:LowToHigh">
-                                    Rating: Low to High
-                                </option>
-                            </select>
-                            <div className="flex gap-5 mt-4">
-                                <button
-                                    onClick={filterHandler}
-                                    className="bg-green-500 text-white p-2 rounded-md mt-2 mx-auto"
-                                >
-                                    Apply Filter
-                                </button>
-                                <button
-                                    onClick={ResetHandler}
-                                    className="bg-white text-green-500 border-green-500 border-2 p-2 rounded-md mt-2 mx-auto"
-                                >
-                                    Reset Filter
-                                </button>
-                            </div>
-                        </FilterSection>
-                    </FilterBox>
-                )}
             </Wrapper>
         </div>
     );
@@ -377,7 +421,7 @@ const SearchBar = styled.div`
         }
     }
 
-    button {
+    .search {
         padding: 12px 24px;
         border: none;
         border-radius: 8px;
@@ -481,7 +525,7 @@ const ResultCard = styled.div`
     .result-card-button {
         padding: 10px 20px;
         background: #f3e5d0;
-        color: #6E260E;
+        color: #6e260e;
         border: none;
         border-radius: 8px;
         cursor: pointer;
@@ -497,27 +541,21 @@ const ResultCard = styled.div`
 `;
 
 const FilterBox = styled.div`
-    position: fixed;
-    top: ${() => {
-        const viewportHeight = window.innerHeight;
-        if (window.innerWidth <= 768) {
-            return `${Math.min(50, viewportHeight * 0.50)}%`;
-        }
-        return `${Math.min(65, viewportHeight * 0.65)}%`;
-    }};
-    right: ${(props) => (window.innerWidth <= 768 ? "0" : "0")};
-    left: ${(props) => (window.innerWidth <= 768 ? "0" : "auto")};
+    position: absolute;
+    z-index: 10;
+    top:  ${(props) => (window.innerWidth <= 768 ? window.innerWidth <= 500 ? "420px": "320px" : "530px")};
+    right: 0;
     transform: ${(props) =>
         window.innerWidth <= 768 ? "translateY(-50%)" : "translate(-5%, -65%)"};
     background-color: #fff;
-    padding: ${props => window.innerWidth <= 768 ? "24px 16px" : "32px"};
+    padding: ${(props) => (window.innerWidth <= 768 ? "24px 16px" : "32px")};
     border-radius: 16px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    width: ${props => window.innerWidth <= 768 ? "90%" : "350px"};
-    margin: ${props => window.innerWidth <= 768 ? "0 auto" : "0"};
+    width: ${(props) => (window.innerWidth <= 768 ? "90%" : "350px")};
+    margin: ${(props) => (window.innerWidth <= 768 ? "0 auto" : "0")};
     border: 1px solid rgba(5, 150, 105, 0.1);
-    max-height: ${props => window.innerWidth <= 768 ? "85vh" : "none"};
     overflow-y: auto;
+
 
     @media (max-width: 480px) {
         width: 95%;
@@ -527,11 +565,11 @@ const FilterBox = styled.div`
 
 const CloseButton = styled.button`
     position: absolute;
-    top: ${props => window.innerWidth <= 768 ? "12px" : "16px"};
-    right: ${props => window.innerWidth <= 768 ? "12px" : "16px"};
+    top: ${(props) => (window.innerWidth <= 768 ? "12px" : "16px")};
+    right: ${(props) => (window.innerWidth <= 768 ? "12px" : "16px")};
     background: none;
     border: none;
-    font-size: ${props => window.innerWidth <= 768 ? "20px" : "24px"};
+    font-size: ${(props) => (window.innerWidth <= 768 ? "20px" : "24px")};
     color: #059669;
     cursor: pointer;
     transition: transform 0.3s ease;
@@ -543,18 +581,18 @@ const CloseButton = styled.button`
 `;
 
 const FilterSection = styled.div`
-    margin-bottom: ${props => window.innerWidth <= 768 ? "20px" : "24px"};
+    margin-bottom: ${(props) => (window.innerWidth <= 768 ? "20px" : "24px")};
     display: flex;
     flex-direction: column;
-    gap: ${props => window.innerWidth <= 768 ? "8px" : "12px"};
+    gap: ${(props) => (window.innerWidth <= 768 ? "8px" : "12px")};
 `;
 
 const CheckboxContainer = styled.div`
     display: flex;
     flex-wrap: wrap;
-    gap: ${props => window.innerWidth <= 768 ? "8px" : "12px"};
+    gap: ${(props) => (window.innerWidth <= 768 ? "8px" : "12px")};
     justify-content: center;
-    
+
     @media (max-width: 480px) {
         gap: 6px;
     }
@@ -564,12 +602,12 @@ const CheckboxLabel = styled.label`
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: ${props => window.innerWidth <= 768 ? "6px" : "8px"};
+    padding: ${(props) => (window.innerWidth <= 768 ? "6px" : "8px")};
     border: 2px solid ${({ checked }) => (checked ? "#059669" : "#eee")};
     border-radius: 12px;
     cursor: pointer;
     transition: all 0.3s ease;
-    width: ${props => window.innerWidth <= 768 ? "80px" : "90px"};
+    width: ${(props) => (window.innerWidth <= 768 ? "80px" : "90px")};
     text-align: center;
     background-color: ${({ checked }) => (checked ? "#ECFDF5" : "#fff")};
     box-shadow: ${({ checked }) =>
@@ -598,10 +636,11 @@ const PriceRange = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: ${props => window.innerWidth <= 768 ? "6px" : "8px"};
+    margin-top: ${(props) => (window.innerWidth <= 768 ? "6px" : "8px")};
 
     span {
-        font-size: ${props => window.innerWidth <= 768 ? "0.9rem" : "0.95rem"};
+        font-size: ${(props) =>
+            window.innerWidth <= 768 ? "0.9rem" : "0.95rem"};
         color: #2d3436;
         font-weight: 500;
     }
@@ -681,18 +720,20 @@ const PageButton = styled.button`
     cursor: pointer;
     background-color: white;
     transition: all 0.3s ease;
-    
+
     &:hover:not(:disabled) {
         background-color: #1c8e20;
         color: white;
     }
-    
+
     &:disabled {
         opacity: 0.5;
         cursor: not-allowed;
     }
-    
-    ${props => props.active && `
+
+    ${(props) =>
+        props.active &&
+        `
         background-color: #4caf50;
         color: white;
         border-color: #4caf50;
@@ -704,7 +745,6 @@ const NavigationButton = styled(PageButton)`
         background-color: #1c8e20;
     }
 `;
-
 
 const styleTag = document.createElement("style");
 styleTag.innerHTML = sliderStyles;
