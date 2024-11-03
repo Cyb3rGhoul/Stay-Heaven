@@ -147,12 +147,12 @@ const SellerHotels = () => {
 
         socket.on("hotel_is_approved", (data) => {
             setHotels((prev) =>
-                prev.map((hotel) =>
+                prev?.map((hotel) =>
                     hotel._id === data.hotel._id ? data.hotel : hotel
                 )
             );
             setFilteredHotels((prev) =>
-                prev.map((hotel) =>
+                prev?.map((hotel) =>
                     hotel._id === data.hotel._id ? data.hotel : hotel
                 )
             );
@@ -160,12 +160,12 @@ const SellerHotels = () => {
 
         socket.on("hotel_delete_req_sent", (data) => {
             setHotels((prev) => {
-                return prev.map((hotel) =>
+                return prev?.map((hotel) =>
                     hotel._id === data.hotel._id ? data.hotel : hotel
                 );
             });
             setFilteredHotels((prev) => {
-                return prev.map((hotel) =>
+                return prev?.map((hotel) =>
                     hotel._id === data.hotel._id ? data.hotel : hotel
                 );
             });
@@ -173,12 +173,12 @@ const SellerHotels = () => {
 
         socket.on("delete_request_undone", (data) => {
             setHotels((prev) => {
-                return prev.map((hotel) =>
+                return prev?.map((hotel) =>
                     hotel._id === data.hotel._id ? data.hotel : hotel
                 );
             });
             setFilteredHotels((prev) => {
-                return prev.map((hotel) =>
+                return prev?.map((hotel) =>
                     hotel._id === data.hotel._id ? data.hotel : hotel
                 );
             });
@@ -186,19 +186,19 @@ const SellerHotels = () => {
 
         socket.on("hotel_deleted", (id) => {
             setHotels((prev) => {
-                return prev.filter((hotel) => hotel._id !== id);
+                return prev?.filter((hotel) => hotel._id !== id);
             });
             setFilteredHotels((prev) => {
-                return prev.filter((hotel) => hotel._id !== id);
+                return prev?.filter((hotel) => hotel._id !== id);
             });
         });
 
         socket.on("hotel_is_edited", (data) => {
             setHotels((prev) =>
-                prev.map((hotel) => (hotel._id === data._id ? data : hotel))
+                prev?.map((hotel) => (hotel._id === data._id ? data : hotel))
             );
             setFilteredHotels((prev) =>
-                prev.map((hotel) => (hotel._id === data._id ? data : hotel))
+                prev?.map((hotel) => (hotel._id === data._id ? data : hotel))
             );
         });
 
@@ -476,7 +476,7 @@ const SellerHotels = () => {
                     </thead>
                     <tbody className="divide-y divide-emerald-200 bg-emerald-50">
                         {filteredHotels
-                            .filter((item) => {
+                            ?.filter((item) => {
                                 return searchTerm.toLowerCase() === ""
                                     ? item
                                     : item.title
@@ -493,7 +493,7 @@ const SellerHotels = () => {
                                                   searchTerm.toLowerCase()
                                               );
                             })
-                            .map((hotel, index) => (
+                            ?.map((hotel, index) => (
                                 <tr
                                     key={hotel._id}
                                     className="hover:bg-emerald-200 transition duration-300 ease-in-out"

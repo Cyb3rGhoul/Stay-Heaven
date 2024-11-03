@@ -200,7 +200,7 @@ const Landing = () => {
                     </div>
                     <div className="landing__grid-container">
                         <div className="landing__grid">
-                            {currentHotels.map((hotel) => (
+                            {currentHotels?.map((hotel) => (
                                 <div
                                     key={hotel._id}
                                     className="landing__grid-item animate-fadeIn"
@@ -242,7 +242,7 @@ const Landing = () => {
                                 </button>
 
                                 <div className="landing__pagination-numbers">
-                                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
+                                    {Array.from({ length: totalPages }, (_, i) => i + 1)?.map((pageNum) => (
                                         <button
                                             key={pageNum}
                                             onClick={() => handlePageChange(pageNum)}
@@ -276,7 +276,7 @@ const Landing = () => {
                                 &times;
                             </span>
                             <div className="landing__modal-grid">
-                                {allCities.map((city, index) => (
+                                {allCities?.map((city, index) => (
                                     <div key={index} className="landing__city-item" onClick={() => {
                                         dispatch(setSearch(city.name));
                                         navigate("/search");

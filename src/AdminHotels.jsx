@@ -314,7 +314,7 @@ const AdminHotels = () => {
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
                         {filteredHotels
-                            .filter((item) => {
+                            ?.filter((item) => {
                                 return searchTerm.toLowerCase() === ""
                                     ? item
                                     : item.title
@@ -336,7 +336,7 @@ const AdminHotels = () => {
                                                       searchTerm.toLowerCase()
                                                   );
                             })
-                            .map((hotel, index) => (
+                            ?.map((hotel, index) => (
                                 <tr
                                     key={hotel._id}
                                     className="hover:bg-emerald-50 transition-colors duration-300"
@@ -393,7 +393,7 @@ const AdminHotels = () => {
                                                 );
                                                 hotel.approvalStatus = e.target.value;
                                                 setHotels((prev) =>
-                                                    prev.map((h) =>
+                                                    prev?.map((h) =>
                                                         h._id === hotel._id
                                                             ? {
                                                                   ...h,

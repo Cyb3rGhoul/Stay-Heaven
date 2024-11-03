@@ -123,7 +123,7 @@ const SellerDashboard = () => {
                 className={`flex flex-col md:flex-row gap-5 ${isMobile ? "items-center" : ""
                     }`}
             >
-                {data.map((item, index) => (
+                {data?.map((item, index) => (
                     <motion.div
                         key={item.title}
                         initial={{ opacity: 0, y: 20 }}

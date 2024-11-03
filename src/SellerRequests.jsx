@@ -43,7 +43,7 @@ const SellerRequests = () => {
             setUser((prev) => {
                 const updatedUser = {
                     ...prev,
-                    receivedOrders: prev.receivedOrders.map((order) =>
+                    receivedOrders: prev.receivedOrders?.map((order) =>
                         order._id === id
                             ? { ...order, approvalStatus: approvalStatus }
                             : order
@@ -105,7 +105,7 @@ const SellerRequests = () => {
                                 </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-emerald-100">
-                                {orders.map((order, index) => (
+                                {orders?.map((order, index) => (
                                     <tr
                                         key={order._id}
                                         className="hover:bg-emerald-50 transition-colors duration-300"

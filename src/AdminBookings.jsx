@@ -142,7 +142,7 @@ const AdminBookings = () => {
                                 Guests:{" "}
                                 <span className="font-semibold">
                                     {order.guests
-                                        .map(
+                                        ?.map(
                                             (guest) =>
                                                 `${guest.firstName} ${guest.lastName}`
                                         )
@@ -368,14 +368,14 @@ const AdminBookings = () => {
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
                         {filteredOrders
-                            .filter((item) => {
+                            ?.filter((item) => {
                                 return searchTerm.toLowerCase() === ""
                                     ? item
                                     : item.hotel.title
                                           .toLowerCase()
                                           .includes(searchTerm.toLowerCase());
                             })
-                            .map((order, index) => (
+                            ?.map((order, index) => (
                                 <tr
                                     key={order._id}
                                     className="hover:bg-gray-50"

@@ -85,12 +85,12 @@ const AdminUser = () => {
                 }
             );
             setUsers((prevUsers) =>
-                prevUsers.map((user) =>
+                prevUsers?.map((user) =>
                     user._id === id ? { ...user, isAdmin: true } : user
                 )
             );
             setFilteredUsers((prevUsers) =>
-                prevUsers.map((user) =>
+                prevUsers?.map((user) =>
                     user._id === id ? { ...user, isAdmin: true } : user
                 )
             );
@@ -110,12 +110,12 @@ const AdminUser = () => {
                 }
             );
             setUsers((prevUsers) =>
-                prevUsers.map((user) =>
+                prevUsers?.map((user) =>
                     user._id === id ? { ...user, isAdmin: false } : user
                 )
             );
             setFilteredUsers((prevUsers) =>
-                prevUsers.map((user) =>
+                prevUsers?.map((user) =>
                     user._id === id ? { ...user, isAdmin: false } : user
                 )
             );
@@ -135,12 +135,12 @@ const AdminUser = () => {
                 }
             );
             setUsers((prevUsers) =>
-                prevUsers.map((user) =>
+                prevUsers?.map((user) =>
                     user._id === id ? { ...user, isCreator: true } : user
                 )
             );
             setFilteredUsers((prevUsers) =>
-                prevUsers.map((user) =>
+                prevUsers?.map((user) =>
                     user._id === id ? { ...user, isCreator: true } : user
                 )
             );
@@ -160,12 +160,12 @@ const AdminUser = () => {
                 }
             );
             setUsers((prevUsers) =>
-                prevUsers.map((user) =>
+                prevUsers?.map((user) =>
                     user._id === id ? { ...user, isCreator: false } : user
                 )
             );
             setFilteredUsers((prevUsers) =>
-                prevUsers.map((user) =>
+                prevUsers?.map((user) =>
                     user._id === id ? { ...user, isCreator: false } : user
                 )
             );
@@ -185,7 +185,7 @@ const AdminUser = () => {
                 }
             );
             setUsers((prevUsers) =>
-                prevUsers.map((user) =>
+                prevUsers?.map((user) =>
                     user._id === id ? { ...user, isban: true } : user
                 )
             );
@@ -205,7 +205,7 @@ const AdminUser = () => {
                 }
             );
             setUsers((prevUsers) =>
-                prevUsers.map((user) =>
+                prevUsers?.map((user) =>
                     user._id === id ? { ...user, isban: false } : user
                 )
             );
@@ -295,7 +295,7 @@ const AdminUser = () => {
                             <p className="text-black font-semibold">
                                 Guests:{" "}
                                 {order.guests
-                                    .map(
+                                    ?.map(
                                         (guest) =>
                                             guest.firstName +
                                             " " +
@@ -550,7 +550,7 @@ const AdminUser = () => {
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-emerald-500">
                         <tr>
-                            {headers.map((header) => (
+                            {headers?.map((header) => (
                                 <th
                                     key={header}
                                     scope="col"
@@ -563,7 +563,7 @@ const AdminUser = () => {
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
                         {filteredUsers
-                            .filter((item) => {
+                            ?.filter((item) => {
                                 return searchTerm.toLowerCase() === ""
                                     ? item
                                     : item.username
@@ -580,7 +580,7 @@ const AdminUser = () => {
                                                   searchTerm.toLowerCase()
                                               );
                             })
-                            .map((user, index) => (
+                            ?.map((user, index) => (
                                 <tr key={index} className="hover:bg-gray-50">
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                         {index + 1}
@@ -633,7 +633,7 @@ const AdminUser = () => {
                                             <option value="" disabled>
                                                 Order ID
                                             </option>
-                                            {user.previousBookings.map(
+                                            {user.previousBookings?.map(
                                                 (order) => (
                                                     <option
                                                         key={order._id}
@@ -703,7 +703,7 @@ const AdminUser = () => {
                                             <option value="" disabled>
                                                 Hotels
                                             </option>
-                                            {user.myCreatedPlaces.map(
+                                            {user.myCreatedPlaces?.map(
                                                 (hotel) => (
                                                     <option key={hotel.title}>
                                                         {hotel.title}
@@ -734,7 +734,7 @@ const AdminUser = () => {
                                             <option value="" disabled>
                                                 Received Order ID
                                             </option>
-                                            {user.receivedOrders.map(
+                                            {user.receivedOrders?.map(
                                                 (order) => (
                                                     <option
                                                         key={order._id}

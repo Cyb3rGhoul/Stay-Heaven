@@ -147,7 +147,7 @@ const AdminDashboard = () => {
 
                 {/* Stats Cards Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 md:gap-6">
-                    {data.map((item, index) => (
+                    {data?.map((item, index) => (
                         <div
                             key={item.title}
                             className="h-[15vh] sm:h-[18vh] md:h-[20vh] relative transition-all duration-500 ease-in-out bg-gradient-to-r from-green-400 to-green-600 cursor-pointer hover:scale-105 hover:from-green-500 hover:to-green-700 rounded-xl p-4 sm:p-5 flex items-center justify-between shadow-xl"

@@ -10,7 +10,7 @@ export default function PieActiveArc({ data }) {
 
         if (width < 500) setBottom(90);
         else if (width < 800) setBottom(60);
-        else setBottom(30);
+        else setBottom(90);
         return () => window.removeEventListener("resize", handleResize);
     }, [width]);
     return (

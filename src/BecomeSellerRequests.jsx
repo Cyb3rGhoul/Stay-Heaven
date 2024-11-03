@@ -127,7 +127,7 @@ const BecomeSellerRequests = () => {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-200 bg-white">
-                                {users.map((user, index) => (
+                                {users?.map((user, index) => (
                                     <tr key={index} className="hover:bg-amber-50 transition-colors duration-200">
                                         <td className="py-4 px-4 text-center text-xs font-medium text-gray-700">
                                             {index + 1}

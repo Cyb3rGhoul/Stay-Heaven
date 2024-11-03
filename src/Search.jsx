@@ -63,9 +63,9 @@ const Search = () => {
     const filterHandler = async () => {
         setLoading(true);
         const queryParams = Object.keys(features)
-            .filter((key) => features[key])
-            .map((key) => `${encodeURIComponent(key)}=true`)
-            .join("&");
+            ?.filter((key) => features[key])
+            ?.map((key) => `${encodeURIComponent(key)}=true`)
+            ?.join("&");
 
         let searchParam = `&searchterm=${encodeURIComponent(search)}`;
 
@@ -123,7 +123,7 @@ const Search = () => {
                             </FilterButton>
                         </SearchBar>
                         <ResultsGrid className="results-grid">
-                            {currentHotels.map((hotel) => (
+                            {currentHotels?.map((hotel) => (
                                 <ResultCard
                                     key={hotel._id}
                                     className="animate-fadeIn"
@@ -163,7 +163,7 @@ const Search = () => {
                                 </NavigationButton>
 
                                 <PaginationNumbers>
-                                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
+                                    {Array.from({ length: totalPages }, (_, i) => i + 1)?.map((pageNum) => (
                                         <PageButton
                                             key={pageNum}
                                             onClick={() => handlePageChange(pageNum)}
