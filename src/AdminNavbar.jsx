@@ -69,7 +69,7 @@ const AdminNavbar = () => {
       <Navbar />
       <div className={`fixed top-[8vh] z-[3] left-0 h-[92vh] bg-white shadow-xl transition-all duration-300 ${isMobile ? 'w-20 pl-3 pr-1' : 'w-1/5'}`}>
         <div className={`flex flex-col justify-evenly h-full p-2 ${isMobile ? 'items-center' : 'p-4 space-y-4'}`}>
-          {navItems.map((item) => (
+          {navItems?.map((item) => (
             <NavLink
               key={item.label}
               to={item.path}

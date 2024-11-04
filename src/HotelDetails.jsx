@@ -486,7 +486,7 @@ const HotelDetails = () => {
                                                     </CloseButton>
                                                 </PopupHeader>
                                                 <Form>
-                                                    {guestNames.map(
+                                                    {guestNames?.map(
                                                         (guest, index) => (
                                                             <GuestDetails
                                                                 key={index}

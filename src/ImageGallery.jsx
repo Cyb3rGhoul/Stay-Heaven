@@ -72,7 +72,7 @@ const ImageModal = ({ isOpen, onClose, images, initialIndex = 0 }) => {
         <div className="w-full p-4 bg-black/50">
           <div className="max-w-screen-xl mx-auto">
             <div className="flex justify-center gap-2 overflow-x-auto pb-2">
-              {images.map((img, index) => (
+              {images?.map((img, index) => (
                 <button
                   key={index}
                   onClick={() => setCurrentIndex(index)}
@@ -170,7 +170,7 @@ const ImageGallery = ({ images = [] }) => {
                 </button>
 
                 <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                  {safeImages.map((_, index) => (
+                  {safeImages?.map((_, index) => (
                     <button
                       key={index}
                       onClick={(e) => { e.stopPropagation(); setCurrentImageIndex(index); }}
@@ -228,7 +228,7 @@ const ImageGallery = ({ images = [] }) => {
       case 2:
         return (
           <div className="w-full grid grid-cols-2 gap-4 aspect-video max-h-[550px]">
-            {safeImages.map((img, index) => renderImage(img, index))}
+            {safeImages?.map((img, index) => renderImage(img, index))}
           </div>
         );
       
@@ -237,7 +237,7 @@ const ImageGallery = ({ images = [] }) => {
           <div className="w-full grid grid-cols-2 gap-4 aspect-video max-h-[550px]">
             {renderImage(safeImages[0], 0)}
             <div className="grid grid-rows-2 gap-4">
-              {safeImages.slice(1).map((img, index) => renderImage(img, index + 1))}
+              {safeImages.slice(1)?.map((img, index) => renderImage(img, index + 1))}
             </div>
           </div>
         );
@@ -247,7 +247,7 @@ const ImageGallery = ({ images = [] }) => {
           <div className="w-full grid grid-cols-3 gap-4 aspect-video max-h-[550px]">
             {renderImage(safeImages[0], 0, 'col-span-2 h-full')}
             <div className="grid grid-rows-3 gap-4">
-              {safeImages.slice(1).map((img, index) => renderImage(img, index + 1))}
+              {safeImages.slice(1)?.map((img, index) => renderImage(img, index + 1))}
             </div>
           </div>
         );
@@ -258,10 +258,10 @@ const ImageGallery = ({ images = [] }) => {
             {renderImage(safeImages[0], 0, 'col-span-2 h-full')}
             <div className="grid grid-rows-2 gap-4">
               <div className="grid grid-cols-2 gap-4">
-                {safeImages.slice(1, 3).map((img, index) => renderImage(img, index + 1))}
+                {safeImages.slice(1, 3)?.map((img, index) => renderImage(img, index + 1))}
               </div>
               <div className="grid grid-cols-2 gap-4">
-                {safeImages.slice(3, 5).map((img, index) => renderImage(img, index + 3))}
+                {safeImages.slice(3, 5)?.map((img, index) => renderImage(img, index + 3))}
               </div>
             </div>
           </div>

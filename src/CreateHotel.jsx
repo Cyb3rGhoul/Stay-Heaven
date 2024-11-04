@@ -100,7 +100,7 @@ const CreateHotel = () => {
         }
         const updatedFiles = [...files, ...selectedFiles];
         setFiles(updatedFiles);
-        const newPreviews = selectedFiles.map((file) =>
+        const newPreviews = selectedFiles?.map((file) =>
             URL.createObjectURL(file)
         );
         setPreviews((prevPreviews) => [...prevPreviews, ...newPreviews]);
@@ -255,7 +255,7 @@ const CreateHotel = () => {
                             />
                             {previews.length > 0 && (
                                 <div className="flex gap-2 ">
-                                    {previews.map((preview, index) => (
+                                    {previews?.map((preview, index) => (
                                         <div key={index} className="relative">
                                             <img
                                                 src={preview}

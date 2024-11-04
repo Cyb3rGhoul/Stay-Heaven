@@ -104,7 +104,7 @@ const AdminRequests = () => {
                                 </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-emerald-100">
-                                {hotels.map((hotel, index) => (
+                                {hotels?.map((hotel, index) => (
                                     <tr
                                         key={hotel._id}
                                         className="hover:bg-emerald-50 transition-colors duration-300"

@@ -60,7 +60,7 @@ const PreviousBookings = () => {
     }; 
     
     const handleRatingClick = (booking, index) => {
-        const updatedBookings = booking.map((b) =>
+        const updatedBookings = booking?.map((b) =>
             b.id === booking.id ? { ...b, rating: index + 1 } : b
         );
         setSelectedBooking({ ...selectedBooking, rating: index + 1 });
@@ -72,7 +72,7 @@ const PreviousBookings = () => {
         })
 
         socket.on("order_is_accepted_or_rejected", (data) => {
-            setpreviousBookings(prev => prev.map((order) => order.id === data._id? data : order))
+            setpreviousBookings(prev => prev?.map((order) => order.id === data._id? data : order))
         })
 
         return () => {
@@ -85,9 +85,9 @@ const PreviousBookings = () => {
             <Title style={{marginTop: "3em"}}>Previous Bookings</Title>
             <ScrollableContainer>
                 {previousBookings
-                .slice()
-                .reverse()
-                .map((booking) => (
+                ?.slice()
+                ?.reverse()
+                ?.map((booking) => (
                     <BookingCard
                         key={booking._id}
                         onClick={() => handleCardClick(booking)}
@@ -140,7 +140,7 @@ const PreviousBookings = () => {
                       <div className="flex flex-col sm:flex-row sm:items-center gap-2">
                         <span className="font-medium">Guests:</span>
                         <span>{selectedBooking.guests
-                          .map((guest) => guest.firstName + " " + guest.lastName)
+                          ?.map((guest) => guest.firstName + " " + guest.lastName)
                           .join(", ")}
                         </span>
                       </div>

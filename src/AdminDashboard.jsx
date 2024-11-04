@@ -132,6 +132,7 @@ const AdminDashboard = () => {
                         className="border-2 w-full sm:w-48 md:w-56 mt-4 sm:mt-0 border-gray-400 rounded-md px-3 py-2 text-gray-600 hover:border-gray-800 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-green-400"
                         name="filter"
                         id="filter"
+                        value={duration}
                         onChange={(e) => {
                             setDuration(e.target.value);
                             getAdminDashboardData(e.target.value);
@@ -146,7 +147,7 @@ const AdminDashboard = () => {
 
                 {/* Stats Cards Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 md:gap-6">
-                    {data.map((item, index) => (
+                    {data?.map((item, index) => (
                         <div
                             key={item.title}
                             className="h-[15vh] sm:h-[18vh] md:h-[20vh] relative transition-all duration-500 ease-in-out bg-gradient-to-r from-green-400 to-green-600 cursor-pointer hover:scale-105 hover:from-green-500 hover:to-green-700 rounded-xl p-4 sm:p-5 flex items-center justify-between shadow-xl"

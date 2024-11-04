@@ -41,7 +41,7 @@ const Footer = () => {
           <div className="space-y-6">
             <h3 className="text-lg font-semibold text-emerald-950">Support</h3>
             <nav className="flex flex-col space-y-4">
-              {supportLinks.map((link) => (
+              {supportLinks?.map((link) => (
                 <a
                   key={link.text}
                   href={link.href}
