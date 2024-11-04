@@ -347,9 +347,12 @@ body.light-theme {
 }
 
 
-@media (max-width: 768px) {
+@media (max-width: 600px) {
   .sigg{  
     margin-top: 8px;
+    display: none !important;
+  }
+  .searchi {
     display: none !important;
   }
   .logg{

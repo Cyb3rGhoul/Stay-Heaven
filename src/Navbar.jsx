@@ -7,6 +7,7 @@ import axios from "./utils/axios";
 import { setUser, toggleLogin } from "./app/reducers/userSlice";
 import socket from "./utils/socket";
 import useHandleErr from "./utils/useHandleErr";
+import { IoMdSearch } from "react-icons/io";
 
 const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -32,7 +33,7 @@ const Navbar = () => {
     const currentPath = location.pathname.split("/")[1];
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const handleError = useHandleErr()
+    const handleError = useHandleErr();
 
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
@@ -54,19 +55,19 @@ const Navbar = () => {
         };
 
         socket.on("seller_made", (data) => {
-            dispatch(setUser(data.seller))
-            setIsSeller(data.seller.isCreator);
-        });
-       
-        socket.on("remove_creator", (data) => {
-            dispatch(setUser(data.seller))
+            dispatch(setUser(data.seller));
             setIsSeller(data.seller.isCreator);
         });
 
-        window.addEventListener('scroll', handleScroll);
+        socket.on("remove_creator", (data) => {
+            dispatch(setUser(data.seller));
+            setIsSeller(data.seller.isCreator);
+        });
+
+        window.addEventListener("scroll", handleScroll);
 
         return () => {
-            window.removeEventListener('scroll', handleScroll);
+            window.removeEventListener("scroll", handleScroll);
             socket.off("seller_made");
             socket.off("remove_creator");
         };
@@ -77,23 +78,23 @@ const Navbar = () => {
                 "/user/logout",
                 {},
                 {
-                    withCredentials: true, 
+                    withCredentials: true,
                 }
             );
             dispatch(toggleLogin(false));
             dispatch(setUser({}));
-            
         } catch (error) {
-            handleError(error)
+            handleError(error);
         } finally {
-           window.location.href = "/";
+            window.location.href = "/";
         }
     };
 
     return (
         <nav
-            className={`navbar ${fixed ? "fixed top-0 left-0 w-full z-10" : ""} ${isSticky ? "" : "sticky"
-                }`}
+            className={`navbar ${
+                fixed ? "fixed top-0 left-0 w-full z-10" : ""
+            } ${isSticky ? "" : "sticky"}`}
         >
             <div className="navbar__logo">
                 <Link to="/">
@@ -106,8 +107,14 @@ const Navbar = () => {
                     marginTop: "0.5rem",
                 }}
             >
+                    <Link to={"/search"} className=" searchi pb-2">
+                        <IoMdSearch className="text-2xl" />
+                    </Link>
                 {isLoggedIn ? (
-                    <li className="navbar__username mr-2 mb-2" onClick={toggleDropdown}>
+                    <li
+                        className="navbar__username mr-2 mb-2"
+                        onClick={toggleDropdown}
+                    >
                         <div className="flex gap-4">
                             <img
                                 src={profileImage}
@@ -117,42 +124,45 @@ const Navbar = () => {
                         </div>
                         {dropdownOpen && (
                             <div className="navbar__dropdown">
-                            <button className="navbar__close" onClick={toggleMenu}>
-                                ✖
-                            </button>
-                            <Link to="/profile">
-                                <div>Profile</div>
-                            </Link>
-                            <Link to="/previousBookings">
-                                <div>Previous Bookings</div>
-                            </Link>
-                            {isAdmin && !isBan && (
-                                <Link to="/admin/dashboard">
-                                    <div>Admin Dashboard</div>
+                                <button
+                                    className="navbar__close"
+                                    onClick={toggleMenu}
+                                >
+                                    ✖
+                                </button>
+                                <Link to="/profile">
+                                    <div>Profile</div>
                                 </Link>
-                            )}
-                            {isSeller && !isBan && (
-                                <Link to={"/seller/dashboard"}>
-                                    <div>Seller Dashboard</div>
+                                <Link to="/previousBookings">
+                                    <div>Previous Bookings</div>
                                 </Link>
-                            )}
-                            {!isSeller && !isBan && (
-                                <Link to="/sellerForm">
-                                    <div>Become a Seller</div>
-                                </Link>
-                            )}
-                            <div
-                                onClick={logouthandler}
-                                style={{
-                                    cursor: "pointer",
-                                    textAlign: "left",
-                                    marginLeft: "12px",
-                                    paddingBottom: "8px",
-                                }}
-                            >
-                                Logout
+                                {isAdmin && !isBan && (
+                                    <Link to="/admin/dashboard">
+                                        <div>Admin Dashboard</div>
+                                    </Link>
+                                )}
+                                {isSeller && !isBan && (
+                                    <Link to={"/seller/dashboard"}>
+                                        <div>Seller Dashboard</div>
+                                    </Link>
+                                )}
+                                {!isSeller && !isBan && (
+                                    <Link to="/sellerForm">
+                                        <div>Become a Seller</div>
+                                    </Link>
+                                )}
+                                <div
+                                    onClick={logouthandler}
+                                    style={{
+                                        cursor: "pointer",
+                                        textAlign: "left",
+                                        marginLeft: "12px",
+                                        paddingBottom: "8px",
+                                    }}
+                                >
+                                    Logout
+                                </div>
                             </div>
-                        </div>                        
                         )}
                     </li>
                 ) : (
