@@ -183,7 +183,6 @@ function Base() {
 
     useEffect(() => {
         getUser();
-        console.log("user updated");
     }, []);
     return isLoading ? <Preloader /> : <RouterProvider router={router} />;
 }
