@@ -7,7 +7,10 @@ export default function useHandleErr() {
 
     const handleError = (error) => {
         const err = error?.response?.data?.message;
-        if (err === "jwt expired") {
+        if(error?.response?.status === 429) {
+            toast.error("Too many requests, please try again after 5 minutes");
+        }
+        else if (err === "jwt expired") {
             navigate("/login");
             toast.error("Session Expired. Please Login Again!");
         } else if(err === "Hotel not found"){
