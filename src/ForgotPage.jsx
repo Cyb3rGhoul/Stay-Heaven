@@ -24,7 +24,7 @@ const ForgotPassword = () => {
         try {
             const response = await axios.post(
                 "/user/forgot-password",
-                { username },
+                { identity: username },
                 { withCredentials: true }
             );
             if (response.data.statusCode === 200) {
@@ -80,7 +80,7 @@ const ForgotPassword = () => {
                         <div>
                             <input
                                 type="text"
-                                placeholder="Enter your username"
+                                placeholder="Enter your username/email"
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
                                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 bg-gray-50"

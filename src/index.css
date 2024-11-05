@@ -26,6 +26,12 @@ img {
   user-select: none;
 }
 
+img {
+  -webkit-user-drag: none; /* For Safari and Chrome */
+  -moz-user-drag: none;    /* For Firefox */
+  -ms-user-drag: none;     /* For IE */
+  user-drag: none;         /* Standard */
+}
 .scrollbar-thumb-rounded::-webkit-scrollbar-thumb {
   border-radius: 12px !important;
 }

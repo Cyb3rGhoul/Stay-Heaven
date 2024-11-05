@@ -26,6 +26,7 @@ const SignUp = () => {
         fullname: "",
         phone: "",
     });
+    const [otpsent, setOtpsent] = useState(false);
     const [avatar, setAvatar] = useState(null);
     const [showAvatar, setShowAvatar] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -79,6 +80,7 @@ const SignUp = () => {
         }
         setOtpVerified(true);
         toast.success("OTP verified successfully");
+        setOtpsent(true);
     };
 
     const validateForm = () => {
@@ -260,6 +262,7 @@ const SignUp = () => {
                                     placeholder="Email"
                                     value={formData.email}
                                     onChange={handleInputChange}
+                                    disabled={otpsent}
                                 />
                             </InputWrapper>
                         </InputGroup>
