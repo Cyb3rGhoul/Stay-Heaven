@@ -93,7 +93,7 @@ const ChatBot = () => {
     }, []);
 
     return (
-      <div style={{ display: "hidden" }} className="invisible flex-1 overflow-y-auto p-4 space-y-4 bg-gradient-to-b from-green-50 to-white">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gradient-to-b from-green-50 to-white">
         <div className="flex items-start space-x-2">
           <div className="w-8 h-8 rounded-full bg-gradient-to-r from-green-400 to-emerald-500 flex items-center justify-center flex-shrink-0">
             <BotIcon className="w-5 h-5 text-white" />
