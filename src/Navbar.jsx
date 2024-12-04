@@ -136,6 +136,9 @@ const Navbar = () => {
                                 <Link to="/previousBookings">
                                     <div>Previous Bookings</div>
                                 </Link>
+                                <Link to="/issueform">
+                                    <div>Issue Form</div>
+                                </Link>
                                 {isAdmin && !isBan && (
                                     <Link to="/admin/dashboard">
                                         <div>Admin Dashboard</div>

@@ -37,6 +37,7 @@ import BecomeSellerRequests from "./BecomeSellerRequests.jsx";
 import { Toaster } from "react-hot-toast";
 import { Analytics } from "@vercel/analytics/react";
 import Preloader from "./Preloader.jsx";
+import IssueForm from "./IssuePage.jsx";
 
 const router = createBrowserRouter([
     {
@@ -74,6 +75,10 @@ const router = createBrowserRouter([
             {
                 path: "/sellerForm",
                 element: <SellerFormPage />,
+            },
+            {
+                path: "/issueForm",
+                element: <IssueForm />,
             },
             {
                 path: "*",

@@ -8,6 +8,7 @@ import socket from "./utils/socket";
 import useHandleErr from "./utils/useHandleErr";
 import Preloader from "./Preloader";
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import ChatBot from './ChatBot';
 
 const Landing = () => {
     const navigate = useNavigate();
@@ -147,6 +148,7 @@ const Landing = () => {
     return (
         isLoading ? <Preloader /> : (
             <>
+            {/* <ChatBot/> */}
                 <div className="landing">
                     <div className="landing__search-container" style={{
                         marginTop: "5rem",
