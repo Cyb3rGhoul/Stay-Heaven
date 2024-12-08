@@ -22,7 +22,7 @@ import useHandleErr from "./utils/useHandleErr";
 import toast from "react-hot-toast";
 import ImageGallery from "./ImageGallery";
 import Preloader from "./Preloader";
-import { Map } from 'lucide-react';
+import { Map } from "lucide-react";
 
 const HotelDetails = () => {
     const { id } = useParams();
@@ -50,8 +50,10 @@ const HotelDetails = () => {
         rating: 0,
     });
     const openGoogleMapsWithAddress = (hotelAddress) => {
-        const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(hotelAddress)}`;
-        window.open(googleMapsUrl, '_blank');
+        const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
+            hotelAddress
+        )}`;
+        window.open(googleMapsUrl, "_blank");
     };
     const [isLoading, setIsLoading] = useState(true);
     const [hotelRating, setHotelRating] = useState(0);
@@ -109,7 +111,7 @@ const HotelDetails = () => {
         } catch (error) {
             handleError(error);
         }
-    }
+    };
     const commentHandler = async () => {
         try {
             const response = await axios.post(
@@ -226,7 +228,10 @@ const HotelDetails = () => {
                 );
                 return;
             }
-            if (guestNames[i].firstName.length < 1 || guestNames[i].lastName.length < 1) {
+            if (
+                guestNames[i].firstName.length < 1 ||
+                guestNames[i].lastName.length < 1
+            ) {
                 toast.error("Please fill all the required fields");
                 return;
             }
@@ -295,8 +300,10 @@ const HotelDetails = () => {
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
-    return (
-        isLoading ? <Preloader /> : <>
+    return isLoading ? (
+        <Preloader />
+    ) : (
+        <>
             <div className="hotelPage" id="hotelPage">
                 <Wrapper>
                     <div>
@@ -410,14 +417,25 @@ const HotelDetails = () => {
                                     <p>Description: {hotel.description}</p>
                                 </Description>
                                 <div className="flex items-center gap-4">
-                                    <p className="text-gray-700">Address: {hotel.address}</p>
+                                    <p className="text-gray-700">
+                                        Address: {hotel.address}
+                                    </p>
                                     <button
-                                        onClick={() => openGoogleMapsWithAddress(hotel.address)}
+                                        onClick={() =>
+                                            openGoogleMapsWithAddress(
+                                                hotel.address
+                                            )
+                                        }
                                         className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-md transition-colors"
                                         title="View on Map"
                                     >
-                                        <Map size={18} className="w-4 h-4 md:w-[18px] md:h-[18px]" />
-                                        <span className="hidden md:inline">View on Map</span>
+                                        <Map
+                                            size={18}
+                                            className="w-4 h-4 md:w-[18px] md:h-[18px]"
+                                        />
+                                        <span className="hidden md:inline">
+                                            View on Map
+                                        </span>
                                     </button>
                                 </div>
                                 <City>
@@ -437,8 +455,8 @@ const HotelDetails = () => {
                                             ₹{" "}
                                             {typeof hotel.price === "number"
                                                 ? hotel.price.toLocaleString(
-                                                    "en-IN"
-                                                )
+                                                      "en-IN"
+                                                  )
                                                 : "N/A"}
                                         </DiscountedPrice>{" "}
                                         per night
@@ -575,18 +593,18 @@ const HotelDetails = () => {
                                                                 </FormItem>
                                                                 {guestNames.length >
                                                                     1 && (
-                                                                        <RemoveGuestButton
-                                                                            type="button"
-                                                                            onClick={() =>
-                                                                                handleRemoveGuest(
-                                                                                    index
-                                                                                )
-                                                                            }
-                                                                        >
-                                                                            Remove
-                                                                            Guest
-                                                                        </RemoveGuestButton>
-                                                                    )}
+                                                                    <RemoveGuestButton
+                                                                        type="button"
+                                                                        onClick={() =>
+                                                                            handleRemoveGuest(
+                                                                                index
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        Remove
+                                                                        Guest
+                                                                    </RemoveGuestButton>
+                                                                )}
                                                             </GuestDetails>
                                                         )
                                                     )}
@@ -602,10 +620,20 @@ const HotelDetails = () => {
                                                                 Check-In Date
                                                             </label>
                                                             <DatePicker
-                                                                selected={checkInDate}
-                                                                onChange={(date) => setCheckInDate(date)}
+                                                                selected={
+                                                                    checkInDate
+                                                                }
+                                                                onChange={(
+                                                                    date
+                                                                ) =>
+                                                                    setCheckInDate(
+                                                                        date
+                                                                    )
+                                                                }
                                                                 placeholderText="Check-In"
-                                                                minDate={new Date()} // This disables all dates before today
+                                                                minDate={
+                                                                    new Date()
+                                                                } // This disables all dates before today
                                                             />
                                                         </FormItem>
                                                         <FormItem>
@@ -613,10 +641,21 @@ const HotelDetails = () => {
                                                                 Check-Out Date
                                                             </label>
                                                             <DatePicker
-                                                                selected={checkOutDate}
-                                                                onChange={(date) => setCheckOutDate(date)}
+                                                                selected={
+                                                                    checkOutDate
+                                                                }
+                                                                onChange={(
+                                                                    date
+                                                                ) =>
+                                                                    setCheckOutDate(
+                                                                        date
+                                                                    )
+                                                                }
                                                                 placeholderText="Select check-out date"
-                                                                minDate={checkInDate || new Date()} // This ensures check-out date can't be before check-in date
+                                                                minDate={
+                                                                    checkInDate ||
+                                                                    new Date()
+                                                                } // This ensures check-out date can't be before check-in date
                                                             />
                                                         </FormItem>
                                                     </DatePickerWrapper>
@@ -751,8 +790,8 @@ const HotelDetails = () => {
                                                         </h4>
                                                         {user &&
                                                             user._id ===
-                                                            review.user
-                                                                ._id && (
+                                                                review.user
+                                                                    ._id && (
                                                                 <button
                                                                     onClick={() =>
                                                                         handleDeleteReview(
@@ -777,9 +816,10 @@ const HotelDetails = () => {
                                                         value={review.rating}
                                                         readOnly
                                                         size="small"
-                                                        className={`text-green-600 relative ${showPopup &&
+                                                        className={`text-green-600 relative ${
+                                                            showPopup &&
                                                             "z-[-1]"
-                                                            }`}
+                                                        }`}
                                                     />
                                                 </div>
                                             </div>
