@@ -38,6 +38,7 @@ import { Toaster } from "react-hot-toast";
 import { Analytics } from "@vercel/analytics/react";
 import Preloader from "./Preloader.jsx";
 import IssueForm from "./IssuePage.jsx";
+import AdminIssues from "./AdminIssues.jsx";
 
 const router = createBrowserRouter([
     {
@@ -115,6 +116,10 @@ const router = createBrowserRouter([
                     {
                         path: "bookings",
                         element: <AdminBookings />,
+                    },
+                    {
+                        path: "issues",
+                        element: <AdminIssues />,
                     },
                 ],
             },

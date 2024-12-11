@@ -43,8 +43,13 @@ const navItems = [
     icon: <UserPlus className="w-6 h-6" /> // Add user icon for seller requests
   },
   { 
-    path: '/admin/Bookings', 
+    path: '/admin/bookings', 
     label: 'Bookings', 
+    icon: <CalendarCheck className="w-6 h-6" /> // Calendar with check for bookings
+  },
+  { 
+    path: '/admin/issues', 
+    label: 'Issues', 
     icon: <CalendarCheck className="w-6 h-6" /> // Calendar with check for bookings
   },
 ];

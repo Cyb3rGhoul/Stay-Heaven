@@ -409,7 +409,7 @@ const AdminHotels = () => {
                                             <option value="approved">
                                                 Approved
                                             </option>
-                                            <option value="rejected">
+                                            <option value="rejeadmcted">
                                                 Rejected
                                             </option>
                                         </select>
