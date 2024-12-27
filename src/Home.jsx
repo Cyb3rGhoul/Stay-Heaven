@@ -148,7 +148,7 @@ const Landing = () => {
     return (
         isLoading ? <Preloader /> : (
             <>
-            <ChatBot/>
+            {/* <ChatBot/> */}
                 <div className="landing">
                     <div className="landing__search-container" style={{
                         marginTop: "5rem",
