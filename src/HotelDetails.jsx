@@ -62,7 +62,10 @@ const HotelDetails = () => {
 
     const [totalDays, setTotalDays] = useState(0);
     useEffect(() => {
-        setRooms(Math.ceil(guestNames.length / hotel.maxGuests));
+        const val = Math.ceil(guestNames.length / hotel.maxGuests);
+        if(rooms < val){
+            setRooms(val);
+        }
         let days = getDifferenceInDays(
             new Date(checkInDate),
             new Date(checkOutDate)
@@ -72,7 +75,7 @@ const HotelDetails = () => {
         if (checkInDate && checkOutDate) {
             setAmount(rooms * hotel.price * days);
         }
-    }, [guestNames, checkInDate, checkOutDate]);
+    }, [guestNames, checkInDate, checkOutDate, rooms]);
 
     const getHotelRatings = () => {
         let len = reviews.length;
@@ -662,7 +665,21 @@ const HotelDetails = () => {
                                                     <SummarySection>
                                                         <SummaryItem>
                                                             <label>Rooms</label>
-                                                            <p>{rooms || 0}</p>
+                                                            <div className="text-white flex items-center justify-center gap-2">
+                                                                <span onClick={() => {
+                                                                    if(rooms - 1 >= Math.ceil(guestNames.length / hotel.maxGuests)){
+                                                                        setRooms(rooms - 1);
+                                                                    } else {
+                                                                        toast.error("You can't reduce the number of rooms");
+                                                                    }
+                                                                }} className="text-2xl cursor-pointer" >-</span>
+                                                                <p>
+                                                                    {rooms || 0}
+                                                                </p>
+                                                                <span onClick={() => {
+                                                                    setRooms(rooms + 1);
+                                                                }} className="text-2xl cursor-pointer">+</span>
+                                                            </div>
                                                         </SummaryItem>
                                                         <SummaryItem>
                                                             <label>
