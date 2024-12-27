@@ -57,8 +57,6 @@ const AdminIssues = () => {
                     withCredentials: true,
                 }
             );
-            console.log(issues);
-            console.log(id);
             setIssues((prev) =>
                 prev.map((issue) =>
                     issue._id === id ? { ...issue, status } : issue

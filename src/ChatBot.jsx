@@ -244,6 +244,21 @@ const ChatBot = () => {
 
         return diffInDays;
     }
+
+    function parseDate(dateString) {
+        const [day, month, year] = dateString.split("/").map(Number);
+        return new Date(year, month - 1, day); // month is zero-indexed in JavaScript Date
+    }
+
+    function getDifferenceInDaysFormatted(date1, date2) {
+        const dateObj1 = parseDate(date1);
+        const dateObj2 = parseDate(date2);
+
+        const diffInMs = Math.abs(dateObj2 - dateObj1);
+        const diffInDays = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
+
+        return diffInDays;
+    }
     const handlePay = async (
         checkInDate,
         checkOutDate,
@@ -253,15 +268,22 @@ const ChatBot = () => {
         hotelId
     ) => {
         try {
-            guestNames = guestNames.map(guests => {
-                if(guests.name.indexOf(" ") > -1) {
+            guestNames = guestNames.map((guests) => {
+                if (guests.name.indexOf(" ") > -1) {
                     let firstName = guests.name.split(" ")[0];
                     let lastName = guests.name.split(" ")[1];
-                    return {firstName, lastName, phoneNumber: guests.phoneNumber}
+                    return {
+                        firstName,
+                        lastName,
+                        phoneNumber: guests.phoneNumber,
+                    };
                 }
-                return {firstName: guests.name, lastName: ".", phoneNumber: guests.phoneNumber}
-            })
-            console.log(guestNames)
+                return {
+                    firstName: guests.name,
+                    lastName: ".",
+                    phoneNumber: guests.phoneNumber,
+                };
+            });
             const uniqueId = generateUniqueId();
             const {
                 data: {
@@ -314,15 +336,13 @@ const ChatBot = () => {
             const rzp1 = new window.Razorpay(options);
             rzp1.open();
         } catch (e) {
-            console.log(e);
             handleError(e);
         }
     };
 
     useEffect(() => {
         socket.on("call_from_chatbot", (data) => {
-            console.log(data);
-            let totalDays = getDifferenceInDays(
+            let totalDays = getDifferenceInDaysFormatted(
                 data.checkindate,
                 data.checkoutdate
             );
