@@ -186,12 +186,22 @@ const ChatBot = () => {
     };
 
     const sendMessage = async (message) => {
-        const response = await axios.post(
-            "/chatbot/message",
-            { message },
-            { withCredentials: true }
-        );
-        simulateResponse(response.data.data);
+        try {
+            const response = await axios.post(
+                "/chatbot/message",
+                { message },
+                { withCredentials: true }
+            );
+
+            let plainTextResponse = response.data.data
+                .replace(/\*\*/g, "") // Remove asterisks
+                .replace(/::/g, "") // Remove colons
+                .replace(/<|>/g, "") // Remove angle brackets
+
+            simulateResponse(plainTextResponse);
+        } catch (error) {
+            console.error("Error sending message:", error);
+        }
     };
     const handleSendMessage = () => {
         if (!inputMessage.trim()) return;

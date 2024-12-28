@@ -42,6 +42,7 @@
     "react-slider": "^2.0.6",
     "react-tsparticles": "^2.12.2",
     "react-typing-effect": "^2.0.5",
+    "showdown": "^2.1.0",
     "socket.io-client": "^4.7.5",
     "styled-components": "^6.1.13",
     "swiper": "^11.1.15",
