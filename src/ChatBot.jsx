@@ -178,15 +178,13 @@ const ChatBot = () => {
     };
 
     const simulateResponse = (text) => {
-        setIsTyping(true);
-        setTimeout(() => {
-            setMessages((prev) => [...prev, { type: "bot", text }]);
-            setIsTyping(false);
-        }, 1000);
+        setMessages((prev) => [...prev, { type: "bot", text }]);
+        setIsTyping(false);
     };
 
     const sendMessage = async (message) => {
         try {
+            setIsTyping(true);
             const response = await axios.post(
                 "/chatbot/message",
                 { message },
@@ -196,7 +194,7 @@ const ChatBot = () => {
             let plainTextResponse = response.data.data
                 .replace(/\*\*/g, "") // Remove asterisks
                 .replace(/::/g, "") // Remove colons
-                .replace(/<|>/g, "") // Remove angle brackets
+                .replace(/<|>/g, ""); // Remove angle brackets
 
             simulateResponse(plainTextResponse);
         } catch (error) {
