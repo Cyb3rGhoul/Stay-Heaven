@@ -1,17 +1,56 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+        <link
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="/apple-touch-icon.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/favicon-32x32.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/favicon-16x16.png"
+        />
+        <link rel="manifest" href="/site.webmanifest" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap"
+            rel="stylesheet"
+        />
+    </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
-</head>
-
-<body data-theme="light" oncontextmenu="return false">
-  <div id="root"></div>
-  <script type="module" src="/src/main.jsx"></script>
-  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-</body>
-
+    <body data-theme="light" oncontextmenu="return false">
+        <div id="root"></div>
+        <script type="module" src="/src/main.jsx"></script>
+        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+        <script>
+            if ("serviceWorker" in navigator) {
+                window.addEventListener("load", () => {
+                    navigator.serviceWorker
+                        .register("/service-worker.js")
+                        .then((registration) => {
+                            console.log(
+                                "Service Worker registered: ",
+                                registration
+                            );
+                        })
+                        .catch((error) => {
+                            console.error(
+                                "Service Worker registration failed: ",
+                                error
+                            );
+                        });
+                });
+            }
+        </script>
+    </body>
 </html>
